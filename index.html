@@ -41,8 +41,8 @@
 
         .line-numbers {
             width: 40px; /* Fixed width for line numbers */
-            text-align: right;
-            padding: 0 8px;
+            text-align: right; /* Align numbers to the right */
+            padding: 0 8px; /* Padding to keep numbers close to text */
             color: #888;
             user-select: none;
             flex-shrink: 0; /* Prevent shrinking */
@@ -54,7 +54,27 @@
         .line-numbers div {
             height: 1.2em; /* Approximate line height */
             line-height: 1.2em;
+            /* Default line number color */
+            color: #888;
+            transition: background-color 0.1s ease; /* Smooth transition for highlight changes */
         }
+
+        /* Line number highlighting for comparison */
+        .line-numbers div.same-line {
+            background-color: rgba(74, 222, 128, 0.3); /* Green for identical lines */
+            color: #d1fae5; /* Lighter text for contrast */
+        }
+
+        .line-numbers div.similar-line {
+            background-color: rgba(96, 165, 250, 0.3); /* Blue for similar lines */
+            color: #bfdbfe; /* Lighter text for contrast */
+        }
+
+        .line-numbers div.different-line {
+            background-color: rgba(239, 68, 68, 0.3); /* Red for different lines */
+            color: #fee2e2; /* Lighter text for contrast */
+        }
+
 
         .code-editor {
             flex-grow: 1;
@@ -128,7 +148,7 @@
         }
 
         .diff-line {
-            background-color: rgba(74, 222, 128, 0.2); /* Green highlight for differences */
+            background-color: rgba(74, 222, 128, 0.2); /* Green highlight for differences in code content */
         }
 
         /* Drag and Drop styles */
@@ -284,7 +304,7 @@
             const numLines = lines.length;
             let lineNumbersHtml = '';
             for (let i = 1; i <= numLines; i++) {
-                lineNumbersHtml += `<div>${i}</div>`;
+                lineNumbersHtml += `<div data-line-number="${i}">${i}</div>`;
             }
             lineNumbersDiv.innerHTML = lineNumbersHtml;
         }
@@ -439,8 +459,19 @@
 
         // Comparison Logic
         function clearDiffHighlights() {
+            // Clear code content highlights
             document.querySelectorAll('.diff-line').forEach(el => {
                 el.classList.remove('diff-line');
+            });
+
+            // Clear line number highlights
+            const allLineNumbers1 = lineNumbers1Div.querySelectorAll('div');
+            const allLineNumbers2 = lineNumbers2Div.querySelectorAll('div');
+            allLineNumbers1.forEach(number => {
+                number.classList.remove('same-line', 'similar-line', 'different-line');
+            });
+            allLineNumbers2.forEach(number => {
+                number.classList.remove('same-line', 'similar-line', 'different-line');
             });
         }
 
@@ -453,19 +484,43 @@
             const maxLength = Math.max(lines1.length, lines2.length);
 
             for (let i = 0; i < maxLength; i++) {
-                const line1 = lines1[i] || '';
-                const line2 = lines2[i] || '';
+                const line1 = lines1[i] ? lines1[i].trim() : ''; // Trim whitespace for comparison
+                const line2 = lines2[i] ? lines2[i].trim() : '';
 
-                if (line1 !== line2) {
-                    // Apply highlight to the corresponding lines in the highlighted overlays
-                    const highlightedLine1 = highlightedCode1Div.querySelector(`[data-line-index="${i}"]`);
-                    const highlightedLine2 = highlightedCode2Div.querySelector(`[data-line-index="${i}"]`);
+                const highlightedLine1 = highlightedCode1Div.querySelector(`[data-line-index="${i}"]`);
+                const highlightedLine2 = highlightedCode2Div.querySelector(`[data-line-index="${i}"]`);
+                const lineNumberDiv1 = lineNumbers1Div.querySelector(`[data-line-number="${i + 1}"]`);
+                const lineNumberDiv2 = lineNumbers2Div.querySelector(`[data-line-number="${i + 1}"]`);
 
-                    if (highlightedLine1) {
-                        highlightedLine1.classList.add('diff-line');
+                if (line1 === line2) {
+                    // Identical lines: Green for line numbers, no general diff highlight on content
+                    if (lineNumberDiv1) lineNumberDiv1.classList.add('same-line');
+                    if (lineNumberDiv2) lineNumberDiv2.classList.add('same-line');
+                } else {
+                    // Lines are different: Apply general diff highlight to content
+                    if (highlightedLine1) highlightedLine1.classList.add('diff-line');
+                    if (highlightedLine2) highlightedLine2.classList.add('diff-line');
+
+                    // Check for common words for 'similar' classification
+                    const words1 = new Set(line1.toLowerCase().split(/\s+|[.,;!?(){}[\]<>"'`:/\\]+/).filter(word => word.length > 0)); // Tokenize and clean
+                    const words2 = new Set(line2.toLowerCase().split(/\s+|[.,;!?(){}[\]<>"'`:/\\]+/).filter(word => word.length > 0));
+
+                    let hasCommonWord = false;
+                    for (const word of words1) {
+                        if (words2.has(word)) {
+                            hasCommonWord = true;
+                            break;
+                        }
                     }
-                    if (highlightedLine2) {
-                        highlightedLine2.classList.add('diff-line');
+
+                    if (hasCommonWord) {
+                        // Similar lines: Blue for line numbers
+                        if (lineNumberDiv1) lineNumberDiv1.classList.add('similar-line');
+                        if (lineNumberDiv2) lineNumberDiv2.classList.add('similar-line');
+                    } else {
+                        // Completely different lines: Red for line numbers
+                        if (lineNumberDiv1) lineNumberDiv1.classList.add('different-line');
+                        if (lineNumberDiv2) lineNumberDiv2.classList.add('different-line');
                     }
                 }
             }
