@@ -36,6 +36,7 @@
             display: flex;
             flex-grow: 1;
             overflow: hidden; /* Ensure content doesn't spill */
+            position: relative; /* Needed for sticky line numbers */
         }
 
         .line-numbers {
@@ -48,6 +49,8 @@
             background-color: #1a202c; /* Match code editor background */
             border-right: 1px solid #2d3748; /* Separator */
             overflow-y: hidden; /* Hide scrollbar, controlled by textarea */
+            /* position: sticky; /* Removed sticky, as it's handled by JS scroll sync */
+            /* left: 0; */
         }
 
         .line-numbers div {
@@ -55,7 +58,7 @@
             line-height: 1.2em;
         }
 
-        .code-editor, .code-display {
+        .code-editor {
             flex-grow: 1;
             position: relative;
             overflow: hidden; /* Hide internal scrollbars, controlled by custom scroll */
@@ -88,7 +91,7 @@
             height: 100%;
             padding: 10px;
             pointer-events: none; /* Allow clicks to pass through to textarea */
-            overflow-y: scroll; /* Sync with textarea scroll */
+            overflow-y: hidden; /* Sync with textarea scroll, hide its own scrollbar */
             font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
             font-size: 0.9rem;
             line-height: 1.2em;
@@ -130,7 +133,7 @@
     <nav class="bg-gray-800 p-4 shadow-lg rounded-b-lg">
         <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
             <h1 class="text-xl font-bold text-teal-400">Comparateur de Code</h1>
-            <div class="flex flex-wrap justify-center gap-3">
+            <div class="flex flex-wrap justify-center sm:justify-end gap-3">
                 <button id="syncScrollBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
                     Mettre les lignes au même niveau
                 </button>
@@ -140,6 +143,15 @@
                 <button id="clearBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
                     Effacer Tout
                 </button>
+                <div class="relative">
+                    <button id="searchLineBtn" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75">
+                        Rechercher Ligne
+                    </button>
+                    <div id="searchLineInputContainer" class="absolute top-full right-0 mt-2 bg-gray-800 rounded-md shadow-lg p-4 z-10 hidden flex items-center">
+                        <input type="number" id="lineNumberInput" class="bg-gray-700 text-white rounded-md p-2 w-24 focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="N° ligne" min="1">
+                        <button id="gotoLineBtn" class="ml-2 px-3 py-2 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-75">Go</button>
+                    </div>
+                </div>
                 <a href="https://terrafaust.github.io/T" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300 flex items-center space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
                         <path fill-rule="evenodd" d="M19.902 4.098a3.75 3.75 0 00-5.304 0l-9.294 9.293a3.75 3.75 0 00-.91 3.757l1.025 2.751a.75.75 0 00.928.387l2.751-1.025a3.75 3.75 0 003.757-.91l9.293-9.295a3.75 3.75 0 000-5.304zm-4.929 6.746l-7.293 7.293a.75.75 0 01-1.06 0l-1.025-1.025a.75.75 0 010-1.06l7.293-7.293a.75.75 0 011.06 0l1.025 1.025a.75.75 0 010 1.06z" clip-rule="evenodd" />
@@ -151,7 +163,7 @@
     </nav>
 
     <main class="flex flex-1 flex-col lg:flex-row p-4 gap-4">
-        <section id="editor1" class="code-area-container flex-1 bg-gray-800 rounded-lg shadow-xl overflow-hidden relative">
+        <section id="editor1" class="code-area-container flex-1 bg-gray-800 rounded-lg shadow-xl overflow-hidden">
             <div class="line-numbers" id="lineNumbers1"></div>
             <div class="code-editor relative flex-1">
                 <textarea id="code1" placeholder="Collez votre code ici ou glissez-déposez un fichier..." class="rounded-lg"></textarea>
@@ -163,7 +175,7 @@
             </div>
         </section>
 
-        <section id="editor2" class="code-area-container flex-1 bg-gray-800 rounded-lg shadow-xl overflow-hidden relative">
+        <section id="editor2" class="code-area-container flex-1 bg-gray-800 rounded-lg shadow-xl overflow-hidden">
             <div class="line-numbers" id="lineNumbers2"></div>
             <div class="code-editor relative flex-1">
                 <textarea id="code2" placeholder="Collez votre code ici ou glissez-déposez un fichier..." class="rounded-lg"></textarea>
@@ -216,8 +228,12 @@
         const editor2Section = document.getElementById('editor2');
         const fileInput1 = document.getElementById('fileInput1');
         const fileInput2 = document.getElementById('fileInput2');
-        const importFileBtn1 = document.getElementById('importFileBtn1'); // New ID for import button
-        const importFileBtn2 = document.getElementById('importFileBtn2'); // New ID for import button
+        const importFileBtn1 = document.getElementById('importFileBtn1');
+        const importFileBtn2 = document.getElementById('importFileBtn2');
+        const searchLineBtn = document.getElementById('searchLineBtn');
+        const searchLineInputContainer = document.getElementById('searchLineInputContainer');
+        const lineNumberInput = document.getElementById('lineNumberInput');
+        const gotoLineBtn = document.getElementById('gotoLineBtn');
 
         let syncScrollEnabled = false;
         let isComparing = false; // State to track if comparison is active
@@ -450,19 +466,38 @@
                 // In a real scenario, you'd use a library like 'mammoth.js' or send to a server.
                 // For now, we'll just read it as text if possible, or show a warning.
                 reader.readAsText(file); // This will likely fail for binary docx
-                alert("Les documents Word (.docx) seront affichés en texte brut, leur formatage riche n'est pas pris en charge pour la comparaison de code.");
+                // Using a custom modal/message box instead of alert()
+                showMessageBox("Les documents Word (.docx) seront affichés en texte brut, leur formatage riche n'est pas pris en charge pour la comparaison de code.");
             } else {
                 reader.readAsText(file);
             }
         }
 
+        // Custom Message Box (instead of alert)
+        function showMessageBox(message) {
+            const messageBox = document.createElement('div');
+            messageBox.className = 'fixed inset-0 bg-gray-900 bg-opacity-75 flex items-center justify-center z-50';
+            messageBox.innerHTML = `
+                <div class="bg-gray-800 p-6 rounded-lg shadow-xl text-white max-w-sm text-center">
+                    <p class="mb-4">${message}</p>
+                    <button id="closeMessageBox" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md">OK</button>
+                </div>
+            `;
+            document.body.appendChild(messageBox);
+
+            document.getElementById('closeMessageBox').addEventListener('click', () => {
+                document.body.removeChild(messageBox);
+            });
+        }
+
+
         // Event listeners for "Importer Fichier" buttons
         importFileBtn1.addEventListener('click', () => {
-            fileInput1.click();
+            fileInput1.click(); // This should trigger the file browser
         });
 
         importFileBtn2.addEventListener('click', () => {
-            fileInput2.click();
+            fileInput2.click(); // This should trigger the file browser
         });
 
         fileInput1.addEventListener('change', (event) => {
@@ -504,9 +539,47 @@
         setupDragAndDrop(editor1Section, code1Textarea, lineNumbers1Div, highlightedCode1Div);
         setupDragAndDrop(editor2Section, code2Textarea, lineNumbers2Div, highlightedCode2Div);
 
-        // Ensure highlighted overlay scrolls with textarea
-        // This is handled by the scroll event listeners for the textareas themselves
-        // as the overlay's scrollTop is explicitly set to match the textarea's scrollTop.
+        // Line Search Functionality
+        searchLineBtn.addEventListener('click', () => {
+            searchLineInputContainer.classList.toggle('hidden');
+            if (!searchLineInputContainer.classList.contains('hidden')) {
+                lineNumberInput.focus();
+            }
+        });
+
+        gotoLineBtn.addEventListener('click', () => {
+            const lineNumber = parseInt(lineNumberInput.value, 10);
+            if (isNaN(lineNumber) || lineNumber < 1) {
+                showMessageBox("Veuillez entrer un numéro de ligne valide.");
+                return;
+            }
+
+            // Calculate scroll position for the target line
+            // Line height is 1.2em, which is approximately 19.2px if font-size is 16px (0.9rem is smaller)
+            // Let's use the actual computed line height for better accuracy
+            const lineHeight = parseFloat(getComputedStyle(code1Textarea).lineHeight);
+            const scrollPosition = (lineNumber - 1) * lineHeight;
+
+            // Scroll both textareas and their associated elements
+            code1Textarea.scrollTop = scrollPosition;
+            lineNumbers1Div.scrollTop = scrollPosition;
+            highlightedCode1Div.scrollTop = scrollPosition;
+
+            code2Textarea.scrollTop = scrollPosition;
+            lineNumbers2Div.scrollTop = scrollPosition;
+            highlightedCode2Div.scrollTop = scrollPosition;
+
+            // Hide the input after jumping
+            searchLineInputContainer.classList.add('hidden');
+            lineNumberInput.value = ''; // Clear input
+        });
+
+        // Close search input if clicked outside
+        document.addEventListener('click', (event) => {
+            if (!searchLineBtn.contains(event.target) && !searchLineInputContainer.contains(event.target)) {
+                searchLineInputContainer.classList.add('hidden');
+            }
+        });
 
     </script>
 </body>
