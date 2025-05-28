@@ -282,6 +282,8 @@
     <script src="https://unpkg.com/codemirror@5.65.5/mode/sass/sass.js"></script>
     <script src="https://unpkg.com/codemirror@5.65.5/mode/typescript/typescript.js"></script>
     <script src="https://unpkg.com/codemirror@5.65.5/mode/jsx/jsx.js"></script>
+    <script src="https://unpkg.com/codemirror@5.65.5/addon/mode/overlay.js"></script>
+    <script src="https://unpkg.com/codemirror@5.65.5/mode/htmlmixed/htmlmixed.js"></script>
 
     <script>
         // Initialisation des instances CodeMirror pour les deux éditeurs
@@ -339,7 +341,7 @@
                 const ext = parts[parts.length - 1].toLowerCase();
                 switch (ext) {
                     case 'js': return 'javascript';
-                    case 'html': case 'htm': return 'xml';
+                    case 'html': case 'htm': return 'htmlmixed'; // Utilise le mode htmlmixed pour le HTML
                     case 'css': return 'css';
                     case 'json': return 'application/json';
                     case 'py': return 'python';
