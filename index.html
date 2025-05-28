@@ -130,39 +130,63 @@
         /* Ces règles sont ajoutées avec !important pour s'assurer qu'elles ne sont pas écrasées */
         /* Elles reproduisent les couleurs du thème Dracula, ajustées pour ressembler davantage à VS Code */
 
-        /* Mots-clés (e.g., function, const, if, var, let, return, new) */
+        /* Mots-clés (e.g., function, const, if, var, let, return, new, import, export) */
         .CodeMirror.cm-s-dracula .cm-keyword { color: #ff79c6 !important; } /* Rose */
-        .CodeMirror.cm-s-dracula .cm-builtin { color: #8be9fd !important; } /* Cyan pour les fonctions/objets intégrés (e.g., document, console) */
-        .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet (e.g., true, false, null) */
-        .CodeMirror.cm-s-dracula .cm-number { color: #bd93f9 !important; } /* Violet pour les nombres */
+        /* Objets/fonctions intégrés (e.g., document, console, window, setTimeout, parseInt) */
+        .CodeMirror.cm-s-dracula .cm-builtin { color: #8be9fd !important; } /* Cyan */
+        /* Atomes (e.g., true, false, null, undefined) */
+        .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet */
+        /* Nombres */
+        .CodeMirror.cm-s-dracula .cm-number { color: #bd93f9 !important; } /* Violet */
 
         /* Noms de fonctions, classes, identifiants */
         .CodeMirror.cm-s-dracula .cm-def { color: #50fa7b !important; } /* Vert pour les définitions (e.g., noms de fonctions déclarées) */
-        .CodeMirror.cm-s-dracula .cm-variable { color: #f8f8f2 !important; } /* Blanc/gris clair pour les variables générales */
-        .CodeMirror.cm-s-dracula .cm-variable-2 { color: #8be9fd !important; } /* Cyan pour les variables de second niveau (souvent paramètres ou variables locales) */
-        .CodeMirror.cm-s-dracula .cm-variable-3 { color: #8be9fd !important; } /* Cyan pour les variables de troisième niveau */
-        .CodeMirror.cm-s-dracula .cm-property { color: #8be9fd !important; } /* Cyan pour les propriétés d'objets (e.g., .getElementById, .value) */
-        .CodeMirror.cm-s-dracula .cm-type { color: #8be9fd !important; } /* Cyan pour les types (e.g., class names, type annotations) */
+        /* Variables générales */
+        .CodeMirror.cm-s-dracula .cm-variable { color: #f8f8f2 !important; } /* Blanc/gris clair */
+        /* Variables de second niveau (souvent paramètres ou variables locales) */
+        .CodeMirror.cm-s-dracula .cm-variable-2 { color: #8be9fd !important; } /* Cyan */
+        /* Variables de troisième niveau */
+        .CodeMirror.cm-s-dracula .cm-variable-3 { color: #8be9fd !important; } /* Cyan */
+        /* Propriétés d'objets (e.g., .getElementById, .value, .classList) */
+        .CodeMirror.cm-s-dracula .cm-property { color: #8be9fd !important; } /* Cyan */
+        /* Types (e.g., class names, type annotations en TypeScript) */
+        .CodeMirror.cm-s-dracula .cm-type { color: #8be9fd !important; } /* Cyan */
 
         /* Chaînes de caractères */
         .CodeMirror.cm-s-dracula .cm-string { color: #f1fa8c !important; } /* Jaune */
-        .CodeMirror.cm-s-dracula .cm-string-2 { color: #f1fa8c !important; } /* Jaune pour les chaînes secondaires/multilignes */
-        .CodeMirror.cm-s-dracula .cm-string-interpolation { color: #f1fa8c !important; } /* Jaune pour l'interpolation de chaînes */
+        /* Chaînes secondaires/multilignes */
+        .CodeMirror.cm-s-dracula .cm-string-2 { color: #f1fa8c !important; } /* Jaune */
+        /* Interpolation de chaînes */
+        .CodeMirror.cm-s-dracula .cm-string-interpolation { color: #f1fa8c !important; } /* Jaune */
 
         /* Commentaires */
         .CodeMirror.cm-s-dracula .cm-comment { color: #6272a4 !important; } /* Gris-bleu */
 
-        /* Opérateurs (e.g., =, +, ==, &&) */
+        /* Opérateurs (e.g., =, +, ==, &&, ||, !) */
         .CodeMirror.cm-s-dracula .cm-operator { color: #ff79c6 !important; } /* Rose */
 
-        /* Métadonnées, qualificateurs */
-        .CodeMirror.cm-s-dracula .cm-meta { color: #ffb86c !important; } /* Orange (e.g., @media, #include) */
+        /* Métadonnées (e.g., @media, #include, @keyframes) */
+        .CodeMirror.cm-s-dracula .cm-meta { color: #ffb86c !important; } /* Orange */
+        /* Qualificateurs (e.g., sélecteurs de classe en CSS comme .dark-theme) */
         .CodeMirror.cm-s-dracula .cm-qualifier { color: #50fa7b !important; } /* Vert */
 
-        /* Balises HTML/XML */
-        .CodeMirror.cm-s-dracula .cm-tag { color: #ff79c6 !important; } /* Rose pour les balises (e.g., <script>, <div>) */
-        .CodeMirror.cm-s-dracula .cm-attribute { color: #50fa7b !important; } /* Vert pour les attributs (e.g., lang, id) */
-        .CodeMirror.cm-s-dracula .cm-tag.cm-bracket { color: #f8f8f2 !important; } /* Blanc/gris clair pour les chevrons des balises */
+        /* Balises HTML/XML (e.g., <html>, <head>, <div>, <button>, <span>) */
+        .CodeMirror.cm-s-dracula .cm-tag { color: #ff79c6 !important; } /* Rose */
+        /* Attributs HTML/XML (e.g., lang, id, style, class, display) */
+        .CodeMirror.cm-s-dracula .cm-attribute { color: #50fa7b !important; } /* Vert */
+        /* Chevrons des balises HTML/XML (e.g., < et >) */
+        .CodeMirror.cm-s-dracula .cm-tag.cm-bracket { color: #f8f8f2 !important; } /* Blanc/gris clair */
+
+        /* Sélecteurs CSS (e.g., body, .container, #side-menu) */
+        /* Note: CodeMirror peut tokeniser les sélecteurs complexes différemment. */
+        .CodeMirror.cm-s-dracula .cm-header { color: #ff79c6 !important; } /* Rose pour les sélecteurs de type (e.g., body, div) */
+        .CodeMirror.cm-s-dracula .cm-selector { color: #8be9fd !important; } /* Cyan pour les sélecteurs de classe/ID */
+        /* Propriétés CSS (e.g., background-color, padding, border-radius) */
+        .CodeMirror.cm-s-dracula .cm-property { color: #8be9fd !important; } /* Cyan */
+        /* Valeurs CSS (e.g., white, #3a3a3a, 10px, solid, pointer) */
+        .CodeMirror.cm-s-dracula .cm-variable-2 { color: #f1fa8c !important; } /* Jaune pour les valeurs */
+        .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet pour les mots-clés CSS comme 'solid', 'pointer' */
+        .CodeMirror.cm-s-dracula .cm-unit { color: #bd93f9 !important; } /* Violet pour les unités (px, %, s) */
 
         /* En-têtes Markdown, liens */
         .CodeMirror.cm-s-dracula .cm-header { color: #bd93f9 !important; } /* Violet */
