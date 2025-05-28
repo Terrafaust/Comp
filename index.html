@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparateur de Code</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
@@ -140,6 +140,12 @@
                 <button id="clearBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
                     Effacer Tout
                 </button>
+                <a href="https://terrafaust.github.io/T" target="_blank" rel="noopener noreferrer" class="px-3 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5">
+                        <path fill-rule="evenodd" d="M19.902 4.098a3.75 3.75 0 00-5.304 0l-9.294 9.293a3.75 3.75 0 00-.91 3.757l1.025 2.751a.75.75 0 00.928.387l2.751-1.025a3.75 3.75 0 003.757-.91l9.293-9.295a3.75 3.75 0 000-5.304zm-4.929 6.746l-7.293 7.293a.75.75 0 01-1.06 0l-1.025-1.025a.75.75 0 010-1.06l7.293-7.293a.75.75 0 011.06 0l1.025 1.025a.75.75 0 010 1.06z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Portail Terra</span>
+                </a>
             </div>
         </div>
     </nav>
@@ -151,7 +157,7 @@
                 <textarea id="code1" placeholder="Collez votre code ici ou glissez-déposez un fichier..." class="rounded-lg"></textarea>
                 <div class="highlighted-code-overlay" id="highlightedCode1"></div>
                 <input type="file" id="fileInput1" class="hidden-file-input" accept=".txt,.html,.css,.js,.json,.xml,.md,.py,.java,.c,.cpp,.php,.rb,.sh,.yml,.ts,.jsx,.tsx,.vue,.go,.swift,.kt,.sql,.r,.dart,.scss,.less,.sass,.json,.xml,.yaml,.ini,.conf,.log,.csv,.tsv,.diff,.patch,.gitignore,.dockerfile,.env,.editorconfig,.prettierrc,.eslintrc,.browserslistrc,.npmrc,.yarnrc,.bowerrc,.gitattributes,.gitmodules,.npmignore,.yarnignore,.flowconfig,.babelrc,.tsconfig.json,.webmanifest,.webapp,.appcache,.build.gradle,.pom.xml,.gradlew,.gradlew.bat,.mvnw,.mvnw.cmd,.properties,.toml,.lock,.map,.min.js,.min.css,.woff,.woff2,.ttf,.otf,.eot,.svg,.png,.jpg,.jpeg,.gif,.bmp,.ico,.webp,.mp3,.wav,.ogg,.mp4,.webm,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z,.tar,.gz,.bz2,.xz,.pdf,.docx,.xlsx,.pptx">
-                <button onclick="document.getElementById('fileInput1').click()" class="absolute bottom-4 right-4 px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300">
+                <button id="importFileBtn1" class="absolute bottom-4 right-4 px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300">
                     Importer Fichier
                 </button>
             </div>
@@ -163,7 +169,7 @@
                 <textarea id="code2" placeholder="Collez votre code ici ou glissez-déposez un fichier..." class="rounded-lg"></textarea>
                 <div class="highlighted-code-overlay" id="highlightedCode2"></div>
                 <input type="file" id="fileInput2" class="hidden-file-input" accept=".txt,.html,.css,.js,.json,.xml,.md,.py,.java,.c,.cpp,.php,.rb,.sh,.yml,.ts,.jsx,.tsx,.vue,.go,.swift,.kt,.sql,.r,.dart,.scss,.less,.sass,.json,.xml,.yaml,.ini,.conf,.log,.csv,.tsv,.diff,.patch,.gitignore,.dockerfile,.env,.editorconfig,.prettierrc,.eslintrc,.browserslistrc,.npmrc,.yarnrc,.bowerrc,.gitattributes,.gitmodules,.npmignore,.yarnignore,.flowconfig,.babelrc,.tsconfig.json,.webmanifest,.webapp,.appcache,.build.gradle,.pom.xml,.gradlew,.gradlew.bat,.mvnw,.mvnw.cmd,.properties,.toml,.lock,.map,.min.js,.min.css,.woff,.woff2,.ttf,.otf,.eot,.svg,.png,.jpg,.jpeg,.gif,.bmp,.ico,.webp,.mp3,.wav,.ogg,.mp4,.webm,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z,.tar,.gz,.bz2,.xz,.pdf,.docx,.xlsx,.pptx">
-                <button onclick="document.getElementById('fileInput2').click()" class="absolute bottom-4 right-4 px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300">
+                <button id="importFileBtn2" class="absolute bottom-4 right-4 px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300">
                     Importer Fichier
                 </button>
             </div>
@@ -210,6 +216,8 @@
         const editor2Section = document.getElementById('editor2');
         const fileInput1 = document.getElementById('fileInput1');
         const fileInput2 = document.getElementById('fileInput2');
+        const importFileBtn1 = document.getElementById('importFileBtn1'); // New ID for import button
+        const importFileBtn2 = document.getElementById('importFileBtn2'); // New ID for import button
 
         let syncScrollEnabled = false;
         let isComparing = false; // State to track if comparison is active
@@ -447,6 +455,15 @@
                 reader.readAsText(file);
             }
         }
+
+        // Event listeners for "Importer Fichier" buttons
+        importFileBtn1.addEventListener('click', () => {
+            fileInput1.click();
+        });
+
+        importFileBtn2.addEventListener('click', () => {
+            fileInput2.click();
+        });
 
         fileInput1.addEventListener('change', (event) => {
             const file = event.target.files[0];
