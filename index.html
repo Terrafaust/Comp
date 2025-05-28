@@ -136,8 +136,8 @@
         .CodeMirror.cm-s-dracula .cm-builtin { color: #8be9fd !important; } /* Cyan */
         /* Atomes (e.g., true, false, null, undefined) */
         .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet */
-        /* Nombres */
-        .CodeMirror.cm-s-dracula .cm-number { color: #bd93f9 !important; } /* Violet */
+        /* Nombres (changé de violet à orange pour plus de contraste et ressemblance VS Code) */
+        .CodeMirror.cm-s-dracula .cm-number { color: #ffb86c !important; } /* Orange */
 
         /* Noms de fonctions, classes, identifiants */
         .CodeMirror.cm-s-dracula .cm-def { color: #50fa7b !important; } /* Vert pour les définitions (e.g., noms de fonctions déclarées) */
@@ -159,7 +159,7 @@
         /* Interpolation de chaînes */
         .CodeMirror.cm-s-dracula .cm-string-interpolation { color: #f1fa8c !important; } /* Jaune */
 
-        /* Commentaires */
+        /* Commentaires (ajusté pour être plus gris-bleu comme VS Code) */
         .CodeMirror.cm-s-dracula .cm-comment { color: #6272a4 !important; } /* Gris-bleu */
 
         /* Opérateurs (e.g., =, +, ==, &&, ||, !) */
@@ -185,8 +185,10 @@
         .CodeMirror.cm-s-dracula .cm-property { color: #8be9fd !important; } /* Cyan */
         /* Valeurs CSS (e.g., white, #3a3a3a, 10px, solid, pointer) */
         .CodeMirror.cm-s-dracula .cm-variable-2 { color: #f1fa8c !important; } /* Jaune pour les valeurs */
-        .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet pour les mots-clés CSS comme 'solid', 'pointer' */
-        .CodeMirror.cm-s-dracula .cm-unit { color: #bd93f9 !important; } /* Violet pour les unités (px, %, s) */
+        /* Mots-clés CSS comme 'solid', 'pointer' (changé de violet à vert pour plus de distinction) */
+        .CodeMirror.cm-s-dracula .cm-atom { color: #50fa7b !important; } /* Vert */
+        /* Unités (px, %, s) */
+        .CodeMirror.cm-s-dracula .cm-unit { color: #bd93f9 !important; } /* Violet */
 
         /* En-têtes Markdown, liens */
         .CodeMirror.cm-s-dracula .cm-header { color: #bd93f9 !important; } /* Violet */
@@ -195,9 +197,10 @@
         /* Erreurs */
         .CodeMirror.cm-s-dracula .cm-error { color: #ff5555 !important; } /* Rouge */
 
-        /* Crochets, parenthèses, accolades, ponctuation */
-        .CodeMirror.cm-s-dracula .cm-bracket { color: #cccccc !important; } /* Gris clair pour les parenthèses, crochets, accolades */
-        .CodeMirror.cm-s-dracula .cm-punctuation { color: #f8f8f2 !important; } /* Blanc/gris clair pour la ponctuation générale (e.g., virgules, points-virgules) */
+        /* Crochets, parenthèses, accolades, ponctuation (couleur gris clair pour une meilleure distinction) */
+        .CodeMirror.cm-s-dracula .cm-bracket { color: #cccccc !important; } /* Gris clair */
+        /* Ponctuation générale (e.g., virgules, points-virgules) */
+        .CodeMirror.cm-s-dracula .cm-punctuation { color: #f8f8f2 !important; } /* Blanc/gris clair */
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
@@ -538,7 +541,7 @@
         clearBtn.addEventListener('click', () => {
             editor1.setValue('');
             editor2.setValue('');
-            editor1.setOption("mode", "javascript"); // Réinitialise le mode par défaut
+            editor1.setOption("mode", "javascript"); // Réinitialise le mode par default
             editor2.setOption("mode", "javascript"); // Réinitialise le mode par default
             checkCompareButtonState();
             clearDiffHighlights();
