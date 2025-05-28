@@ -4,8 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparateur de Code</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://unpkg.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://unpkg.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
+    
+    <link href="./dist/output.css" rel="stylesheet">
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://unpkg.com/codemirror@5.65.5/lib/codemirror.css">
@@ -611,9 +613,6 @@
             editor2.refresh();
             checkCompareButtonState(); // Assure que l'état du bouton est correct au chargement
         });
-
-        // Avertissement pour l'utilisation de Tailwind CSS en production (pour information)
-        console.warn("L'utilisation du CDN Tailwind CSS n'est pas recommandée en production pour des performances optimales. Pour un déploiement en production, installez-le comme plugin PostCSS ou utilisez l'interface de ligne de commande Tailwind CLI.");
 
     </script>
 </body>
