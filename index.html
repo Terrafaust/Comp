@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparateur de Code</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/lib/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/theme/dracula.min.css">
+    <link rel="stylesheet" href="./codemirror/lib/codemirror.min.css">
+    <link rel="stylesheet" href="./codemirror/theme/dracula.min.css" id="cm-theme">
 
     <style>
         /* Styles généraux pour le corps de la page */
@@ -126,21 +126,21 @@
             width: 90%;
         }
 
-        /* --- Styles pour la coloration syntaxique (VS Code-like) --- */
+        /* --- Styles pour la coloration syntaxique (Optimisée) --- */
         /* Ces règles sont ajoutées avec !important pour s'assurer qu'elles ne sont pas écrasées */
-        /* Elles reproduisent les couleurs du thème Dracula, ajustées pour ressembler davantage à VS Code */
+        /* L'objectif est une coloration claire et distincte pour chaque type d'élément */
 
         /* Mots-clés (e.g., function, const, if, var, let, return, new, import, export) */
-        .CodeMirror.cm-s-dracula .cm-keyword { color: #ff79c6 !important; } /* Rose */
+        .CodeMirror.cm-s-dracula .cm-keyword { color: #ff79c6 !important; } /* Rose vif */
         /* Objets/fonctions intégrés (e.g., document, console, window, setTimeout, parseInt) */
-        .CodeMirror.cm-s-dracula .cm-builtin { color: #8be9fd !important; } /* Cyan */
+        .CodeMirror.cm-s-dracula .cm-builtin { color: #8be9fd !important; } /* Cyan clair */
         /* Atomes (e.g., true, false, null, undefined) */
         .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet */
         /* Nombres */
         .CodeMirror.cm-s-dracula .cm-number { color: #ffb86c !important; } /* Orange */
 
         /* Noms de fonctions, classes, identifiants */
-        .CodeMirror.cm-s-dracula .cm-def { color: #50fa7b !important; } /* Vert pour les définitions (e.g., noms de fonctions déclarées) */
+        .CodeMirror.cm-s-dracula .cm-def { color: #50fa7b !important; } /* Vert */
         /* Variables générales */
         .CodeMirror.cm-s-dracula .cm-variable { color: #f8f8f2 !important; } /* Blanc/gris clair */
         /* Variables de second niveau (souvent paramètres ou variables locales) */
@@ -178,7 +178,6 @@
         .CodeMirror.cm-s-dracula .cm-tag.cm-bracket { color: #f8f8f2 !important; } /* Blanc/gris clair */
 
         /* Sélecteurs CSS (e.g., body, .container, #side-menu) */
-        /* Note: CodeMirror peut tokeniser les sélecteurs complexes différemment. */
         .CodeMirror.cm-s-dracula .cm-header { color: #ff79c6 !important; } /* Rose pour les sélecteurs de type (e.g., body, div) */
         .CodeMirror.cm-s-dracula .cm-selector { color: #8be9fd !important; } /* Cyan pour les sélecteurs de classe/ID */
         /* Propriétés CSS (e.g., background-color, padding, border-radius) */
@@ -233,6 +232,13 @@
                     </svg>
                     <span>Portail Terra</span>
                 </a>
+                <div class="relative">
+                    <button id="themeBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-75">
+                        Thème
+                    </button>
+                    <div id="themeList" class="absolute top-full right-0 mt-2 bg-gray-800 rounded-md shadow-lg p-4 z-10 hidden flex-col items-start">
+                        </div>
+                </div>
             </div>
         </div>
     </nav>
@@ -262,28 +268,27 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/lib/codemirror.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/xml/xml.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/css/css.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/python/python.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/clike/clike.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/php/php.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/ruby/ruby.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/shell/shell.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/markdown/markdown.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/sql/sql.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/yaml/yaml.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/json/json.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/go/go.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/swift/swift.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/r/r.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/dart/dart.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/sass/sass.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/typescript/typescript.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/jsx/jsx.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/addon/mode/overlay.min.js"></script>
+    <script src="./codemirror/lib/codemirror.min.js"></script>
+    <script src="./codemirror/addon/mode/overlay.min.js"></script>
+    <script src="./codemirror/mode/xml/xml.min.js"></script>
+    <script src="./codemirror/mode/javascript/javascript.min.js"></script>
+    <script src="./codemirror/mode/css/css.min.js"></script>
+    <script src="./codemirror/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="./codemirror/mode/python/python.min.js"></script>
+    <script src="./codemirror/mode/clike/clike.min.js"></script>
+    <script src="./codemirror/mode/php/php.min.js"></script>
+    <script src="./codemirror/mode/ruby/ruby.min.js"></script>
+    <script src="./codemirror/mode/shell/shell.min.js"></script>
+    <script src="./codemirror/mode/markdown/markdown.min.js"></script>
+    <script src="./codemirror/mode/sql/sql.min.js"></script>
+    <script src="./codemirror/mode/yaml/yaml.min.js"></script>
+    <script src="./codemirror/mode/json/json.min.js"></script> <script src="./codemirror/mode/go/go.min.js"></script>
+    <script src="./codemirror/mode/swift/swift.min.js"></script>
+    <script src="./codemirror/mode/r/r.min.js"></script>
+    <script src="./codemirror/mode/dart/dart.min.js"></script>
+    <script src="./codemirror/mode/sass/sass.min.js"></script>
+    <script src="./codemirror/mode/typescript/typescript.min.js"></script>
+    <script src="./codemirror/mode/jsx/jsx.min.js"></script>
 
     <script>
         // Initialisation des instances CodeMirror pour les deux éditeurs
@@ -326,9 +331,22 @@
         const searchLineInputContainer = document.getElementById('searchLineInputContainer');
         const lineNumberInput = document.getElementById('lineNumberInput');
         const gotoLineBtn = document.getElementById('gotoLineBtn');
+        const themeBtn = document.getElementById('themeBtn');
+        const themeList = document.getElementById('themeList');
+        const cmThemeLink = document.getElementById('cm-theme');
 
         let syncScrollEnabled = false;
         let isComparing = false; // État pour suivre si la comparaison est active
+
+        // Liste des thèmes disponibles (basée sur les thèmes CodeMirror courants)
+        // Assurez-vous que ces fichiers .css sont présents dans votre dossier codemirror/theme/
+        const availableThemes = [
+            'dracula', 'material', 'monokai', 'nord', 'solarized', 'base16-dark', 'base16-light',
+            'mdn-like', 'eclipse', 'idea', 'lesser-dark', 'liquibyte', 'neat', 'night',
+            'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'railscasts', 'rubyblue', 'seti',
+            'shadowfox', 'ssms', 'the-matrix', 'tomorrow-night-bright', 'twilight', 'vibrant-ink',
+            'xq-dark', 'xq-light', 'zenburn'
+        ];
 
         /**
          * Détermine le mode CodeMirror approprié en fonction de l'extension du nom de fichier.
@@ -543,8 +561,8 @@
         clearBtn.addEventListener('click', () => {
             editor1.setValue('');
             editor2.setValue('');
-            editor1.setOption("mode", "javascript"); // Réinitialise le mode par default
-            editor2.setOption("mode", "javascript"); // Réinitialise le mode par default
+            editor1.setOption("mode", "javascript"); // Réinitialise le mode par défaut
+            editor2.setOption("mode", "javascript"); // Réinitialise le mode par défaut
             checkCompareButtonState();
             clearDiffHighlights();
             isComparing = false;
@@ -686,11 +704,53 @@
             }
         });
 
+        // Gestion du menu de sélection de thème
+        themeBtn.addEventListener('click', (event) => {
+            event.stopPropagation(); // Empêche la fermeture immédiate si le clic est sur le bouton
+            themeList.classList.toggle('hidden');
+            if (!themeList.classList.contains('hidden') && themeList.children.length === 0) {
+                // Générer les boutons de thème si la liste est vide
+                availableThemes.forEach(theme => {
+                    const themeItem = document.createElement('button');
+                    themeItem.textContent = theme.charAt(0).toUpperCase() + theme.slice(1).replace(/-/g, ' '); // Formate le nom
+                    themeItem.classList.add('px-3', 'py-1', 'w-full', 'text-left', 'hover:bg-gray-700', 'rounded-md', 'transition', 'duration-200');
+                    themeItem.dataset.theme = theme;
+                    themeItem.addEventListener('click', () => {
+                        // Supprimer l'ancien thème
+                        const oldTheme = cmThemeLink.getAttribute('href');
+                        if (oldTheme) {
+                            const oldThemeName = oldTheme.substring(oldTheme.lastIndexOf('/') + 1, oldTheme.lastIndexOf('.min.css'));
+                            document.body.classList.remove(`cm-s-${oldThemeName}`);
+                        }
+                        
+                        // Charger le nouveau thème
+                        cmThemeLink.href = `./codemirror/theme/${theme}.min.css`;
+                        editor1.setOption("theme", theme);
+                        editor2.setOption("theme", theme);
+                        document.body.classList.add(`cm-s-${theme}`); // Ajoute la classe pour la coloration spécifique au thème
+                        themeList.classList.add('hidden'); // Cacher la liste après sélection
+                    });
+                    themeList.appendChild(themeItem);
+                });
+            }
+        });
+
+        // Ferme la liste des thèmes si l'on clique en dehors
+        document.addEventListener('click', (event) => {
+            if (!themeBtn.contains(event.target) && !themeList.contains(event.target) && !event.target.closest('.message-box-overlay')) {
+                themeList.classList.add('hidden');
+            }
+        });
+
+
         // Configuration initiale de CodeMirror pour s'assurer qu'il est prêt au chargement
         window.addEventListener('load', () => {
             editor1.refresh(); // Force le rafraîchissement des éditeurs
             editor2.refresh();
             checkCompareButtonState(); // Assure que l'état du bouton est correct au chargement
+            // Appliquer le thème initial à la classe body pour les styles généraux
+            const initialTheme = cmThemeLink.href.substring(cmThemeLink.href.lastIndexOf('/') + 1, cmThemeLink.href.lastIndexOf('.min.css'));
+            document.body.classList.add(`cm-s-${initialTheme}`);
         });
 
         // Avertissement pour l'utilisation du CDN Tailwind CSS en production (pour information)
