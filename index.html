@@ -200,7 +200,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/r/r.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/dart/dart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sass/sass.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/typescript/typescript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/jsx/jsx.min.js"></script> <script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/jsx/jsx.min.js"></script>
+
+    <script>
         // Initialisation des instances CodeMirror pour les deux éditeurs
         const editor1 = CodeMirror(document.getElementById('codeMirrorContainer1'), {
             lineNumbers: true, // Affiche les numéros de ligne
@@ -609,6 +611,9 @@
             editor2.refresh();
             checkCompareButtonState(); // Assure que l'état du bouton est correct au chargement
         });
+
+        // Avertissement pour l'utilisation de Tailwind CSS en production (pour information)
+        console.warn("L'utilisation du CDN Tailwind CSS n'est pas recommandée en production pour des performances optimales. Pour un déploiement en production, installez-le comme plugin PostCSS ou utilisez l'interface de ligne de commande Tailwind CLI.");
 
     </script>
 </body>
