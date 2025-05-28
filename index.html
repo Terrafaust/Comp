@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparateur de Code</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdnjs.cloudflare.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/lib/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/theme/dracula.min.css">
 
     <style>
         /* Styles généraux pour le corps de la page */
@@ -136,7 +136,7 @@
         .CodeMirror.cm-s-dracula .cm-builtin { color: #8be9fd !important; } /* Cyan */
         /* Atomes (e.g., true, false, null, undefined) */
         .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet */
-        /* Nombres (changé de violet à orange pour plus de contraste et ressemblance VS Code) */
+        /* Nombres */
         .CodeMirror.cm-s-dracula .cm-number { color: #ffb86c !important; } /* Orange */
 
         /* Noms de fonctions, classes, identifiants */
@@ -159,7 +159,7 @@
         /* Interpolation de chaînes */
         .CodeMirror.cm-s-dracula .cm-string-interpolation { color: #f1fa8c !important; } /* Jaune */
 
-        /* Commentaires (ajusté pour être plus gris-bleu comme VS Code) */
+        /* Commentaires */
         .CodeMirror.cm-s-dracula .cm-comment { color: #6272a4 !important; } /* Gris-bleu */
 
         /* Opérateurs (e.g., =, +, ==, &&, ||, !) */
@@ -185,7 +185,7 @@
         .CodeMirror.cm-s-dracula .cm-property { color: #8be9fd !important; } /* Cyan */
         /* Valeurs CSS (e.g., white, #3a3a3a, 10px, solid, pointer) */
         .CodeMirror.cm-s-dracula .cm-variable-2 { color: #f1fa8c !important; } /* Jaune pour les valeurs */
-        /* Mots-clés CSS comme 'solid', 'pointer' (changé de violet à vert pour plus de distinction) */
+        /* Mots-clés CSS comme 'solid', 'pointer' */
         .CodeMirror.cm-s-dracula .cm-atom { color: #50fa7b !important; } /* Vert */
         /* Unités (px, %, s) */
         .CodeMirror.cm-s-dracula .cm-unit { color: #bd93f9 !important; } /* Violet */
@@ -197,7 +197,7 @@
         /* Erreurs */
         .CodeMirror.cm-s-dracula .cm-error { color: #ff5555 !important; } /* Rouge */
 
-        /* Crochets, parenthèses, accolades, ponctuation (couleur gris clair pour une meilleure distinction) */
+        /* Crochets, parenthèses, accolades, ponctuation */
         .CodeMirror.cm-s-dracula .cm-bracket { color: #cccccc !important; } /* Gris clair */
         /* Ponctuation générale (e.g., virgules, points-virgules) */
         .CodeMirror.cm-s-dracula .cm-punctuation { color: #f8f8f2 !important; } /* Blanc/gris clair */
@@ -262,28 +262,28 @@
         </div>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/php/php.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/ruby/ruby.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/shell/shell.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/markdown/markdown.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/yaml/yaml.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/json/json.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/go/go.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/swift/swift.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/r/r.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/dart/dart.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sass/sass.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/typescript/typescript.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/jsx/jsx.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/mode/overlay.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/lib/codemirror.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/xml/xml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/css/css.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/clike/clike.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/php/php.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/ruby/ruby.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/shell/shell.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/markdown/markdown.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/sql/sql.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/yaml/yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/json/json.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/go/go.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/swift/swift.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/r/r.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/dart/dart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/sass/sass.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/typescript/typescript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/mode/jsx/jsx.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/codemirror@5.65.5/addon/mode/overlay.min.js"></script>
 
     <script>
         // Initialisation des instances CodeMirror pour les deux éditeurs
