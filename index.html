@@ -128,33 +128,52 @@
 
         /* --- Styles pour la coloration syntaxique (VS Code-like) --- */
         /* Ces règles sont ajoutées avec !important pour s'assurer qu'elles ne sont pas écrasées */
-        /* Elles reproduisent les couleurs du thème Dracula pour les tokens CodeMirror */
-        .CodeMirror.cm-s-dracula .cm-keyword { color: #ff79c6 !important; } /* Rose pour les mots-clés (e.g., function, const, if) */
-        .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet pour les atomes (e.g., true, false, null) */
+        /* Elles reproduisent les couleurs du thème Dracula, ajustées pour ressembler davantage à VS Code */
+
+        /* Mots-clés (e.g., function, const, if, var, let, return, new) */
+        .CodeMirror.cm-s-dracula .cm-keyword { color: #ff79c6 !important; } /* Rose */
+        .CodeMirror.cm-s-dracula .cm-builtin { color: #8be9fd !important; } /* Cyan pour les fonctions/objets intégrés (e.g., document, console) */
+        .CodeMirror.cm-s-dracula .cm-atom { color: #bd93f9 !important; } /* Violet (e.g., true, false, null) */
         .CodeMirror.cm-s-dracula .cm-number { color: #bd93f9 !important; } /* Violet pour les nombres */
-        .CodeMirror.cm-s-dracula .cm-def { color: #50fa7b !important; } /* Vert pour les définitions (e.g., noms de fonctions) */
-        .CodeMirror.cm-s-dracula .cm-variable,
-        .CodeMirror.cm-s-dracula .cm-property,
-        .CodeMirror.cm-s-dracula .cm-variable-2,
-        .CodeMirror.cm-s-dracula .cm-type { color: #f8f8f2 !important; } /* Blanc/gris clair pour les variables, propriétés, types */
-        .CodeMirror.cm-s-dracula .cm-string { color: #f1fa8c !important; } /* Jaune pour les chaînes de caractères */
-        .CodeMirror.cm-s-dracula .cm-string-2 { color: #f1fa8c !important; } /* Jaune pour les chaînes multilignes ou secondaires */
-        .CodeMirror.cm-s-dracula .cm-comment { color: #6272a4 !important; } /* Gris/bleu pour les commentaires */
-        .CodeMirror.cm-s-dracula .cm-operator { color: #ff79c6 !important; } /* Rose pour les opérateurs (e.g., =, +, ==) */
-        .CodeMirror.cm-s-dracula .cm-meta { color: #ffb86c !important; } /* Orange pour les métadonnées (e.g., annotations, directives de préprocesseur) */
-        .CodeMirror.cm-s-dracula .cm-qualifier { color: #50fa7b !important; } /* Vert pour les qualificateurs */
-        .CodeMirror.cm-s-dracula .cm-builtin { color: #50fa7b !important; } /* Vert pour les fonctions/objets intégrés */
-        .CodeMirror.cm-s-dracula .cm-tag { color: #ff79c6 !important; } /* Rose pour les balises HTML/XML */
-        .CodeMirror.cm-s-dracula .cm-attribute { color: #50fa7b !important; } /* Vert pour les attributs HTML/XML */
-        .CodeMirror.cm-s-dracula .cm-header { color: #bd93f9 !important; } /* Violet pour les en-têtes Markdown */
-        .CodeMirror.cm-s-dracula .cm-link { color: #8be9fd !important; } /* Cyan pour les liens */
-        .CodeMirror.cm-s-dracula .cm-error { color: #ff5555 !important; } /* Rouge pour les erreurs */
-        .CodeMirror.cm-s-dracula .cm-bracket { color: #f8f8f2 !important; } /* Blanc/gris clair pour les crochets/parenthèses */
-        .CodeMirror.cm-s-dracula .cm-punctuation { color: #f8f8f2 !important; } /* Blanc/gris clair pour la ponctuation */
-        .CodeMirror.cm-s-dracula .cm-string-interpolation { color: #f1fa8c !important; } /* Jaune pour l'interpolation de chaînes */
-        .CodeMirror.cm-s-dracula .cm-property.cm-variable-2 { color: #8be9fd !important; } /* Cyan pour les propriétés de variables */
+
+        /* Noms de fonctions, classes, identifiants */
+        .CodeMirror.cm-s-dracula .cm-def { color: #50fa7b !important; } /* Vert pour les définitions (e.g., noms de fonctions déclarées) */
+        .CodeMirror.cm-s-dracula .cm-variable { color: #f8f8f2 !important; } /* Blanc/gris clair pour les variables générales */
+        .CodeMirror.cm-s-dracula .cm-variable-2 { color: #8be9fd !important; } /* Cyan pour les variables de second niveau (souvent paramètres ou variables locales) */
         .CodeMirror.cm-s-dracula .cm-variable-3 { color: #8be9fd !important; } /* Cyan pour les variables de troisième niveau */
-        .CodeMirror.cm-s-dracula .cm-tag.cm-bracket { color: #f8f8f2 !important; } /* Blanc/gris clair pour les crochets de balises */
+        .CodeMirror.cm-s-dracula .cm-property { color: #8be9fd !important; } /* Cyan pour les propriétés d'objets (e.g., .getElementById, .value) */
+        .CodeMirror.cm-s-dracula .cm-type { color: #8be9fd !important; } /* Cyan pour les types (e.g., class names, type annotations) */
+
+        /* Chaînes de caractères */
+        .CodeMirror.cm-s-dracula .cm-string { color: #f1fa8c !important; } /* Jaune */
+        .CodeMirror.cm-s-dracula .cm-string-2 { color: #f1fa8c !important; } /* Jaune pour les chaînes secondaires/multilignes */
+        .CodeMirror.cm-s-dracula .cm-string-interpolation { color: #f1fa8c !important; } /* Jaune pour l'interpolation de chaînes */
+
+        /* Commentaires */
+        .CodeMirror.cm-s-dracula .cm-comment { color: #6272a4 !important; } /* Gris-bleu */
+
+        /* Opérateurs (e.g., =, +, ==, &&) */
+        .CodeMirror.cm-s-dracula .cm-operator { color: #ff79c6 !important; } /* Rose */
+
+        /* Métadonnées, qualificateurs */
+        .CodeMirror.cm-s-dracula .cm-meta { color: #ffb86c !important; } /* Orange (e.g., @media, #include) */
+        .CodeMirror.cm-s-dracula .cm-qualifier { color: #50fa7b !important; } /* Vert */
+
+        /* Balises HTML/XML */
+        .CodeMirror.cm-s-dracula .cm-tag { color: #ff79c6 !important; } /* Rose pour les balises (e.g., <script>, <div>) */
+        .CodeMirror.cm-s-dracula .cm-attribute { color: #50fa7b !important; } /* Vert pour les attributs (e.g., lang, id) */
+        .CodeMirror.cm-s-dracula .cm-tag.cm-bracket { color: #f8f8f2 !important; } /* Blanc/gris clair pour les chevrons des balises */
+
+        /* En-têtes Markdown, liens */
+        .CodeMirror.cm-s-dracula .cm-header { color: #bd93f9 !important; } /* Violet */
+        .CodeMirror.cm-s-dracula .cm-link { color: #8be9fd !important; } /* Cyan */
+
+        /* Erreurs */
+        .CodeMirror.cm-s-dracula .cm-error { color: #ff5555 !important; } /* Rouge */
+
+        /* Crochets, parenthèses, accolades, ponctuation */
+        .CodeMirror.cm-s-dracula .cm-bracket { color: #cccccc !important; } /* Gris clair pour les parenthèses, crochets, accolades */
+        .CodeMirror.cm-s-dracula .cm-punctuation { color: #f8f8f2 !important; } /* Blanc/gris clair pour la ponctuation générale (e.g., virgules, points-virgules) */
     </style>
 </head>
 <body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
