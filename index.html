@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparateur de Code</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #2d3748; /* Darker background for scrollbar track */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4a5568; /* Greyish thumb */
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #5a677d; /* Lighter grey on hover */
+        }
+
+        .code-area-container {
+            display: flex;
+            flex-grow: 1;
+            overflow: hidden; /* Ensure content doesn't spill */
+        }
+
+        .line-numbers {
+            width: 40px; /* Fixed width for line numbers */
+            text-align: right;
+            padding: 0 8px;
+            color: #888;
+            user-select: none;
+            flex-shrink: 0; /* Prevent shrinking */
+            background-color: #1a202c; /* Match code editor background */
+            border-right: 1px solid #2d3748; /* Separator */
+            overflow-y: hidden; /* Hide scrollbar, controlled by textarea */
+        }
+
+        .line-numbers div {
+            height: 1.2em; /* Approximate line height */
+            line-height: 1.2em;
+        }
+
+        .code-editor, .code-display {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden; /* Hide internal scrollbars, controlled by custom scroll */
+        }
+
+        textarea {
+            width: 100%;
+            height: 100%;
+            background-color: #1a202c; /* Dark background */
+            color: #f8f8f2; /* Light text */
+            border: none;
+            resize: none;
+            outline: none;
+            padding: 10px;
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace; /* Monospaced font */
+            font-size: 0.9rem;
+            line-height: 1.2em;
+            overflow-y: scroll; /* Enable scrolling for textarea */
+            white-space: pre; /* Preserve whitespace */
+            word-wrap: normal; /* Prevent wrapping */
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+        /* Overlay for highlighted code */
+        .highlighted-code-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            pointer-events: none; /* Allow clicks to pass through to textarea */
+            overflow-y: scroll; /* Sync with textarea scroll */
+            font-family: 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.2em;
+            white-space: pre;
+            word-wrap: normal;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .highlighted-code-overlay pre {
+            margin: 0;
+            padding: 0;
+            background: none; /* No background from highlight.js */
+        }
+
+        .highlighted-code-overlay code {
+            display: block; /* Each line on its own block */
+            padding: 0;
+            background: none; /* No background from highlight.js */
+        }
+
+        .diff-line {
+            background-color: rgba(74, 222, 128, 0.2); /* Green highlight for differences */
+        }
+
+        /* Drag and Drop styles */
+        .drag-over {
+            border: 2px dashed #4ade80; /* Green dashed border */
+            background-color: rgba(74, 222, 128, 0.1); /* Light green background */
+        }
+
+        /* Hide the actual file input, use a custom button */
+        .hidden-file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 flex flex-col min-h-screen">
+
+    <nav class="bg-gray-800 p-4 shadow-lg rounded-b-lg">
+        <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+            <h1 class="text-xl font-bold text-teal-400">Comparateur de Code</h1>
+            <div class="flex flex-wrap justify-center gap-3">
+                <button id="syncScrollBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-75">
+                    Mettre les lignes au même niveau
+                </button>
+                <button id="compareBtn" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-75" disabled>
+                    Comparer
+                </button>
+                <button id="clearBtn" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-75">
+                    Effacer Tout
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex flex-1 flex-col lg:flex-row p-4 gap-4">
+        <section id="editor1" class="code-area-container flex-1 bg-gray-800 rounded-lg shadow-xl overflow-hidden relative">
+            <div class="line-numbers" id="lineNumbers1"></div>
+            <div class="code-editor relative flex-1">
+                <textarea id="code1" placeholder="Collez votre code ici ou glissez-déposez un fichier..." class="rounded-lg"></textarea>
+                <div class="highlighted-code-overlay" id="highlightedCode1"></div>
+                <input type="file" id="fileInput1" class="hidden-file-input" accept=".txt,.html,.css,.js,.json,.xml,.md,.py,.java,.c,.cpp,.php,.rb,.sh,.yml,.ts,.jsx,.tsx,.vue,.go,.swift,.kt,.sql,.r,.dart,.scss,.less,.sass,.json,.xml,.yaml,.ini,.conf,.log,.csv,.tsv,.diff,.patch,.gitignore,.dockerfile,.env,.editorconfig,.prettierrc,.eslintrc,.browserslistrc,.npmrc,.yarnrc,.bowerrc,.gitattributes,.gitmodules,.npmignore,.yarnignore,.flowconfig,.babelrc,.tsconfig.json,.webmanifest,.webapp,.appcache,.build.gradle,.pom.xml,.gradlew,.gradlew.bat,.mvnw,.mvnw.cmd,.properties,.toml,.lock,.map,.min.js,.min.css,.woff,.woff2,.ttf,.otf,.eot,.svg,.png,.jpg,.jpeg,.gif,.bmp,.ico,.webp,.mp3,.wav,.ogg,.mp4,.webm,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z,.tar,.gz,.bz2,.xz,.pdf,.docx,.xlsx,.pptx">
+                <button onclick="document.getElementById('fileInput1').click()" class="absolute bottom-4 right-4 px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300">
+                    Importer Fichier
+                </button>
+            </div>
+        </section>
+
+        <section id="editor2" class="code-area-container flex-1 bg-gray-800 rounded-lg shadow-xl overflow-hidden relative">
+            <div class="line-numbers" id="lineNumbers2"></div>
+            <div class="code-editor relative flex-1">
+                <textarea id="code2" placeholder="Collez votre code ici ou glissez-déposez un fichier..." class="rounded-lg"></textarea>
+                <div class="highlighted-code-overlay" id="highlightedCode2"></div>
+                <input type="file" id="fileInput2" class="hidden-file-input" accept=".txt,.html,.css,.js,.json,.xml,.md,.py,.java,.c,.cpp,.php,.rb,.sh,.yml,.ts,.jsx,.tsx,.vue,.go,.swift,.kt,.sql,.r,.dart,.scss,.less,.sass,.json,.xml,.yaml,.ini,.conf,.log,.csv,.tsv,.diff,.patch,.gitignore,.dockerfile,.env,.editorconfig,.prettierrc,.eslintrc,.browserslistrc,.npmrc,.yarnrc,.bowerrc,.gitattributes,.gitmodules,.npmignore,.yarnignore,.flowconfig,.babelrc,.tsconfig.json,.webmanifest,.webapp,.appcache,.build.gradle,.pom.xml,.gradlew,.gradlew.bat,.mvnw,.mvnw.cmd,.properties,.toml,.lock,.map,.min.js,.min.css,.woff,.woff2,.ttf,.otf,.eot,.svg,.png,.jpg,.jpeg,.gif,.bmp,.ico,.webp,.mp3,.wav,.ogg,.mp4,.webm,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z,.tar,.gz,.bz2,.xz,.pdf,.docx,.xlsx,.pptx">
+                <button onclick="document.getElementById('fileInput2').click()" class="absolute bottom-4 right-4 px-3 py-1 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-md shadow-lg transition duration-300">
+                    Importer Fichier
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 p-3 text-gray-400 text-xs rounded-t-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <span class="text-left">Comparateur de Code</span>
+            <span class="text-right">Créé par Terrafaust & IA</span>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script> <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+
+
+    <script>
+        const code1Textarea = document.getElementById('code1');
+        const code2Textarea = document.getElementById('code2');
+        const lineNumbers1Div = document.getElementById('lineNumbers1');
+        const lineNumbers2Div = document.getElementById('lineNumbers2');
+        const highlightedCode1Div = document.getElementById('highlightedCode1');
+        const highlightedCode2Div = document.getElementById('highlightedCode2');
+        const syncScrollBtn = document.getElementById('syncScrollBtn');
+        const compareBtn = document.getElementById('compareBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const editor1Section = document.getElementById('editor1');
+        const editor2Section = document.getElementById('editor2');
+        const fileInput1 = document.getElementById('fileInput1');
+        const fileInput2 = document.getElementById('fileInput2');
+
+        let syncScrollEnabled = false;
+        let isComparing = false; // State to track if comparison is active
+
+        // Function to update line numbers
+        function updateLineNumbers(textarea, lineNumbersDiv) {
+            const lines = textarea.value.split('\n');
+            const numLines = lines.length;
+            let lineNumbersHtml = '';
+            for (let i = 1; i <= numLines; i++) {
+                lineNumbersHtml += `<div>${i}</div>`;
+            }
+            lineNumbersDiv.innerHTML = lineNumbersHtml;
+        }
+
+        // Function to get language hint from file extension
+        function getLanguageFromFilename(filename) {
+            const parts = filename.split('.');
+            if (parts.length > 1) {
+                const ext = parts[parts.length - 1].toLowerCase();
+                // Map common extensions to highlight.js language names
+                switch (ext) {
+                    case 'js': return 'javascript';
+                    case 'html':
+                    case 'htm': return 'xml'; // highlight.js uses xml for html
+                    case 'css': return 'css';
+                    case 'json': return 'json';
+                    case 'py': return 'python';
+                    case 'java': return 'java';
+                    case 'c': return 'c';
+                    case 'cpp': return 'cpp';
+                    case 'php': return 'php';
+                    case 'rb': return 'ruby';
+                    case 'sh': return 'bash';
+                    case 'md': return 'markdown';
+                    case 'ts': return 'typescript';
+                    case 'jsx': return 'javascript'; // JSX is JavaScript
+                    case 'tsx': return 'typescript'; // TSX is TypeScript
+                    case 'vue': return 'xml'; // Vue SFCs are mostly HTML
+                    case 'go': return 'go';
+                    case 'swift': return 'swift';
+                    case 'kt': return 'kotlin';
+                    case 'sql': return 'sql';
+                    case 'r': return 'r';
+                    case 'dart': return 'dart';
+                    case 'scss': return 'scss';
+                    case 'less': return 'less';
+                    case 'sass': return 'sass';
+                    case 'yaml':
+                    case 'yml': return 'yaml';
+                    case 'xml': return 'xml';
+                    case 'txt': return 'plaintext'; // No highlighting for plain text
+                    case 'docx': return 'plaintext'; // Handle Word docs as plain text
+                    default: return 'plaintext';
+                }
+            }
+            return 'plaintext';
+        }
+
+        // Function to apply syntax highlighting
+        function highlightCode(textarea, highlightedDiv, filename = '') {
+            const code = textarea.value;
+            const language = getLanguageFromFilename(filename);
+            let highlightedHtml = '';
+
+            // Split code into lines for individual highlighting and diff styling
+            const lines = code.split('\n');
+            lines.forEach((line, index) => {
+                let highlightedLine;
+                if (language === 'plaintext') {
+                    highlightedLine = line; // No highlighting for plaintext
+                } else {
+                    try {
+                        highlightedLine = hljs.highlight(line, { language: language, ignoreIllegals: true }).value;
+                    } catch (e) {
+                        // Fallback to auto-detection if specific language fails
+                        highlightedLine = hljs.highlightAuto(line).value;
+                    }
+                }
+                // Wrap each line in a div for potential diff highlighting
+                highlightedHtml += `<div data-line-index="${index}">${highlightedLine}</div>`;
+            });
+
+            highlightedDiv.innerHTML = `<pre><code>${highlightedHtml}</code></pre>`;
+        }
+
+        // Event listener for textarea input
+        function handleCodeInput(textarea, lineNumbersDiv, highlightedDiv, filename = '') {
+            updateLineNumbers(textarea, lineNumbersDiv);
+            highlightCode(textarea, highlightedDiv, filename);
+            checkCompareButtonState();
+            // If comparison is active, re-run comparison on input
+            if (isComparing) {
+                compareCodes();
+            } else {
+                // Clear any existing diff highlights if not in compare mode
+                clearDiffHighlights();
+            }
+        }
+
+        code1Textarea.addEventListener('input', () => handleCodeInput(code1Textarea, lineNumbers1Div, highlightedCode1Div));
+        code2Textarea.addEventListener('input', () => handleCodeInput(code2Textarea, lineNumbers2Div, highlightedCode2Div));
+
+        // Initial update on load
+        window.addEventListener('load', () => {
+            handleCodeInput(code1Textarea, lineNumbers1Div, highlightedCode1Div);
+            handleCodeInput(code2Textarea, lineNumbers2Div, highlightedCode2Div);
+        });
+
+        // Synchronized Scrolling
+        function syncScroll(scrollingElement, targetElement, targetLineNumbers) {
+            if (syncScrollEnabled) {
+                targetElement.scrollTop = scrollingElement.scrollTop;
+                targetLineNumbers.scrollTop = scrollingElement.scrollTop;
+            }
+        }
+
+        code1Textarea.addEventListener('scroll', () => {
+            lineNumbers1Div.scrollTop = code1Textarea.scrollTop;
+            highlightedCode1Div.scrollTop = code1Textarea.scrollTop;
+            syncScroll(code1Textarea, code2Textarea, lineNumbers2Div);
+            syncScroll(code1Textarea, highlightedCode2Div, lineNumbers2Div); // Sync overlay too
+        });
+
+        code2Textarea.addEventListener('scroll', () => {
+            lineNumbers2Div.scrollTop = code2Textarea.scrollTop;
+            highlightedCode2Div.scrollTop = code2Textarea.scrollTop;
+            syncScroll(code2Textarea, code1Textarea, lineNumbers1Div);
+            syncScroll(code2Textarea, highlightedCode1Div, lineNumbers1Div); // Sync overlay too
+        });
+
+        syncScrollBtn.addEventListener('click', () => {
+            syncScrollEnabled = !syncScrollEnabled;
+            syncScrollBtn.textContent = syncScrollEnabled ? 'Défilement Synchronisé (Activé)' : 'Mettre les lignes au même niveau';
+            syncScrollBtn.classList.toggle('bg-blue-600', !syncScrollEnabled);
+            syncScrollBtn.classList.toggle('bg-blue-800', syncScrollEnabled);
+            syncScrollBtn.classList.toggle('hover:bg-blue-700', !syncScrollEnabled);
+            syncScrollBtn.classList.toggle('hover:bg-blue-900', syncScrollEnabled);
+
+            // If enabling sync scroll, ensure both are at the same scroll position
+            if (syncScrollEnabled) {
+                code2Textarea.scrollTop = code1Textarea.scrollTop;
+                lineNumbers2Div.scrollTop = lineNumbers1Div.scrollTop;
+                highlightedCode2Div.scrollTop = highlightedCode1Div.scrollTop;
+            }
+        });
+
+        // Comparison Logic
+        function clearDiffHighlights() {
+            document.querySelectorAll('.diff-line').forEach(el => {
+                el.classList.remove('diff-line');
+            });
+        }
+
+        function compareCodes() {
+            clearDiffHighlights(); // Clear previous highlights first
+
+            const lines1 = code1Textarea.value.split('\n');
+            const lines2 = code2Textarea.value.split('\n');
+
+            const maxLength = Math.max(lines1.length, lines2.length);
+
+            for (let i = 0; i < maxLength; i++) {
+                const line1 = lines1[i] || '';
+                const line2 = lines2[i] || '';
+
+                if (line1 !== line2) {
+                    // Apply highlight to the corresponding lines in the highlighted overlays
+                    const highlightedLine1 = highlightedCode1Div.querySelector(`[data-line-index="${i}"]`);
+                    const highlightedLine2 = highlightedCode2Div.querySelector(`[data-line-index="${i}"]`);
+
+                    if (highlightedLine1) {
+                        highlightedLine1.classList.add('diff-line');
+                    }
+                    if (highlightedLine2) {
+                        highlightedLine2.classList.add('diff-line');
+                    }
+                }
+            }
+            isComparing = true; // Set comparison state to true
+        }
+
+        compareBtn.addEventListener('click', compareCodes);
+
+        // Check if compare button should be enabled
+        function checkCompareButtonState() {
+            if (code1Textarea.value.trim() !== '' && code2Textarea.value.trim() !== '') {
+                compareBtn.disabled = false;
+                compareBtn.classList.remove('bg-gray-600', 'cursor-not-allowed');
+                compareBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+            } else {
+                compareBtn.disabled = true;
+                compareBtn.classList.add('bg-gray-600', 'cursor-not-allowed');
+                compareBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                clearDiffHighlights(); // Clear highlights if one editor becomes empty
+                isComparing = false; // Reset comparison state
+            }
+        }
+
+        // Initial check for compare button state
+        checkCompareButtonState();
+
+        // Clear All button
+        clearBtn.addEventListener('click', () => {
+            code1Textarea.value = '';
+            code2Textarea.value = '';
+            handleCodeInput(code1Textarea, lineNumbers1Div, highlightedCode1Div);
+            handleCodeInput(code2Textarea, lineNumbers2Div, highlightedCode2Div);
+            checkCompareButtonState();
+            clearDiffHighlights();
+            isComparing = false;
+            // Reset sync scroll button state
+            syncScrollEnabled = false;
+            syncScrollBtn.textContent = 'Mettre les lignes au même niveau';
+            syncScrollBtn.classList.remove('bg-blue-800', 'hover:bg-blue-900');
+            syncScrollBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+        });
+
+        // File Input Handling
+        function handleFile(file, textarea, lineNumbersDiv, highlightedDiv) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                textarea.value = e.target.result;
+                handleCodeInput(textarea, lineNumbersDiv, highlightedDiv, file.name);
+            };
+            // For .docx files, read as ArrayBuffer and then attempt to convert to text
+            // This is a simplified approach; a proper .docx parser is complex.
+            if (file.name.endsWith('.docx')) {
+                // This part is a placeholder for actual docx parsing.
+                // In a real scenario, you'd use a library like 'mammoth.js' or send to a server.
+                // For now, we'll just read it as text if possible, or show a warning.
+                reader.readAsText(file); // This will likely fail for binary docx
+                alert("Les documents Word (.docx) seront affichés en texte brut, leur formatage riche n'est pas pris en charge pour la comparaison de code.");
+            } else {
+                reader.readAsText(file);
+            }
+        }
+
+        fileInput1.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file, code1Textarea, lineNumbers1Div, highlightedCode1Div);
+            }
+        });
+
+        fileInput2.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                handleFile(file, code2Textarea, lineNumbers2Div, highlightedCode2Div);
+            }
+        });
+
+        // Drag and Drop Handling
+        function setupDragAndDrop(editorSection, textarea, lineNumbersDiv, highlightedDiv) {
+            editorSection.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                editorSection.classList.add('drag-over');
+            });
+
+            editorSection.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                editorSection.classList.remove('drag-over');
+            });
+
+            editorSection.addEventListener('drop', (e) => {
+                e.preventDefault();
+                editorSection.classList.remove('drag-over');
+                const file = e.dataTransfer.files[0];
+                if (file) {
+                    handleFile(file, textarea, lineNumbersDiv, highlightedDiv);
+                }
+            });
+        }
+
+        setupDragAndDrop(editor1Section, code1Textarea, lineNumbers1Div, highlightedCode1Div);
+        setupDragAndDrop(editor2Section, code2Textarea, lineNumbers2Div, highlightedCode2Div);
+
+        // Ensure highlighted overlay scrolls with textarea
+        // This is handled by the scroll event listeners for the textareas themselves
+        // as the overlay's scrollTop is explicitly set to match the textarea's scrollTop.
+
+    </script>
+</body>
+</html>
