@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparateur de Code</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://fonts.googleapis.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com; img-src 'self' data: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' https:; connect-src 'self' https:;">
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./output.css"> (maj 30/05)
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./codemirror/lib/codemirror.min.css">
-    <link rel="stylesheet" href="./codemirror/theme/dracula.min.css" id="cm-theme">
+    <link rel="stylesheet" href="./Codemirror/lib/codemirror.min.css"> (maj 30/05)
+    <link rel="stylesheet" href="./Codemirror/theme/dracula.min.css" id="cm-theme"> (maj 30/05)
 
     <style>
         /* Styles généraux pour le corps de la page */
@@ -268,494 +268,533 @@
         </div>
     </footer>
 
-    <script src="./codemirror/lib/codemirror.min.js"></script>
-    <script src="./codemirror/addon/mode/overlay.min.js"></script>
-    <script src="./codemirror/mode/xml/xml.min.js"></script>
-    <script src="./codemirror/mode/javascript/javascript.min.js"></script>
-    <script src="./codemirror/mode/css/css.min.js"></script>
-    <script src="./codemirror/mode/htmlmixed/htmlmixed.min.js"></script>
-    <script src="./codemirror/mode/python/python.min.js"></script>
-    <script src="./codemirror/mode/clike/clike.min.js"></script>
-    <script src="./codemirror/mode/php/php.min.js"></script>
-    <script src="./codemirror/mode/ruby/ruby.min.js"></script>
-    <script src="./codemirror/mode/shell/shell.min.js"></script>
-    <script src="./codemirror/mode/markdown/markdown.min.js"></script>
-    <script src="./codemirror/mode/sql/sql.min.js"></script>
-    <script src="./codemirror/mode/yaml/yaml.min.js"></script>
-    <script src="./codemirror/mode/json/json.min.js"></script> <script src="./codemirror/mode/go/go.min.js"></script>
-    <script src="./codemirror/mode/swift/swift.min.js"></script>
-    <script src="./codemirror/mode/r/r.min.js"></script>
-    <script src="./codemirror/mode/dart/dart.min.js"></script>
-    <script src="./codemirror/mode/sass/sass.min.js"></script>
-    <script src="./codemirror/mode/typescript/typescript.min.js"></script>
-    <script src="./codemirror/mode/jsx/jsx.min.js"></script>
+    <script src="./Codemirror/lib/codemirror.js"></script> (maj 30/05)
+    <script src="./Codemirror/addon/mode/overlay.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/xml/xml.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/javascript/javascript.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/css/css.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/htmlmixed/htmlmixed.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/python/python.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/clike/clike.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/php/php.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/ruby/ruby.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/shell/shell.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/markdown/markdown.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/sql/sql.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/yaml/yaml.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/json/json.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/go/go.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/swift/swift.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/r/r.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/dart/dart.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/sass/sass.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/typescript/typescript.min.js"></script> (maj 30/05)
+    <script src="./Codemirror/mode/jsx/jsx.min.js"></script> (maj 30/05)
 
     <script>
+        // Fonction de log personnalisée pour le débogage (maj 30/05)
+        function debugLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            console.log(`[${timestamp}] [${type.toUpperCase()}] ${message}`);
+            // Vous pouvez également afficher ces logs dans une zone de l'interface utilisateur si nécessaire
+        }
+
+        debugLog("Début du script principal. (maj 30/05)");
+
         // Initialisation des instances CodeMirror pour les deux éditeurs
-        const editor1 = CodeMirror(document.getElementById('codeMirrorContainer1'), {
-            lineNumbers: true, // Affiche les numéros de ligne
-            mode: "javascript", // Mode par défaut, sera mis à jour selon le type de fichier
-            theme: "dracula", // Thème sombre (Dracula)
-            indentUnit: 4, // Taille de l'indentation
-            tabSize: 4, // Taille des tabulations
-            lineWrapping: false, // Empêche le retour à la ligne automatique
-            readOnly: false, // Permet l'édition
-            autofocus: true, // Met le focus sur l'éditeur au chargement
-            matchBrackets: true, // Surligne les parenthèses/crochets correspondants
-            autoCloseBrackets: true, // Ferme automatiquement les parenthèses/crochets
-        });
+        // Vérifie si CodeMirror est défini avant l'initialisation (maj 30/05)
+        if (typeof CodeMirror === 'undefined') {
+            debugLog("Erreur: CodeMirror n'est pas défini. Vérifiez le chemin et l'ordre de chargement de codemirror.js.", 'error'); (maj 30/05)
+        } else {
+            debugLog("CodeMirror est défini. Initialisation des éditeurs. (maj 30/05)");
+            const editor1 = CodeMirror(document.getElementById('codeMirrorContainer1'), {
+                lineNumbers: true, // Affiche les numéros de ligne
+                mode: "javascript", // Mode par défaut, sera mis à jour selon le type de fichier
+                theme: "dracula", // Thème sombre (Dracula)
+                indentUnit: 4, // Taille de l'indentation
+                tabSize: 4, // Taille des tabulations
+                lineWrapping: false, // Empêche le retour à la ligne automatique
+                readOnly: false, // Permet l'édition
+                autofocus: true, // Met le focus sur l'éditeur au chargement
+                matchBrackets: true, // Surligne les parenthèses/crochets correspondants
+                autoCloseBrackets: true, // Ferme automatiquement les parenthèses/crochets
+            });
 
-        const editor2 = CodeMirror(document.getElementById('codeMirrorContainer2'), {
-            lineNumbers: true,
-            mode: "javascript",
-            theme: "dracula",
-            indentUnit: 4,
-            tabSize: 4,
-            lineWrapping: false,
-            readOnly: false,
-            matchBrackets: true,
-            autoCloseBrackets: true,
-        });
+            const editor2 = CodeMirror(document.getElementById('codeMirrorContainer2'), {
+                lineNumbers: true,
+                mode: "javascript",
+                theme: "dracula",
+                indentUnit: 4,
+                tabSize: 4,
+                lineWrapping: false,
+                readOnly: false,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+            });
 
-        // Récupération des autres éléments du DOM
-        const syncScrollBtn = document.getElementById('syncScrollBtn');
-        const compareBtn = document.getElementById('compareBtn');
-        const clearBtn = document.getElementById('clearBtn');
-        const editor1Section = document.getElementById('editor1');
-        const editor2Section = document.getElementById('editor2');
-        const fileInput1 = document.getElementById('fileInput1');
-        const fileInput2 = document.getElementById('fileInput2');
-        const importFileBtn1 = document.getElementById('importFileBtn1');
-        const importFileBtn2 = document.getElementById('importFileBtn2');
-        const searchLineBtn = document.getElementById('searchLineBtn');
-        const searchLineInputContainer = document.getElementById('searchLineInputContainer');
-        const lineNumberInput = document.getElementById('lineNumberInput');
-        const gotoLineBtn = document.getElementById('gotoLineBtn');
-        const themeBtn = document.getElementById('themeBtn');
-        const themeList = document.getElementById('themeList');
-        const cmThemeLink = document.getElementById('cm-theme');
+            // Récupération des autres éléments du DOM
+            const syncScrollBtn = document.getElementById('syncScrollBtn');
+            const compareBtn = document.getElementById('compareBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const editor1Section = document.getElementById('editor1');
+            const editor2Section = document.getElementById('editor2');
+            const fileInput1 = document.getElementById('fileInput1');
+            const fileInput2 = document.getElementById('fileInput2');
+            const importFileBtn1 = document.getElementById('importFileBtn1');
+            const importFileBtn2 = document.getElementById('importFileBtn2');
+            const searchLineBtn = document.getElementById('searchLineBtn');
+            const searchLineInputContainer = document.getElementById('searchLineInputContainer');
+            const lineNumberInput = document.getElementById('lineNumberInput');
+            const gotoLineBtn = document.getElementById('gotoLineBtn');
+            const themeBtn = document.getElementById('themeBtn');
+            const themeList = document.getElementById('themeList');
+            const cmThemeLink = document.getElementById('cm-theme');
 
-        let syncScrollEnabled = false;
-        let isComparing = false; // État pour suivre si la comparaison est active
+            let syncScrollEnabled = false;
+            let isComparing = false; // État pour suivre si la comparaison est active
 
-        // Liste des thèmes disponibles (basée sur les thèmes CodeMirror courants)
-        // Assurez-vous que ces fichiers .css sont présents dans votre dossier codemirror/theme/
-        const availableThemes = [
-            'dracula', 'material', 'monokai', 'nord', 'solarized', 'base16-dark', 'base16-light',
-            'mdn-like', 'eclipse', 'idea', 'lesser-dark', 'liquibyte', 'neat', 'night',
-            'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'railscasts', 'rubyblue', 'seti',
-            'shadowfox', 'ssms', 'the-matrix', 'tomorrow-night-bright', 'twilight', 'vibrant-ink',
-            'xq-dark', 'xq-light', 'zenburn'
-        ];
+            // Liste des thèmes disponibles (basée sur les thèmes CodeMirror courants)
+            // Assurez-vous que ces fichiers .css sont présents dans votre dossier Codemirror/theme/
+            const availableThemes = [
+                'dracula', 'material', 'monokai', 'nord', 'solarized', 'base16-dark', 'base16-light',
+                'mdn-like', 'eclipse', 'idea', 'lesser-dark', 'liquibyte', 'neat', 'night',
+                'paraiso-dark', 'paraiso-light', 'pastel-on-dark', 'railscasts', 'rubyblue', 'seti',
+                'shadowfox', 'ssms', 'the-matrix', 'tomorrow-night-bright', 'twilight', 'vibrant-ink',
+                'xq-dark', 'xq-light', 'zenburn'
+            ];
 
-        /**
-         * Détermine le mode CodeMirror approprié en fonction de l'extension du nom de fichier.
-         * @param {string} filename - Le nom du fichier.
-         * @returns {string} Le mode CodeMirror ou 'text/plain' par défaut.
-         */
-        function getCodeMirrorModeFromFilename(filename) {
-            const parts = filename.split('.');
-            if (parts.length > 1) {
-                const ext = parts[parts.length - 1].toLowerCase();
-                switch (ext) {
-                    case 'js': return 'javascript';
-                    case 'html': case 'htm': return 'htmlmixed'; // Utilise le mode htmlmixed pour le HTML
-                    case 'css': return 'css';
-                    case 'json': return 'application/json';
-                    case 'py': return 'python';
-                    case 'java': return 'text/x-java';
-                    case 'c': return 'text/x-csrc';
-                    case 'cpp': return 'text/x-c++src';
-                    case 'php': return 'php';
-                    case 'rb': return 'ruby';
-                    case 'sh': return 'shell';
-                    case 'md': return 'markdown';
-                    case 'ts': return 'typescript';
-                    case 'jsx': return 'jsx';
-                    case 'tsx': return 'text/typescript';
-                    case 'vue': return 'text/x-vue'; // Mode Vue.js (nécessite l'addon si non inclus)
-                    case 'go': return 'go';
-                    case 'swift': return 'swift';
-                    case 'kt': return 'text/x-kotlin';
-                    case 'sql': return 'sql';
-                    case 'r': return 'r';
-                    case 'dart': return 'dart';
-                    case 'scss': return 'text/x-scss';
-                    case 'less': return 'text/x-less';
-                    case 'sass': return 'text/x-sass';
-                    case 'yaml': case 'yml': return 'yaml';
-                    case 'xml': return 'xml';
-                    case 'txt': return 'text/plain';
-                    case 'docx': return 'text/plain'; // Les documents Word sont traités comme du texte brut
-                    default: return 'text/plain';
+            /**
+             * Détermine le mode CodeMirror approprié en fonction de l'extension du nom de fichier.
+             * @param {string} filename - Le nom du fichier.
+             * @returns {string} Le mode CodeMirror ou 'text/plain' par défaut.
+             */
+            function getCodeMirrorModeFromFilename(filename) {
+                const parts = filename.split('.');
+                if (parts.length > 1) {
+                    const ext = parts[parts.length - 1].toLowerCase();
+                    switch (ext) {
+                        case 'js': return 'javascript';
+                        case 'html': case 'htm': return 'htmlmixed'; // Utilise le mode htmlmixed pour le HTML
+                        case 'css': return 'css';
+                        case 'json': return 'application/json';
+                        case 'py': return 'python';
+                        case 'java': return 'text/x-java';
+                        case 'c': return 'text/x-csrc';
+                        case 'cpp': return 'text/x-c++src';
+                        case 'php': return 'php';
+                        case 'rb': return 'ruby';
+                        case 'sh': return 'shell';
+                        case 'md': return 'markdown';
+                        case 'ts': return 'typescript';
+                        case 'jsx': return 'jsx';
+                        case 'tsx': return 'text/typescript';
+                        case 'vue': return 'text/x-vue'; // Mode Vue.js (nécessite l'addon si non inclus)
+                        case 'go': return 'go';
+                        case 'swift': return 'swift';
+                        case 'kt': return 'text/x-kotlin';
+                        case 'sql': return 'sql';
+                        case 'r': return 'r';
+                        case 'dart': return 'dart';
+                        case 'scss': return 'text/x-scss';
+                        case 'less': return 'text/x-less';
+                        case 'sass': return 'text/x-sass';
+                        case 'yaml': case 'yml': return 'yaml';
+                        case 'xml': return 'xml';
+                        case 'txt': return 'text/plain';
+                        case 'docx': return 'text/plain'; // Les documents Word sont traités comme du texte brut
+                        default: return 'text/plain';
+                    }
                 }
+                return 'text/plain';
             }
-            return 'text/plain';
-        }
 
-        /**
-         * Met à jour le contenu et le mode d'une instance CodeMirror.
-         * @param {CodeMirror.Editor} editorInstance - L'instance CodeMirror à mettre à jour.
-         * @param {string} content - Le nouveau contenu du texte.
-         * @param {string} [filename=''] - Le nom du fichier pour déterminer le mode.
-         */
-        function updateEditorContentAndMode(editorInstance, content, filename = '') {
-            editorInstance.setValue(content);
-            const mode = getCodeMirrorModeFromFilename(filename);
-            editorInstance.setOption("mode", mode);
-            editorInstance.refresh(); // Important pour que CodeMirror se redessine correctement
-        }
-
-        // Écouteurs d'événements pour les changements de contenu des éditeurs CodeMirror
-        editor1.on('change', () => {
-            checkCompareButtonState();
-            if (isComparing) {
-                compareCodes(); // Relance la comparaison si elle est active
-            } else {
-                clearDiffHighlights(); // Efface les surlignages si la comparaison n'est pas active
+            /**
+             * Met à jour le contenu et le mode d'une instance CodeMirror.
+             * @param {CodeMirror.Editor} editorInstance - L'instance CodeMirror à mettre à jour.
+             * @param {string} content - Le nouveau contenu du texte.
+             * @param {string} [filename=''] - Le nom du fichier pour déterminer le mode.
+             */
+            function updateEditorContentAndMode(editorInstance, content, filename = '') {
+                editorInstance.setValue(content);
+                const mode = getCodeMirrorModeFromFilename(filename);
+                editorInstance.setOption("mode", mode);
+                editorInstance.refresh(); // Important pour que CodeMirror se redessine correctement
+                debugLog(`Éditeur mis à jour : mode '${mode}' pour le fichier '${filename}'. (maj 30/05)`);
             }
-        });
-        editor2.on('change', () => {
-            checkCompareButtonState();
-            if (isComparing) {
-                compareCodes();
-            } else {
-                clearDiffHighlights();
-            }
-        });
 
-        // Synchronisation du défilement entre les deux éditeurs CodeMirror
-        editor1.on('scroll', (instance) => {
-            if (syncScrollEnabled) {
-                const scrollInfo = instance.getScrollInfo();
-                editor2.scrollTo(scrollInfo.left, scrollInfo.top);
-            }
-        });
-
-        editor2.on('scroll', (instance) => {
-            if (syncScrollEnabled) {
-                const scrollInfo = instance.getScrollInfo();
-                editor1.scrollTo(scrollInfo.left, scrollInfo.top);
-            }
-        });
-
-        // Gestion du bouton "Défilement synchronisé"
-        syncScrollBtn.addEventListener('click', () => {
-            syncScrollEnabled = !syncScrollEnabled;
-            syncScrollBtn.textContent = syncScrollEnabled ? 'Défilement synchronisé (Activé)' : 'Défilement synchronisé (Désactivé)';
-            syncScrollBtn.classList.toggle('bg-blue-600', !syncScrollEnabled);
-            syncScrollBtn.classList.toggle('bg-blue-800', syncScrollEnabled);
-            syncScrollBtn.classList.toggle('hover:bg-blue-700', !syncScrollEnabled);
-            syncScrollBtn.classList.toggle('hover:bg-blue-900', syncScrollEnabled);
-
-            // Si le défilement synchronisé est activé, assure que les deux éditeurs sont à la même position
-            if (syncScrollEnabled) {
-                const scrollInfo1 = editor1.getScrollInfo();
-                editor2.scrollTo(scrollInfo1.left, scrollInfo1.top);
-            }
-        });
-
-        /**
-         * Efface tous les surlignages de différence et de numéros de ligne.
-         */
-        function clearDiffHighlights() {
-            isComparing = false; // Réinitialise l'état de comparaison
-            // Efface les surlignages de contenu de ligne
-            editor1.eachLine(line => editor1.removeLineClass(line, 'background', 'diff-line'));
-            editor2.eachLine(line => editor2.removeLineClass(line, 'background', 'diff-line'));
-
-            // Efface les surlignages de numéros de ligne
-            editor1.eachLine(line => {
-                editor1.removeLineClass(line, 'gutter', 'same-line');
-                editor1.removeLineClass(line, 'gutter', 'similar-line');
-                editor1.removeLineClass(line, 'gutter', 'different-line');
-            });
-            editor2.eachLine(line => {
-                editor2.removeLineClass(line, 'gutter', 'same-line');
-                editor2.removeLineClass(line, 'gutter', 'similar-line');
-                editor2.removeLineClass(line, 'gutter', 'different-line');
-            });
-        }
-
-        /**
-         * Compare les codes dans les deux éditeurs et applique les surlignages.
-         * - Numéro de ligne vert si les lignes sont identiques.
-         * - Numéro de ligne rouge si les lignes sont différentes (pas de mots en commun).
-         * - Numéro de ligne bleu si les lignes sont similaires (au moins un mot en commun).
-         * - Contenu de ligne vert clair si les lignes sont différentes.
-         */
-        function compareCodes() {
-            clearDiffHighlights(); // Efface les surlignages précédents
-            isComparing = true; // Définit l'état de comparaison à actif
-
-            const lines1 = editor1.getValue().split('\n');
-            const lines2 = editor2.getValue().split('\n');
-
-            const maxLength = Math.max(lines1.length, lines2.length);
-
-            for (let i = 0; i < maxLength; i++) {
-                const line1 = lines1[i] ? lines1[i].trim() : ''; // Supprime les espaces blancs pour la comparaison
-                const line2 = lines2[i] ? lines2[i].trim() : '';
-
-                const cmLine1 = editor1.getLineHandle(i); // Référence à l'objet ligne de CodeMirror
-                const cmLine2 = editor2.getLineHandle(i);
-
-                if (line1 === line2) {
-                    // Lignes identiques : Numéro de ligne en vert
-                    if (cmLine1) editor1.addLineClass(cmLine1, 'gutter', 'same-line');
-                    if (cmLine2) editor2.addLineClass(cmLine2, 'gutter', 'same-line');
+            // Écouteurs d'événements pour les changements de contenu des éditeurs CodeMirror
+            editor1.on('change', () => {
+                debugLog("Changement détecté dans l'éditeur 1. (maj 30/05)");
+                checkCompareButtonState();
+                if (isComparing) {
+                    compareCodes(); // Relance la comparaison si elle est active
                 } else {
-                    // Les lignes sont différentes : Surlignage général du contenu en vert clair
-                    if (cmLine1) editor1.addLineClass(cmLine1, 'background', 'diff-line');
-                    if (cmLine2) editor2.addLineClass(cmLine2, 'background', 'diff-line');
-
-                    // Vérifie les mots en commun pour la classification 'similaire'
-                    // Tokenise et nettoie les mots, convertit en minuscules pour une comparaison insensible à la casse
-                    const words1 = new Set(line1.toLowerCase().split(/\s+|[.,;!?(){}[\]<>"'`:/\\]+/).filter(word => word.length > 0));
-                    const words2 = new Set(line2.toLowerCase().split(/\s+|[.,;!?(){}[\]<>"'`:/\\]+/).filter(word => word.length > 0));
-
-                    let hasCommonWord = false;
-                    for (const word of words1) {
-                        if (words2.has(word)) {
-                            hasCommonWord = true;
-                            break;
-                        }
-                    }
-
-                    if (hasCommonWord) {
-                        // Lignes similaires : Numéro de ligne en bleu
-                        if (cmLine1) editor1.addLineClass(cmLine1, 'gutter', 'similar-line');
-                        if (cmLine2) editor2.addLineClass(cmLine2, 'gutter', 'similar-line');
-                    } else {
-                        // Lignes complètement différentes : Numéro de ligne en rouge
-                        if (cmLine1) editor1.addLineClass(cmLine1, 'gutter', 'different-line');
-                        if (cmLine2) editor2.addLineClass(cmLine2, 'gutter', 'different-line');
-                    }
+                    clearDiffHighlights(); // Efface les surlignages si la comparaison n'est pas active
                 }
-            }
-        }
-
-        compareBtn.addEventListener('click', compareCodes);
-
-        /**
-         * Vérifie l'état des éditeurs et active/désactive le bouton "Comparer" en conséquence.
-         */
-        function checkCompareButtonState() {
-            if (editor1.getValue().trim() !== '' && editor2.getValue().trim() !== '') {
-                compareBtn.disabled = false;
-                compareBtn.classList.remove('bg-gray-600', 'cursor-not-allowed');
-                compareBtn.classList.add('bg-green-600', 'hover:bg-green-700');
-            } else {
-                compareBtn.disabled = true;
-                compareBtn.classList.add('bg-gray-600', 'cursor-not-allowed');
-                compareBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
-                clearDiffHighlights(); // Efface les surlignages si un éditeur devient vide
-                isComparing = false; // Réinitialise l'état de comparaison
-            }
-        }
-
-        // Vérification initiale de l'état du bouton "Comparer" au chargement
-        checkCompareButtonState();
-
-        // Gestion du bouton "Effacer Tout"
-        clearBtn.addEventListener('click', () => {
-            editor1.setValue('');
-            editor2.setValue('');
-            editor1.setOption("mode", "javascript"); // Réinitialise le mode par défaut
-            editor2.setOption("mode", "javascript"); // Réinitialise le mode par défaut
-            checkCompareButtonState();
-            clearDiffHighlights();
-            isComparing = false;
-            // Réinitialise l'état du bouton de défilement synchronisé
-            syncScrollEnabled = false;
-            syncScrollBtn.textContent = 'Défilement synchronisé (Désactivé)';
-            syncScrollBtn.classList.remove('bg-blue-800', 'hover:bg-blue-900');
-            syncScrollBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-        });
-
-        /**
-         * Gère le chargement d'un fichier dans un éditeur CodeMirror.
-         * @param {File} file - Le fichier à charger.
-         * @param {CodeMirror.Editor} editorInstance - L'instance CodeMirror cible.
-         */
-        function handleFile(file, editorInstance) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                updateEditorContentAndMode(editorInstance, e.target.result, file.name);
+            });
+            editor2.on('change', () => {
+                debugLog("Changement détecté dans l'éditeur 2. (maj 30/05)");
                 checkCompareButtonState();
                 if (isComparing) {
                     compareCodes();
                 } else {
                     clearDiffHighlights();
                 }
-            };
-            // Gestion spécifique pour les documents Word (.docx)
-            if (file.name.endsWith('.docx')) {
-                reader.readAsText(file); // Tente de lire comme texte (peut résulter en texte illisible pour les binaires)
-                showMessageBox("Les documents Word (.docx) seront affichés en texte brut, leur formatage riche n'est pas pris en charge pour la comparaison de code.");
-            } else {
-                reader.readAsText(file);
-            }
-        }
-
-        /**
-         * Affiche une boîte de message personnalisée (modale) au lieu de l'alerte native du navigateur.
-         * @param {string} message - Le message à afficher.
-         */
-        function showMessageBox(message) {
-            const messageBox = document.createElement('div');
-            messageBox.className = 'message-box-overlay';
-            messageBox.innerHTML = `
-                <div class="message-box-content">
-                    <p class="mb-4">${message}</p>
-                    <button id="closeMessageBox" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md">OK</button>
-                </div>
-            `;
-            document.body.appendChild(messageBox);
-
-            document.getElementById('closeMessageBox').addEventListener('click', () => {
-                document.body.removeChild(messageBox);
-            });
-        }
-
-        // Écouteurs d'événements pour les boutons "Importer Fichier"
-        importFileBtn1.addEventListener('click', () => {
-            fileInput1.click(); // Déclenche l'ouverture du sélecteur de fichiers
-        });
-
-        importFileBtn2.addEventListener('click', () => {
-            fileInput2.click(); // Déclenche l'ouverture du sélecteur de fichiers
-        });
-
-        fileInput1.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                handleFile(file, editor1);
-            }
-        });
-
-        fileInput2.addEventListener('change', (event) => {
-            const file = event.target.files[0];
-            if (file) {
-                handleFile(file, editor2);
-            }
-        });
-
-        /**
-         * Configure la fonctionnalité de glisser-déposer pour une section d'éditeur donnée.
-         * @param {HTMLElement} editorSection - La section de l'éditeur (ex: editor1Section).
-         * @param {CodeMirror.Editor} editorInstance - L'instance CodeMirror associée.
-         */
-        function setupDragAndDrop(editorSection, editorInstance) {
-            editorSection.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                editorSection.classList.add('drag-over');
             });
 
-            editorSection.addEventListener('dragleave', (e) => {
-                e.preventDefault();
-                editorSection.classList.remove('drag-over');
-            });
-
-            editorSection.addEventListener('drop', (e) => {
-                e.preventDefault();
-                editorSection.classList.remove('drag-over');
-                const file = e.dataTransfer.files[0];
-                if (file) {
-                    handleFile(file, editorInstance);
+            // Synchronisation du défilement entre les deux éditeurs CodeMirror
+            editor1.on('scroll', (instance) => {
+                if (syncScrollEnabled) {
+                    const scrollInfo = instance.getScrollInfo();
+                    editor2.scrollTo(scrollInfo.left, scrollInfo.top);
                 }
             });
-        }
 
-        setupDragAndDrop(editor1Section, editor1);
-        setupDragAndDrop(editor2Section, editor2);
+            editor2.on('scroll', (instance) => {
+                if (syncScrollEnabled) {
+                    const scrollInfo = instance.getScrollInfo();
+                    editor1.scrollTo(scrollInfo.left, scrollInfo.top);
+                }
+            });
 
-        // Fonctionnalité de recherche de ligne
-        searchLineBtn.addEventListener('click', () => {
-            searchLineInputContainer.classList.toggle('hidden');
-            if (!searchLineInputContainer.classList.contains('hidden')) {
-                lineNumberInput.focus();
-            }
-        });
+            // Gestion du bouton "Défilement synchronisé"
+            syncScrollBtn.addEventListener('click', () => {
+                syncScrollEnabled = !syncScrollEnabled;
+                syncScrollBtn.textContent = syncScrollEnabled ? 'Défilement synchronisé (Activé)' : 'Défilement synchronisé (Désactivé)';
+                syncScrollBtn.classList.toggle('bg-blue-600', !syncScrollEnabled);
+                syncScrollBtn.classList.toggle('bg-blue-800', syncScrollEnabled);
+                syncScrollBtn.classList.toggle('hover:bg-blue-700', !syncScrollEnabled);
+                syncScrollBtn.classList.toggle('hover:bg-blue-900', syncScrollEnabled);
+                debugLog(`Défilement synchronisé : ${syncScrollEnabled ? 'Activé' : 'Désactivé'}. (maj 30/05)`);
 
-        gotoLineBtn.addEventListener('click', () => {
-            const lineNumber = parseInt(lineNumberInput.value, 10);
-            if (isNaN(lineNumber) || lineNumber < 1) {
-                showMessageBox("Veuillez entrer un numéro de ligne valide.");
-                return;
-            }
+                // Si le défilement synchronisé est activé, assure que les deux éditeurs sont à la même position
+                if (syncScrollEnabled) {
+                    const scrollInfo1 = editor1.getScrollInfo();
+                    editor2.scrollTo(scrollInfo1.left, scrollInfo1.top);
+                }
+            });
 
-            // Les lignes de CodeMirror sont indexées à partir de 0
-            const lineIndex = lineNumber - 1;
+            /**
+             * Efface tous les surlignages de différence et de numéros de ligne.
+             */
+            function clearDiffHighlights() {
+                debugLog("Effacement des surlignages de différence. (maj 30/05)");
+                isComparing = false; // Réinitialise l'état de comparaison
+                // Efface les surlignages de contenu de ligne
+                editor1.eachLine(line => editor1.removeLineClass(line, 'background', 'diff-line'));
+                editor2.eachLine(line => editor2.removeLineClass(line, 'background', 'diff-line'));
 
-            // Fait défiler les deux éditeurs à la ligne cible
-            editor1.scrollIntoView({ line: lineIndex, char: 0 }, 50); // 50px de marge du haut
-            editor2.scrollIntoView({ line: lineIndex, char: 0 }, 50);
-
-            // Masque l'entrée après le saut
-            searchLineInputContainer.classList.add('hidden');
-            lineNumberInput.value = ''; // Efface l'entrée
-        });
-
-        // Ferme l'entrée de recherche si l'on clique en dehors
-        document.addEventListener('click', (event) => {
-            if (!searchLineBtn.contains(event.target) && !searchLineInputContainer.contains(event.target) && !event.target.closest('.message-box-overlay')) {
-                searchLineInputContainer.classList.add('hidden');
-            }
-        });
-
-        // Gestion du menu de sélection de thème
-        themeBtn.addEventListener('click', (event) => {
-            event.stopPropagation(); // Empêche la fermeture immédiate si le clic est sur le bouton
-            themeList.classList.toggle('hidden');
-            if (!themeList.classList.contains('hidden') && themeList.children.length === 0) {
-                // Générer les boutons de thème si la liste est vide
-                availableThemes.forEach(theme => {
-                    const themeItem = document.createElement('button');
-                    themeItem.textContent = theme.charAt(0).toUpperCase() + theme.slice(1).replace(/-/g, ' '); // Formate le nom
-                    themeItem.classList.add('px-3', 'py-1', 'w-full', 'text-left', 'hover:bg-gray-700', 'rounded-md', 'transition', 'duration-200');
-                    themeItem.dataset.theme = theme;
-                    themeItem.addEventListener('click', () => {
-                        // Supprimer l'ancien thème
-                        const oldTheme = cmThemeLink.getAttribute('href');
-                        if (oldTheme) {
-                            const oldThemeName = oldTheme.substring(oldTheme.lastIndexOf('/') + 1, oldTheme.lastIndexOf('.min.css'));
-                            document.body.classList.remove(`cm-s-${oldThemeName}`);
-                        }
-                        
-                        // Charger le nouveau thème
-                        cmThemeLink.href = `./codemirror/theme/${theme}.min.css`;
-                        editor1.setOption("theme", theme);
-                        editor2.setOption("theme", theme);
-                        document.body.classList.add(`cm-s-${theme}`); // Ajoute la classe pour la coloration spécifique au thème
-                        themeList.classList.add('hidden'); // Cacher la liste après sélection
-                    });
-                    themeList.appendChild(themeItem);
+                // Efface les surlignages de numéros de ligne
+                editor1.eachLine(line => {
+                    editor1.removeLineClass(line, 'gutter', 'same-line');
+                    editor1.removeLineClass(line, 'gutter', 'similar-line');
+                    editor1.removeLineClass(line, 'gutter', 'different-line');
+                });
+                editor2.eachLine(line => {
+                    editor2.removeLineClass(line, 'gutter', 'same-line');
+                    editor2.removeLineClass(line, 'gutter', 'similar-line');
+                    editor2.removeLineClass(line, 'gutter', 'different-line');
                 });
             }
-        });
 
-        // Ferme la liste des thèmes si l'on clique en dehors
-        document.addEventListener('click', (event) => {
-            if (!themeBtn.contains(event.target) && !themeList.contains(event.target) && !event.target.closest('.message-box-overlay')) {
-                themeList.classList.add('hidden');
+            /**
+             * Compare les codes dans les deux éditeurs et applique les surlignages.
+             * - Numéro de ligne vert si les lignes sont identiques.
+             * - Numéro de ligne rouge si les lignes sont différentes (pas de mots en commun).
+             * - Numéro de ligne bleu si les lignes sont similaires (au moins un mot en commun).
+             * - Contenu de ligne vert clair si les lignes sont différentes.
+             */
+            function compareCodes() {
+                debugLog("Lancement de la comparaison des codes. (maj 30/05)");
+                clearDiffHighlights(); // Efface les surlignages précédents
+                isComparing = true; // Définit l'état de comparaison à actif
+
+                const lines1 = editor1.getValue().split('\n');
+                const lines2 = editor2.getValue().split('\n');
+
+                const maxLength = Math.max(lines1.length, lines2.length);
+
+                for (let i = 0; i < maxLength; i++) {
+                    const line1 = lines1[i] ? lines1[i].trim() : ''; // Supprime les espaces blancs pour la comparaison
+                    const line2 = lines2[i] ? lines2[i].trim() : '';
+
+                    const cmLine1 = editor1.getLineHandle(i); // Référence à l'objet ligne de CodeMirror
+                    const cmLine2 = editor2.getLineHandle(i);
+
+                    if (line1 === line2) {
+                        // Lignes identiques : Numéro de ligne en vert
+                        if (cmLine1) editor1.addLineClass(cmLine1, 'gutter', 'same-line');
+                        if (cmLine2) editor2.addLineClass(cmLine2, 'gutter', 'same-line');
+                    } else {
+                        // Les lignes sont différentes : Surlignage général du contenu en vert clair
+                        if (cmLine1) editor1.addLineClass(cmLine1, 'background', 'diff-line');
+                        if (cmLine2) editor2.addLineClass(cmLine2, 'background', 'diff-line');
+
+                        // Vérifie les mots en commun pour la classification 'similaire'
+                        // Tokenise et nettoie les mots, convertit en minuscules pour une comparaison insensible à la casse
+                        const words1 = new Set(line1.toLowerCase().split(/\s+|[.,;!?(){}[\]<>"'`:/\\]+/).filter(word => word.length > 0));
+                        const words2 = new Set(line2.toLowerCase().split(/\s+|[.,;!?(){}[\]<>"'`:/\\]+/).filter(word => word.length > 0));
+
+                        let hasCommonWord = false;
+                        for (const word of words1) {
+                            if (words2.has(word)) {
+                                hasCommonWord = true;
+                                break;
+                            }
+                        }
+
+                        if (hasCommonWord) {
+                            // Lignes similaires : Numéro de ligne en bleu
+                            if (cmLine1) editor1.addLineClass(cmLine1, 'gutter', 'similar-line');
+                            if (cmLine2) editor2.addLineClass(cmLine2, 'gutter', 'similar-line');
+                        } else {
+                            // Lignes complètement différentes : Numéro de ligne en rouge
+                            if (cmLine1) editor1.addLineClass(cmLine1, 'gutter', 'different-line');
+                            if (cmLine2) editor2.addLineClass(cmLine2, 'gutter', 'different-line');
+                        }
+                    }
+                }
             }
-        });
+
+            compareBtn.addEventListener('click', compareCodes);
+
+            /**
+             * Vérifie l'état des éditeurs et active/désactive le bouton "Comparer" en conséquence.
+             */
+            function checkCompareButtonState() {
+                if (editor1.getValue().trim() !== '' && editor2.getValue().trim() !== '') {
+                    compareBtn.disabled = false;
+                    compareBtn.classList.remove('bg-gray-600', 'cursor-not-allowed');
+                    compareBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    debugLog("Bouton 'Comparer' activé. (maj 30/05)");
+                } else {
+                    compareBtn.disabled = true;
+                    compareBtn.classList.add('bg-gray-600', 'cursor-not-allowed');
+                    compareBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    clearDiffHighlights(); // Efface les surlignages si un éditeur devient vide
+                    isComparing = false; // Réinitialise l'état de comparaison
+                    debugLog("Bouton 'Comparer' désactivé. (maj 30/05)");
+                }
+            }
+
+            // Vérification initiale de l'état du bouton "Comparer" au chargement
+            checkCompareButtonState();
+
+            // Gestion du bouton "Effacer Tout"
+            clearBtn.addEventListener('click', () => {
+                debugLog("Effacement de tous les éditeurs. (maj 30/05)");
+                editor1.setValue('');
+                editor2.setValue('');
+                editor1.setOption("mode", "javascript"); // Réinitialise le mode par défaut
+                editor2.setOption("mode", "javascript"); // Réinitialise le mode par défaut
+                checkCompareButtonState();
+                clearDiffHighlights();
+                isComparing = false;
+                // Réinitialise l'état du bouton de défilement synchronisé
+                syncScrollEnabled = false;
+                syncScrollBtn.textContent = 'Défilement synchronisé (Désactivé)';
+                syncScrollBtn.classList.remove('bg-blue-800', 'hover:bg-blue-900');
+                syncScrollBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            });
+
+            /**
+             * Gère le chargement d'un fichier dans un éditeur CodeMirror.
+             * @param {File} file - Le fichier à charger.
+             * @param {CodeMirror.Editor} editorInstance - L'instance CodeMirror cible.
+             */
+            function handleFile(file, editorInstance) {
+                debugLog(`Tentative de chargement du fichier : ${file.name} dans l'éditeur. (maj 30/05)`);
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    updateEditorContentAndMode(editorInstance, e.target.result, file.name);
+                    checkCompareButtonState();
+                    if (isComparing) {
+                        compareCodes();
+                    } else {
+                        clearDiffHighlights();
+                    }
+                };
+                // Gestion spécifique pour les documents Word (.docx)
+                if (file.name.endsWith('.docx')) {
+                    reader.readAsText(file); // Tente de lire comme texte (peut résulter en texte illisible pour les binaires)
+                    showMessageBox("Les documents Word (.docx) seront affichés en texte brut, leur formatage riche n'est pas pris en charge pour la comparaison de code.");
+                } else {
+                    reader.readAsText(file);
+                }
+            }
+
+            /**
+             * Affiche une boîte de message personnalisée (modale) au lieu de l'alerte native du navigateur.
+             * @param {string} message - Le message à afficher.
+             */
+            function showMessageBox(message) {
+                debugLog(`Affichage du message : "${message}". (maj 30/05)`);
+                const messageBox = document.createElement('div');
+                messageBox.className = 'message-box-overlay';
+                messageBox.innerHTML = `
+                    <div class="message-box-content">
+                        <p class="mb-4">${message}</p>
+                        <button id="closeMessageBox" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md">OK</button>
+                    </div>
+                `;
+                document.body.appendChild(messageBox);
+
+                document.getElementById('closeMessageBox').addEventListener('click', () => {
+                    document.body.removeChild(messageBox);
+                    debugLog("Boîte de message fermée. (maj 30/05)");
+                });
+            }
+
+            // Écouteurs d'événements pour les boutons "Importer Fichier"
+            importFileBtn1.addEventListener('click', () => {
+                debugLog("Clic sur 'Importer Fichier' pour l'éditeur 1. (maj 30/05)");
+                fileInput1.click(); // Déclenche l'ouverture du sélecteur de fichiers
+            });
+
+            importFileBtn2.addEventListener('click', () => {
+                debugLog("Clic sur 'Importer Fichier' pour l'éditeur 2. (maj 30/05)");
+                fileInput2.click(); // Déclenche l'ouverture du sélecteur de fichiers
+            });
+
+            fileInput1.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    handleFile(file, editor1);
+                }
+            });
+
+            fileInput2.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    handleFile(file, editor2);
+                }
+            });
+
+            /**
+             * Configure la fonctionnalité de glisser-déposer pour une section d'éditeur donnée.
+             * @param {HTMLElement} editorSection - La section de l'éditeur (ex: editor1Section).
+             * @param {CodeMirror.Editor} editorInstance - L'instance CodeMirror associée.
+             */
+            function setupDragAndDrop(editorSection, editorInstance) {
+                editorSection.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    editorSection.classList.add('drag-over');
+                });
+
+                editorSection.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    editorSection.classList.remove('drag-over');
+                });
+
+                editorSection.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    editorSection.classList.remove('drag-over');
+                    const file = e.dataTransfer.files[0];
+                    if (file) {
+                        handleFile(file, editorInstance);
+                        debugLog(`Fichier déposé : ${file.name}. (maj 30/05)`);
+                    }
+                });
+            }
+
+            setupDragAndDrop(editor1Section, editor1);
+            setupDragAndDrop(editor2Section, editor2);
+
+            // Fonctionnalité de recherche de ligne
+            searchLineBtn.addEventListener('click', () => {
+                searchLineInputContainer.classList.toggle('hidden');
+                if (!searchLineInputContainer.classList.contains('hidden')) {
+                    lineNumberInput.focus();
+                    debugLog("Champ de recherche de ligne affiché. (maj 30/05)");
+                } else {
+                    debugLog("Champ de recherche de ligne masqué. (maj 30/05)");
+                }
+            });
+
+            gotoLineBtn.addEventListener('click', () => {
+                const lineNumber = parseInt(lineNumberInput.value, 10);
+                if (isNaN(lineNumber) || lineNumber < 1) {
+                    showMessageBox("Veuillez entrer un numéro de ligne valide.");
+                    debugLog("Numéro de ligne invalide entré. (maj 30/05)", 'warn');
+                    return;
+                }
+
+                // Les lignes de CodeMirror sont indexées à partir de 0
+                const lineIndex = lineNumber - 1;
+
+                // Fait défiler les deux éditeurs à la ligne cible
+                editor1.scrollIntoView({ line: lineIndex, char: 0 }, 50); // 50px de marge du haut
+                editor2.scrollIntoView({ line: lineIndex, char: 0 }, 50);
+                debugLog(`Défilement vers la ligne ${lineNumber}. (maj 30/05)`);
+
+                // Masque l'entrée après le saut
+                searchLineInputContainer.classList.add('hidden');
+                lineNumberInput.value = ''; // Efface l'entrée
+            });
+
+            // Ferme l'entrée de recherche si l'on clique en dehors
+            document.addEventListener('click', (event) => {
+                if (!searchLineBtn.contains(event.target) && !searchLineInputContainer.contains(event.target) && !event.target.closest('.message-box-overlay')) {
+                    searchLineInputContainer.classList.add('hidden');
+                }
+            });
+
+            // Gestion du menu de sélection de thème
+            themeBtn.addEventListener('click', (event) => {
+                event.stopPropagation(); // Empêche la fermeture immédiate si le clic est sur le bouton
+                themeList.classList.toggle('hidden');
+                if (!themeList.classList.contains('hidden') && themeList.children.length === 0) {
+                    debugLog("Génération de la liste des thèmes. (maj 30/05)");
+                    // Générer les boutons de thème si la liste est vide
+                    availableThemes.forEach(theme => {
+                        const themeItem = document.createElement('button');
+                        themeItem.textContent = theme.charAt(0).toUpperCase() + theme.slice(1).replace(/-/g, ' '); // Formate le nom
+                        themeItem.classList.add('px-3', 'py-1', 'w-full', 'text-left', 'hover:bg-gray-700', 'rounded-md', 'transition', 'duration-200');
+                        themeItem.dataset.theme = theme;
+                        themeItem.addEventListener('click', () => {
+                            // Supprimer l'ancien thème
+                            const oldTheme = cmThemeLink.getAttribute('href');
+                            if (oldTheme) {
+                                const oldThemeName = oldTheme.substring(oldTheme.lastIndexOf('/') + 1, oldTheme.lastIndexOf('.min.css'));
+                                document.body.classList.remove(`cm-s-${oldThemeName}`);
+                            }
+                            
+                            // Charger le nouveau thème
+                            cmThemeLink.href = `./Codemirror/theme/${theme}.min.css`; (maj 30/05)
+                            editor1.setOption("theme", theme);
+                            editor2.setOption("theme", theme);
+                            document.body.classList.add(`cm-s-${theme}`); // Ajoute la classe pour la coloration spécifique au thème
+                            themeList.classList.add('hidden'); // Cacher la liste après sélection
+                            debugLog(`Thème changé pour : ${theme}. (maj 30/05)`);
+                        });
+                        themeList.appendChild(themeItem);
+                    });
+                }
+            });
+
+            // Ferme la liste des thèmes si l'on clique en dehors
+            document.addEventListener('click', (event) => {
+                if (!themeBtn.contains(event.target) && !themeList.contains(event.target) && !event.target.closest('.message-box-overlay')) {
+                    themeList.classList.add('hidden');
+                }
+            });
 
 
-        // Configuration initiale de CodeMirror pour s'assurer qu'il est prêt au chargement
-        window.addEventListener('load', () => {
-            editor1.refresh(); // Force le rafraîchissement des éditeurs
-            editor2.refresh();
-            checkCompareButtonState(); // Assure que l'état du bouton est correct au chargement
-            // Appliquer le thème initial à la classe body pour les styles généraux
-            const initialTheme = cmThemeLink.href.substring(cmThemeLink.href.lastIndexOf('/') + 1, cmThemeLink.href.lastIndexOf('.min.css'));
-            document.body.classList.add(`cm-s-${initialTheme}`);
-        });
+            // Configuration initiale de CodeMirror pour s'assurer qu'il est prêt au chargement
+            window.addEventListener('load', () => {
+                debugLog("Fenêtre chargée. Rafraîchissement des éditeurs. (maj 30/05)");
+                editor1.refresh(); // Force le rafraîchissement des éditeurs
+                editor2.refresh();
+                checkCompareButtonState(); // Assure que l'état du bouton est correct au chargement
+                // Appliquer le thème initial à la classe body pour les styles généraux
+                const initialTheme = cmThemeLink.href.substring(cmThemeLink.href.lastIndexOf('/') + 1, cmThemeLink.href.lastIndexOf('.min.css'));
+                document.body.classList.add(`cm-s-${initialTheme}`);
+            });
 
-        // Avertissement pour l'utilisation du CDN Tailwind CSS en production (pour information)
-        console.warn("L'utilisation du CDN Tailwind CSS n'est pas recommandée en production pour des performances optimales. Pour un déploiement en production, installez-le comme plugin PostCSS ou utilisez l'interface de ligne de commande Tailwind CLI.");
-
+            // Avertissement pour l'utilisation du CDN Tailwind CSS en production (pour information)
+            console.warn("L'utilisation du CDN Tailwind CSS n'est pas recommandée en production pour des performances optimales. Pour un déploiement en production, installez-le comme plugin PostCSS ou utilisez l'interface de ligne de commande Tailwind CLI.");
+        }
+        debugLog("Fin du script principal. (maj 30/05)");
     </script>
 </body>
 </html>
