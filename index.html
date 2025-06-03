@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comparateur de Documents</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .CodeMirror {
+            height: 100%;
+            border-radius: 0.5rem; /* rounded-lg */
+            overflow: hidden; /* Ensure content stays within rounded corners */
+        }
+        .CodeMirror-scroll {
+            overflow: auto !important; /* Allow scrolling */
+            margin-right: -17px; /* Compensate for scrollbar to avoid horizontal scroll */
+            margin-bottom: -17px; /* Compensate for scrollbar to avoid vertical scroll */
+            padding-bottom: 17px; /* Add padding to make space for horizontal scrollbar */
+            box-sizing: content-box; /* Ensure padding doesn't affect width */
+        }
+        /* Custom styles for the two editors */
+        #editor1 .CodeMirror {
+            border: 2px solid #3b82f6; /* blue-500 */
+        }
+        #editor2 .CodeMirror {
+            border: 2px solid #ef4444; /* red-500 */
+        }
+
+        /* Highlight differences */
+        .diff-line {
+            background-color: #fecaca; /* red-200, slightly lighter for line background */
+            opacity: 0.9; /* Slightly less transparent */
+        }
+        .diff-char {
+            background-color: #ef4444; /* red-500, more prominent for char */
+            font-weight: bold;
+            color: white; /* Add white text for better contrast */
+            padding: 0 2px; /* Small padding to make it stand out */
+            border-radius: 2px; /* Slightly rounded corners for chars */
+        }
+
+        /* Drag and drop overlay */
+        .drop-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            border-radius: 0.5rem;
+            pointer-events: none; /* Allow events to pass through when not active */
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 10;
+        }
+        .drop-overlay.active {
+            opacity: 1;
+            pointer-events: auto; /* Enable events when active */
+        }
+
+        /* Custom button styling */
+        .btn {
+            @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300 ease-in-out shadow-lg;
+            background: linear-gradient(145deg, #60a5fa, #3b82f6); /* blue-400 to blue-500 */
+            color: white;
+            border: none;
+            cursor: pointer;
+            outline: none;
+        }
+        .btn:hover {
+            background: linear-gradient(145deg, #3b82f6, #2563eb); /* blue-500 to blue-600 */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Specific button colors */
+        .btn-compare {
+            background: linear-gradient(145deg, #fca5a5, #ef4444); /* red-300 to red-500 */
+        }
+        .btn-compare:hover {
+            background: linear-gradient(145deg, #ef4444, #dc2626); /* red-500 to red-600 */
+        }
+        /* Style for compare button when differences are shown */
+        .btn-compare.active {
+            background: linear-gradient(145deg, #4ade80, #22c55e); /* green-400 to green-600 */
+        }
+        .btn-compare.active:hover {
+            background: linear-gradient(145deg, #22c55e, #16a34a); /* green-600 to green-700 */
+        }
+
+
+        .btn-sync.active {
+            background: linear-gradient(145deg, #4ade80, #22c55e); /* green-400 to green-600 */
+        }
+        .btn-sync.active:hover {
+            background: linear-gradient(145deg, #22c55e, #16a34a); /* green-600 to green-700 */
+        }
+
+        /* Message box styling */
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            max-width: 90%;
+            min-width: 300px;
+        }
+        .message-box-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 shadow-xl">
+        <h1 class="text-4xl font-bold text-center tracking-tight">Comparateur de Documents</h1>
+        <p class="text-center text-blue-100 mt-2">Glissez, déposez et comparez vos fichiers texte.</p>
+    </header>
+
+    <main class="flex-grow container mx-auto p-8 flex flex-col md:flex-row gap-8">
+        <!-- Editor 1 -->
+        <section id="editor1" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col min-h-[600px]">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-700">Document 1</h2>
+            <div class="flex-grow border border-gray-300 rounded-lg overflow-hidden">
+                <textarea id="code1" class="w-full h-full"></textarea>
+            </div>
+            <div class="drop-overlay" id="drop-overlay-1">
+                <p>Déposez le fichier ici</p>
+            </div>
+        </section>
+
+        <!-- Editor 2 -->
+        <section id="editor2" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col min-h-[600px]">
+            <h2 class="text-2xl font-semibold mb-4 text-red-700">Document 2</h2>
+            <div class="flex-grow border border-gray-300 rounded-lg overflow-hidden">
+                <textarea id="code2" class="w-full h-full"></textarea>
+            </div>
+            <div class="drop-overlay" id="drop-overlay-2">
+                <p>Déposez le fichier ici</p>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 p-6 shadow-inner mt-auto">
+        <div class="container mx-auto flex flex-col sm:flex-row justify-center items-center gap-4">
+            <button id="syncScrollBtn" class="btn btn-sync">
+                Synchroniser le défilement
+            </button>
+            <button id="compareBtn" class="btn btn-compare">
+                Comparer les documents
+            </button>
+        </div>
+    </footer>
+
+    <!-- Message Box -->
+    <div id="messageBoxBackdrop" class="message-box-backdrop"></div>
+    <div id="messageBox" class="message-box">
+        <p id="messageBoxText" class="text-lg font-medium mb-4"></p>
+        <button id="messageBoxCloseBtn" class="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Fermer</button>
+    </div>
+
+    <!-- CodeMirror JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/scroll/scrollpastend.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/selection/active-line.min.js"></script>
+
+    <script>
+        let editor1, editor2;
+        let syncScroll = false;
+        let scrollTimeout1, scrollTimeout2;
+        let diffMarks = []; // Stores CodeMirror TextMarker objects
+
+        // Function to show a custom message box
+        function showMessageBox(message) {
+            const messageBox = document.getElementById('messageBox');
+            const messageBoxText = document.getElementById('messageBoxText');
+            const messageBoxBackdrop = document.getElementById('messageBoxBackdrop');
+
+            messageBoxText.textContent = message;
+            messageBox.style.display = 'flex';
+            messageBoxBackdrop.style.display = 'block';
+        }
+
+        // Function to hide the custom message box
+        function hideMessageBox() {
+            const messageBox = document.getElementById('messageBox');
+            const messageBoxBackdrop = document.getElementById('messageBoxBackdrop');
+
+            messageBox.style.display = 'none';
+            messageBoxBackdrop.style.display = 'none';
+        }
+
+        // Initialize CodeMirror editors when the window loads
+        window.onload = function() {
+            editor1 = CodeMirror.fromTextArea(document.getElementById('code1'), {
+                lineNumbers: true,
+                mode: "text/plain", // Default mode, can be changed dynamically
+                theme: "dracula",
+                lineWrapping: true,
+                styleActiveLine: true,
+                readOnly: false // Allow editing
+            });
+
+            editor2 = CodeMirror.fromTextArea(document.getElementById('code2'), {
+                lineNumbers: true,
+                mode: "text/plain", // Default mode, can be changed dynamically
+                theme: "dracula",
+                lineWrapping: true,
+                styleActiveLine: true,
+                readOnly: false // Allow editing
+            });
+
+            // Set initial content for demonstration
+            editor1.setValue(`// Document 1 - En-tête
+function greet(name) {
+    console.log("Bonjour, " + name + "!"); // Différence ici
+    // Cette ligne est unique au document 1
+    const x = 10;
+    return x;
+}
+
+// Ligne identique dans les deux documents
+const sharedLine = "Cette ligne est la même.";
+const message = "Ceci est le document 1."; // Différence ici
+greet("Monde"); // Différence ici
+`);
+
+            editor2.setValue(`// Document 2 - En-tête
+function greet(name) {
+    console.log("Salut, " + name + "!"); // Différence ici
+    // Cette ligne est unique au document 2
+    const y = 20;
+    return y;
+}
+
+// Ligne identique dans les deux documents
+const sharedLine = "Cette ligne est la même.";
+const message = "Ceci est le document 2."; // Différence ici
+greet("Utilisateur"); // Différence ici
+`);
+
+            setupDragAndDrop();
+            setupScrollSynchronization();
+            setupComparison();
+
+            // Add event listener for message box close button
+            document.getElementById('messageBoxCloseBtn').addEventListener('click', hideMessageBox);
+        };
+
+        /**
+         * Sets up drag-and-drop functionality for both editor areas.
+         * Allows users to drag and drop text files into the editors.
+         */
+        function setupDragAndDrop() {
+            const editor1Section = document.getElementById('editor1');
+            const editor2Section = document.getElementById('editor2');
+            const dropOverlay1 = document.getElementById('drop-overlay-1');
+            const dropOverlay2 = document.getElementById('drop-overlay-2');
+
+            // Helper function to handle drag events
+            function handleDragEvents(section, overlay, editorInstance) {
+                section.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    overlay.classList.add('active');
+                });
+
+                section.addEventListener('dragleave', (e) => {
+                    e.preventDefault();
+                    // Only hide if leaving the main section, not child elements
+                    if (e.target === section) {
+                        overlay.classList.remove('active');
+                    }
+                });
+
+                section.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    overlay.classList.remove('active');
+
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const file = files[0];
+                        if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.js') || file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.json')) {
+                            const reader = new FileReader();
+                            reader.onload = (event) => {
+                                editorInstance.setValue(event.target.result);
+                                showMessageBox(`Fichier "${file.name}" chargé dans le document.`);
+                                clearDiffMarks(); // Clear marks after new file is loaded
+                                document.getElementById('compareBtn').textContent = 'Comparer les documents';
+                                document.getElementById('compareBtn').classList.remove('active');
+                            };
+                            reader.onerror = () => {
+                                showMessageBox(`Erreur lors de la lecture du fichier "${file.name}".`);
+                            };
+                            reader.readAsText(file);
+                        } else {
+                            showMessageBox('Veuillez déposer un fichier texte (.txt, .js, .html, .css, .json, etc.).');
+                        }
+                    }
+                });
+            }
+
+            handleDragEvents(editor1Section, dropOverlay1, editor1);
+            handleDragEvents(editor2Section, dropOverlay2, editor2);
+        }
+
+        /**
+         * Sets up scroll synchronization between the two CodeMirror editors.
+         * Toggles synchronization on button click.
+         */
+        function setupScrollSynchronization() {
+            const syncScrollBtn = document.getElementById('syncScrollBtn');
+
+            // Function to synchronize scrolling from source to target
+            function syncEditorScroll(sourceEditor, targetEditor) {
+                clearTimeout(scrollTimeout1); // Clear any pending timeouts
+                clearTimeout(scrollTimeout2); // Clear any pending timeouts
+
+                // Calculate scroll percentage
+                const scrollInfo = sourceEditor.getScrollInfo();
+                const scrollPercentage = scrollInfo.top / (scrollInfo.height - scrollInfo.clientHeight);
+
+                // Apply scroll to target editor
+                targetEditor.scrollTo(0, scrollPercentage * (targetEditor.getScrollInfo().height - targetEditor.getScrollInfo().clientHeight));
+            }
+
+            // Event listener for editor1 scroll
+            const onScroll1 = () => {
+                if (syncScroll) {
+                    clearTimeout(scrollTimeout1);
+                    scrollTimeout1 = setTimeout(() => syncEditorScroll(editor1, editor2), 10);
+                }
+            };
+
+            // Event listener for editor2 scroll
+            const onScroll2 = () => {
+                if (syncScroll) {
+                    clearTimeout(scrollTimeout2);
+                    scrollTimeout2 = setTimeout(() => syncEditorScroll(editor2, editor1), 10);
+                }
+            };
+
+            syncScrollBtn.addEventListener('click', () => {
+                syncScroll = !syncScroll;
+                syncScrollBtn.classList.toggle('active', syncScroll);
+                if (syncScroll) {
+                    showMessageBox('Défilement synchronisé activé.');
+                    editor1.on('scroll', onScroll1);
+                    editor2.on('scroll', onScroll2);
+                    // Immediately sync after activation
+                    syncEditorScroll(editor1, editor2);
+                } else {
+                    showMessageBox('Défilement synchronisé désactivé.');
+                    editor1.off('scroll', onScroll1);
+                    editor2.off('scroll', onScroll2);
+                }
+            });
+        }
+
+        /**
+         * Sets up the document comparison functionality.
+         * Compares line by line and highlights differences.
+         */
+        function setupComparison() {
+            const compareBtn = document.getElementById('compareBtn');
+
+            compareBtn.addEventListener('click', () => {
+                // If there are existing diff marks, clear them and reset button
+                if (diffMarks.length > 0) {
+                    clearDiffMarks();
+                    compareBtn.textContent = 'Comparer les documents';
+                    compareBtn.classList.remove('active');
+                    showMessageBox('Surlignage des différences effacé.');
+                    return; // Exit function after clearing
+                }
+
+                // If no diff marks, proceed with comparison
+                const doc1Lines = editor1.getValue().split('\n');
+                const doc2Lines = editor2.getValue().split('\n');
+
+                const maxLines = Math.max(doc1Lines.length, doc2Lines.length);
+
+                let differencesFound = false;
+
+                for (let i = 0; i < maxLines; i++) {
+                    const line1 = doc1Lines[i] || '';
+                    const line2 = doc2Lines[i] || '';
+
+                    if (line1 !== line2) {
+                        differencesFound = true;
+                        // Highlight the entire line if they are different
+                        if (line1) {
+                            diffMarks.push(editor1.markText(
+                                { line: i, ch: 0 },
+                                { line: i, ch: line1.length },
+                                { className: 'diff-line' }
+                            ));
+                        }
+                        if (line2) {
+                            diffMarks.push(editor2.markText(
+                                { line: i, ch: 0 },
+                                { line: i, ch: line2.length },
+                                { className: 'diff-line' }
+                            ));
+                        }
+
+                        // Character-level comparison for differing lines
+                        const minLength = Math.min(line1.length, line2.length);
+                        for (let j = 0; j < minLength; j++) {
+                            if (line1[j] !== line2[j]) {
+                                diffMarks.push(editor1.markText(
+                                    { line: i, ch: j },
+                                    { line: i, ch: j + 1 },
+                                    { className: 'diff-char' }
+                                ));
+                                diffMarks.push(editor2.markText(
+                                    { line: i, ch: j },
+                                    { line: i, ch: j + 1 },
+                                    { className: 'diff-char' }
+                                ));
+                            }
+                        }
+                        // Highlight remaining characters if one line is longer
+                        if (line1.length > line2.length) {
+                            diffMarks.push(editor1.markText(
+                                { line: i, ch: minLength },
+                                { line: i, ch: line1.length },
+                                { className: 'diff-char' }
+                            ));
+                        } else if (line2.length > line1.length) {
+                            diffMarks.push(editor2.markText(
+                                { line: i, ch: minLength },
+                                { line: i, ch: line2.length },
+                                { className: 'diff-char' }
+                            ));
+                        }
+                    }
+                }
+
+                if (differencesFound) {
+                    showMessageBox('Comparaison terminée : des différences ont été trouvées et sont surlignées.');
+                    compareBtn.textContent = 'Effacer les différences';
+                    compareBtn.classList.add('active');
+                } else {
+                    showMessageBox('Les documents sont identiques !');
+                    compareBtn.textContent = 'Comparer les documents';
+                    compareBtn.classList.remove('active');
+                }
+            });
+        }
+
+        /**
+         * Clears all previously marked differences in both editors.
+         */
+        function clearDiffMarks() {
+            diffMarks.forEach(mark => mark.clear());
+            diffMarks = [];
+        }
+    </script>
+</body>
+</html>
