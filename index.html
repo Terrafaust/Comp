@@ -1,202 +1,369 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="light"> <!-- Default to light mode -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparateur de Documents</title>
+    <title>Comparateur de Documents Pro - NovaLook</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- CodeMirror CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.css">
+    <!-- CodeMirror Addons CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/dialog/dialog.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/matchesonscrollbar.css">
+
+    <!-- CodeMirror Themes (selection) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-palenight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/eclipse.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/nord.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/solarized.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/one-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/cobalt.min.css">
+
+
     <style>
+        :root {
+            --header-height: 56px; /* Slightly more compact header */
+            --editor-container-padding: 0.75rem; /* p-3 */
+            --primary-color: #3b82f6; /* blue-500 */
+            --primary-hover-color: #2563eb; /* blue-600 */
+            --secondary-color: #6b7280; /* gray-500 */
+            --secondary-hover-color: #4b5563; /* gray-600 */
+
+            --bg-light: #ffffff;
+            --text-light: #1f2937; /* gray-800 */
+            --border-light: #d1d5db; /* gray-300 */
+            --input-bg-light: #f9fafb; /* gray-50 */
+
+            --bg-dark: #111827; /* gray-900 */
+            --text-dark: #f3f4f6; /* gray-100 */
+            --border-dark: #374151; /* gray-700 */
+            --input-bg-dark: #1f2937; /* gray-800 */
+
+            /* CodeMirror line height settings */
+            --cm-font-size: 13px;
+            --cm-line-height-multiplier: 1.5;
+            --cm-max-lines: 100;
+            /* Calculated max-height for 100 lines: 100 * 13px * 1.5 = 1950px */
+            --cm-max-height: calc(var(--cm-max-lines) * var(--cm-font-size) * var(--cm-line-height-multiplier));
+        }
+
+        html.dark {
+            color-scheme: dark;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f0f2f5;
+            background-color: var(--bg-light);
+            color: var(--text-light);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevent horizontal scroll on body */
+            overflow-y: hidden; /* Prevent main page body from scrolling vertically if content fits */
         }
+        html.dark body {
+            background-color: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
         .CodeMirror {
-            height: 100%;
-            border-radius: 0.5rem; /* rounded-lg */
-            overflow: hidden; /* Ensure content stays within rounded corners */
+            height: 100% !important; /* Tries to fill its parent */
+            max-height: var(--cm-max-height); /* But capped at 100 lines equivalent */
+            border-radius: 0.375rem; /* rounded-md */
+            border: 1px solid var(--border-light);
+            font-size: var(--cm-font-size);
+            line-height: var(--cm-line-height-multiplier);
+        }
+        html.dark .CodeMirror {
+            border: 1px solid var(--border-dark);
         }
         .CodeMirror-scroll {
-            overflow: auto !important; /* Allow scrolling */
-            margin-right: -17px; /* Compensate for scrollbar to avoid horizontal scroll */
-            margin-bottom: -17px; /* Compensate for scrollbar to avoid vertical scroll */
-            padding-bottom: 17px; /* Add padding to make space for horizontal scrollbar */
-            box-sizing: content-box; /* Ensure padding doesn't affect width */
-        }
-        /* Custom styles for the two editors */
-        #editor1 .CodeMirror {
-            border: 2px solid #3b82f6; /* blue-500 */
-        }
-        #editor2 .CodeMirror {
-            border: 2px solid #ef4444; /* red-500 */
+            min-height: 150px; /* Ensure it's always somewhat visible */
+            /* CodeMirror handles its own overflow internally */
         }
 
-        /* Highlight differences */
-        .diff-line {
-            background-color: #fecaca; /* red-200, slightly lighter for line background */
-            opacity: 0.9; /* Slightly less transparent */
+        /* Header Styling */
+        .app-header {
+            height: var(--header-height);
+            background-color: var(--bg-light);
+            border-bottom: 1px solid var(--border-light);
+            padding: 0 1rem; /* px-4 */
+            flex-shrink: 0; /* Prevent header from shrinking */
         }
-        .diff-char {
-            background-color: #ef4444; /* red-500, more prominent for char */
-            font-weight: bold;
-            color: white; /* Add white text for better contrast */
-            padding: 0 2px; /* Small padding to make it stand out */
-            border-radius: 2px; /* Slightly rounded corners for chars */
-        }
-
-        /* Drag and drop overlay */
-        .drop-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 1.5rem;
-            border-radius: 0.5rem;
-            pointer-events: none; /* Allow events to pass through when not active */
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-            z-index: 10;
-        }
-        .drop-overlay.active {
-            opacity: 1;
-            pointer-events: auto; /* Enable events when active */
+        html.dark .app-header {
+            background-color: var(--bg-dark);
+            border-bottom: 1px solid var(--border-dark);
         }
 
-        /* Custom button styling */
+        /* Button Styling - Flat & Modern */
         .btn {
-            @apply px-6 py-3 rounded-xl font-semibold transition-all duration-300 ease-in-out shadow-lg;
-            background: linear-gradient(145deg, #60a5fa, #3b82f6); /* blue-400 to blue-500 */
+            @apply px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
             color: white;
-            border: none;
-            cursor: pointer;
-            outline: none;
+            border: 1px solid var(--primary-color);
         }
-        .btn:hover {
-            background: linear-gradient(145deg, #3b82f6, #2563eb); /* blue-500 to blue-600 */
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        .btn-primary:hover { background-color: var(--primary-hover-color); border-color: var(--primary-hover-color); }
+        .btn-primary.active {
+            background-color: #16a34a; /* green-600 */
+            border-color: #16a34a;
         }
-        .btn:active {
-            transform: translateY(0);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Specific button colors */
-        .btn-compare {
-            background: linear-gradient(145deg, #fca5a5, #ef4444); /* red-300 to red-500 */
-        }
-        .btn-compare:hover {
-            background: linear-gradient(145deg, #ef4444, #dc2626); /* red-500 to red-600 */
-        }
-        /* Style for compare button when differences are shown */
-        .btn-compare.active {
-            background: linear-gradient(145deg, #4ade80, #22c55e); /* green-400 to green-600 */
-        }
-        .btn-compare.active:hover {
-            background: linear-gradient(145deg, #22c55e, #16a34a); /* green-600 to green-700 */
+         .btn-primary.active:hover {
+            background-color: #15803d; /* green-700 */
+            border-color: #15803d;
         }
 
 
-        .btn-sync.active {
-            background: linear-gradient(145deg, #4ade80, #22c55e); /* green-400 to green-600 */
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--secondary-color);
+            border: 1px solid var(--border-light);
         }
-        .btn-sync.active:hover {
-            background: linear-gradient(145deg, #22c55e, #16a34a); /* green-600 to green-700 */
+        html.dark .btn-secondary {
+            color: var(--text-dark);
+            border: 1px solid var(--border-dark);
+        }
+        .btn-secondary:hover {
+            background-color: var(--input-bg-light);
+            border-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        html.dark .btn-secondary:hover {
+            background-color: var(--input-bg-dark);
+            border-color: var(--secondary-hover-color);
+            color: var(--primary-color);
+        }
+        .btn-secondary.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+         html.dark .btn-secondary.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .btn-icon { @apply p-1.5; } /* For icon-only buttons */
+
+        /* Input Styling */
+        .input-field {
+            @apply px-2.5 py-1.5 border rounded-md text-sm shadow-sm transition-colors;
+            background-color: var(--input-bg-light);
+            border-color: var(--border-light);
+            color: var(--text-light);
+        }
+        .input-field:focus {
+            @apply ring-2 ring-offset-1 dark:ring-offset-gray-900 ring-blue-500 border-blue-500 outline-none;
+        }
+        html.dark .input-field {
+            background-color: var(--input-bg-dark);
+            border-color: var(--border-dark);
+            color: var(--text-dark);
         }
 
-        /* Message box styling */
-        .message-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            z-index: 1000;
-            display: none; /* Hidden by default */
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            max-width: 90%;
-            min-width: 300px;
+        /* Modal Styling */
+        .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-30 dark:bg-opacity-50 z-40; }
+        .modal {
+            @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg shadow-xl z-50 w-full max-w-sm;
+            background-color: var(--bg-light);
         }
-        .message-box-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-            display: none;
+        html.dark .modal { background-color: var(--bg-dark); }
+        .modal-title { @apply text-lg font-semibold mb-3; }
+        .modal-body { @apply text-sm mb-4; }
+        .modal-footer { @apply flex justify-end gap-2; }
+
+        /* Dropdown Styling */
+        .dropdown { @apply relative inline-block text-left; }
+        .dropdown-menu {
+            @apply origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20;
+            background-color: var(--bg-light);
+            max-height: 200px; overflow-y: auto;
         }
+        html.dark .dropdown-menu { background-color: var(--bg-dark); @apply ring-gray-700; }
+        .dropdown-item {
+            @apply block px-3 py-1.5 text-sm cursor-pointer;
+            color: var(--text-light);
+        }
+        html.dark .dropdown-item { color: var(--text-dark); }
+        .dropdown-item:hover { background-color: var(--input-bg-light); }
+        html.dark .dropdown-item:hover { background-color: var(--input-bg-dark); }
+
+
+        /* T icon style */
+        #tIcon {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600; /* semibold */
+            font-size: 1rem; /* text-base */
+            width: 30px; height: 30px; /* Fixed size */
+        }
+
+        /* Editor container takes remaining height */
+        #editorContainer {
+            /* height: calc(100vh - var(--header-height) - (var(--editor-container-padding) * 2)); */
+            /* Let flex-grow handle height distribution */
+            flex-grow: 1;
+            width: 100%;
+            display: flex; /* Ensure it's a flex container for children */
+            overflow: hidden; /* Prevent this container from causing page scroll */
+        }
+        .editor-wrapper {
+            height: 100%; /* Make editor wrapper take full height of its column */
+            display: flex;
+            flex-direction: column; /* Stack title and editor div */
+            min-height: 0; /* Important for flex children that need to scroll */
+        }
+        .editor-wrapper > div.flex-grow { /* This is the div CodeMirror replaces/uses */
+             flex-grow: 1;
+             min-height: 0; /* Allow shrinking and internal scrolling */
+             position: relative; /* For drop overlay */
+        }
+
+
+        .drop-overlay {
+            @apply absolute inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center text-white text-lg rounded-md pointer-events-none opacity-0 transition-opacity duration-300 z-10;
+        }
+        .drop-overlay.active { @apply opacity-100 pointer-events-auto; }
+
+        .diff-line { background-color: rgba(239, 68, 68, 0.15); } /* Lighter red */
+        html.dark .diff-line { background-color: rgba(239, 68, 68, 0.25); }
+        .diff-char {
+            background-color: rgba(239, 68, 68, 0.5);
+            font-weight: 500; color: white; padding: 0 1px; border-radius: 2px;
+        }
+        html.dark .diff-char { background-color: rgba(239, 68, 68, 0.7); }
+
+        .CodeMirror-matchingtag { background: rgba(0, 123, 255, .2); }
+        .CodeMirror-focused .cm-matchhighlight { background-color: rgba(59, 130, 246, 0.2); }
+        .cm-matchhighlight { background-color: rgba(59, 130, 246, 0.15); }
+        .CodeMirror-selection-highlight-scrollbar { background-color: rgba(59, 130, 246, 0.3); }
+
+        .search-results-count { @apply text-xs ml-1 opacity-70; }
+
+         /* Styling for CodeMirror search dialogs */
+        .CodeMirror-dialog {
+            background-color: var(--bg-light) !important;
+            color: var(--text-light) !important;
+            border: 1px solid var(--border-light) !important;
+            @apply rounded-md shadow-lg text-sm p-3;
+        }
+        html.dark .CodeMirror-dialog {
+            background-color: var(--bg-dark) !important;
+            color: var(--text-dark) !important;
+            border: 1px solid var(--border-dark) !important;
+        }
+        .CodeMirror-dialog input[type="text"] {
+             @apply input-field !important;
+             padding: 0.375rem 0.5rem !important; /* Equivalent to py-1.5 px-2 */
+        }
+        .CodeMirror-dialog button {
+            @apply btn btn-secondary !important;
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important; /* text-xs */
+        }
+        .CodeMirror-search-label {
+             color: var(--text-light) !important;
+             @apply text-xs;
+        }
+         html.dark .CodeMirror-search-label {
+             color: var(--text-dark) !important;
+        }
+
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
-    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 shadow-xl">
-        <h1 class="text-4xl font-bold text-center tracking-tight">Comparateur de Documents</h1>
-        <p class="text-center text-blue-100 mt-2">Glissez, déposez et comparez vos fichiers texte.</p>
+<body class="antialiased">
+    <!-- Header -->
+    <header class="app-header flex items-center justify-between fixed top-0 left-0 right-0 z-30">
+        <div class="flex items-center gap-3">
+            <button id="tIcon" class="btn btn-secondary btn-icon" title="Portail T">T</button>
+            <h1 class="text-md font-semibold">Comparateur</h1>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap justify-end">
+            <!-- Go to Line -->
+            <div class="flex items-center">
+                <input type="number" id="goToLineInput" placeholder="Ligne" class="input-field w-20 text-xs" min="1">
+                <button id="goToLineBtn" class="btn btn-secondary btn-icon ml-1" title="Aller à la ligne">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.854 3.854a.5.5 0 0 0-.708-.708L6 7.293 1.854 3.146a.5.5 0 1 0-.708.708L5.293 8l-4.147 4.146a.5.5 0 0 0 .708.708L6 8.707l4.146 4.147a.5.5 0 0 0 .708-.708L6.707 8l4.147-4.146z"/></svg>
+                </button>
+            </div>
+
+            <!-- Search -->
+            <div class="flex items-center">
+                <input type="text" id="searchInput" placeholder="Rechercher..." class="input-field w-32 text-xs">
+                <button id="searchBtn" class="btn btn-secondary btn-icon ml-1" title="Rechercher (Ctrl+F)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+                </button>
+                <button id="replaceBtn" class="btn btn-secondary btn-icon ml-1" title="Remplacer (Ctrl+H)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 13.5A1.5 1.5 0 0 1 0 12V4A1.5 1.5 0 0 1 1.5 2.5h13A1.5 1.5 0 0 1 16 4v8a1.5 1.5 0 0 1-1.5 1.5h-13zm13-1a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5h-13a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h13z"/><path d="M2 5.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5zm4.5-3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/></svg>
+                </button>
+            </div>
+            <span id="searchOccurrencesTotal" class="text-xs opacity-70 hidden"></span>
+
+            <button id="syncScrollBtn" class="btn btn-secondary" title="Synchroniser le défilement">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 0-1h-13a.5.5 0 0 0-.5.5zm-1-4a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1h-15a.5.5 0 0 1-.5-.5zm1-4a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/></svg>
+                Sync
+            </button>
+            <button id="compareBtn" class="btn btn-secondary" title="Comparer les documents">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 13.5 4.5v5A2.5 2.5 0 0 1 11 12H5A2.5 2.5 0 0 1 2.5 9.5v-5A2.5 2.5 0 0 1 5 2V.5zm0 2.5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5z"/><path d="M12 13H4a1 1 0 0 0-1 1v1.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V14a1 1 0 0 0-1-1z"/></svg>
+                Comparer
+            </button>
+
+            <!-- Theme Selector -->
+            <div class="dropdown">
+                <button id="themeToggleBtn" class="btn btn-secondary btn-icon" title="Changer de thème">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.901 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/></svg>
+                </button>
+                <div id="themeDropdown" class="dropdown-menu hidden"></div>
+            </div>
+
+            <!-- Day/Night Mode Toggle -->
+            <button id="darkModeToggle" class="btn btn-secondary btn-icon" title="Mode Jour/Nuit">
+                <svg id="sunIcon" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                <svg id="moonIcon" class="w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+            </button>
+        </div>
     </header>
 
-    <main class="flex-grow container mx-auto p-8 flex flex-col md:flex-row gap-8">
-        <!-- Editor 1 -->
-        <section id="editor1" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col h-[500px]">
-            <h2 class="text-2xl font-semibold mb-4 text-blue-700">Document 1</h2>
-            <div class="flex-grow border border-gray-300 rounded-lg overflow-hidden">
-                <textarea id="code1" class="w-full h-full"></textarea>
-            </div>
-            <div class="drop-overlay" id="drop-overlay-1">
-                <p>Déposez le fichier ici</p>
-            </div>
+    <!-- Main Content Area for Editors -->
+    <main id="editorContainer" class="flex-grow flex flex-col md:flex-row gap-3 p-3" style="padding-top: calc(var(--header-height) + var(--editor-container-padding));">
+        <section id="editor1Wrapper" class="relative flex-1 flex flex-col editor-wrapper min-w-0">
+            <h2 class="text-sm font-medium mb-1.5 opacity-80">Document 1 <span id="occurrences1" class="search-results-count"></span></h2>
+            <div class="flex-grow relative"><textarea id="code1"></textarea><div class="drop-overlay" id="drop-overlay-1"><p>Déposez le fichier ici</p></div></div>
         </section>
 
-        <!-- Editor 2 -->
-        <section id="editor2" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col h-[500px]">
-            <h2 class="text-2xl font-semibold mb-4 text-red-700">Document 2</h2>
-            <div class="flex-grow border border-gray-300 rounded-lg overflow-hidden">
-                <textarea id="code2" class="w-full h-full"></textarea>
-            </div>
-            <div class="drop-overlay" id="drop-overlay-2">
-                <p>Déposez le fichier ici</p>
-            </div>
+        <section id="editor2Wrapper" class="relative flex-1 flex flex-col editor-wrapper min-w-0">
+            <h2 class="text-sm font-medium mb-1.5 opacity-80">Document 2 <span id="occurrences2" class="search-results-count"></span></h2>
+            <div class="flex-grow relative"><textarea id="code2"></textarea><div class="drop-overlay" id="drop-overlay-2"><p>Déposez le fichier ici</p></div></div>
         </section>
     </main>
 
-    <footer class="bg-gray-800 p-6 shadow-inner mt-auto">
-        <div class="container mx-auto flex flex-col sm:flex-row justify-center items-center gap-4">
-            <button id="syncScrollBtn" class="btn btn-sync">
-                Synchroniser le défilement
-            </button>
-            <button id="compareBtn" class="btn btn-compare">
-                Comparer les documents
-            </button>
+    <!-- "T" Portal Modal -->
+    <div id="tPortalModalBackdrop" class="modal-backdrop hidden"></div>
+    <div id="tPortalModal" class="modal hidden">
+        <h3 class="modal-title">Portail T</h3>
+        <div class="modal-body">Souhaitez-vous revenir au portail T ?</div>
+        <div class="modal-footer">
+            <button id="closeTPortalModalBtn" class="btn btn-secondary">Annuler</button>
+            <a href="https://Terrafaust.github.io/T" target="_blank" class="btn btn-primary">Retourner au portail</a>
         </div>
-    </footer>
-
-    <!-- Message Box -->
-    <div id="messageBoxBackdrop" class="message-box-backdrop"></div>
-    <div id="messageBox" class="message-box">
-        <p id="messageBoxText" class="text-lg font-medium mb-4"></p>
-        <button id="messageBoxCloseBtn" class="btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md">Fermer</button>
     </div>
 
-    <!-- CodeMirror JS -->
+    <!-- Message Box -->
+    <div id="messageBoxBackdrop" class="modal-backdrop hidden"></div>
+    <div id="messageBox" class="modal hidden">
+        <p id="messageBoxText" class="modal-body"></p>
+        <div class="modal-footer"><button id="messageBoxCloseBtn" class="btn btn-primary">Fermer</button></div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
-    <!-- CodeMirror modes for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/meta.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
@@ -204,358 +371,412 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/markdown/markdown.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script> <!-- For languages like C++, Java -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/go/go.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/php/php.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/ruby/ruby.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/shell/shell.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/swift/swift.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/textile/textile.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/yaml/yaml.min.js"></script>
-
-
-    <!-- CodeMirror addons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/scroll/scrollpastend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/selection/active-line.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/edit/matchbrackets.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/searchcursor.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/search.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/dialog/dialog.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/jump-to-line.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/matchesonscrollbar.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/match-highlighter.js"></script>
 
     <script>
         let editor1, editor2;
         let syncScroll = false;
-        let scrollTimeout1, scrollTimeout2;
-        let diffMarks = []; // Stores CodeMirror TextMarker objects
+        let diffMarks = [];
+        let currentTheme = 'one-dark'; // Changed default for a more modern dark start
 
-        // Function to show a custom message box
+        const availableThemes = [
+            { name: 'One Dark', value: 'one-dark' },
+            { name: 'Dracula', value: 'dracula' },
+            { name: 'Material Palenight', value: 'material-palenight' },
+            { name: 'Monokai', value: 'monokai' },
+            { name: 'Nord', value: 'nord' },
+            { name: 'Cobalt', value: 'cobalt'},
+            { name: 'Eclipse (Light)', value: 'eclipse' },
+            { name: 'Solarized Light', value: 'solarized light' },
+            { name: 'Solarized Dark', value: 'solarized dark' },
+            { name: 'CodeMirror Default', value: 'default' }
+        ];
+
         function showMessageBox(message) {
-            const messageBox = document.getElementById('messageBox');
-            const messageBoxText = document.getElementById('messageBoxText');
-            const messageBoxBackdrop = document.getElementById('messageBoxBackdrop');
-
-            messageBoxText.textContent = message;
-            messageBox.style.display = 'flex';
-            messageBoxBackdrop.style.display = 'block';
+            document.getElementById('messageBoxText').textContent = message;
+            document.getElementById('messageBox').classList.remove('hidden');
+            document.getElementById('messageBoxBackdrop').classList.remove('hidden');
         }
 
-        // Function to hide the custom message box
         function hideMessageBox() {
-            const messageBox = document.getElementById('messageBox');
-            const messageBoxBackdrop = document.getElementById('messageBoxBackdrop');
-
-            messageBox.style.display = 'none';
-            messageBoxBackdrop.style.display = 'none';
+            document.getElementById('messageBox').classList.add('hidden');
+            document.getElementById('messageBoxBackdrop').classList.add('hidden');
         }
 
-        // Function to determine CodeMirror mode based on file extension
         function getModeForFile(filename) {
-            const extension = filename.split('.').pop().toLowerCase();
-            switch (extension) {
-                case 'js':
-                    return 'javascript';
-                case 'html':
-                case 'htm':
-                    return 'htmlmixed';
-                case 'css':
-                    return 'css';
-                case 'py':
-                    return 'python';
-                case 'json':
-                    return { name: 'javascript', json: true }; // Specific for JSON
-                case 'xml':
-                    return 'xml';
-                case 'md':
-                case 'markdown':
-                    return 'markdown';
-                case 'c':
-                case 'cpp':
-                case 'java':
-                    return 'clike';
-                case 'go':
-                    return 'go';
-                case 'php':
-                    return 'php';
-                case 'rb':
-                    return 'ruby';
-                case 'sh':
-                case 'bash':
-                    return 'shell';
-                case 'sql':
-                    return 'sql';
-                case 'swift':
-                    return 'swift';
-                case 'yml':
-                case 'yaml':
-                    return 'yaml';
-                default:
-                    return 'text/plain';
-            }
+            const info = CodeMirror.findModeByExtension(filename.split('.').pop());
+            return info ? info.mode : 'text/plain';
         }
 
-        // Initialize CodeMirror editors when the window loads
         window.onload = function() {
-            editor1 = CodeMirror.fromTextArea(document.getElementById('code1'), {
+            const commonOptions = {
                 lineNumbers: true,
-                mode: "javascript", // Default mode for initial content
-                theme: "dracula",
+                theme: currentTheme,
                 lineWrapping: true,
                 styleActiveLine: true,
-                readOnly: false // Allow editing
-            });
+                matchBrackets: true,
+                scrollPastEnd: true,
+                highlightSelectionMatches: { showToken: /\w/, annotateScrollbar: true },
+            };
 
-            editor2 = CodeMirror.fromTextArea(document.getElementById('code2'), {
-                lineNumbers: true,
-                mode: "javascript", // Default mode for initial content
-                theme: "dracula",
-                lineWrapping: true,
-                styleActiveLine: true,
-                readOnly: false // Allow editing
-            });
+            editor1 = CodeMirror.fromTextArea(document.getElementById('code1'), commonOptions);
+            editor2 = CodeMirror.fromTextArea(document.getElementById('code2'), commonOptions);
 
-            // Set initial content for demonstration
-            editor1.setValue(`// Document 1 - Exemple de code JavaScript
-function calculateSum(a, b) {
-    // Cette ligne est unique au document 1
-    const result = a + b;
-    return result;
-}
-
-const data = {
-    "name": "Document 1",
-    "version": "1.0",
-    "status": "active"
-};
-
-console.log("Somme calculée : " + calculateSum(5, 10));
-`);
-
-            editor2.setValue(`// Document 2 - Exemple de code JavaScript
-function calculateSum(x, y) {
-    // Cette ligne est unique au document 2
-    const sum = x + y;
-    return sum;
-}
-
-const data = {
-    "name": "Document 2",
-    "version": "1.1",
-    "status": "pending"
-};
-
-console.log("Somme calculée : " + calculateSum(7, 8));
-`);
+            editor1.setValue(`// Document 1 - Design Épuré\nfunction calculateTotal(price, quantity) {\n  // This is a comment.\n  const subtotal = price * quantity;\n  const tax = subtotal * 0.05; // 5% tax\n  return subtotal + tax;\n}\n\nconsole.log(calculateTotal(100, 2));\n// Ligne pour recherche: mot_unique_doc1`);
+            editor2.setValue(`// Document 2 - Design Épuré\nfunction calculateTotal(itemPrice, numItems) {\n  // Another comment here.\n  const sub = itemPrice * numItems;\n  const salesTax = sub * 0.07; // 7% sales tax\n  return sub + salesTax;\n}\n\nconsole.log(calculateTotal(150, 3));\n// Ligne pour recherche: mot_unique_doc2`);
 
             setupDragAndDrop();
             setupScrollSynchronization();
             setupComparison();
+            setupGoToLine();
+            setupSearchAndReplace();
+            setupThemeSwitcher();
+            setupDarkModeToggle();
+            setupTPortalModal();
 
-            // Add event listener for message box close button
             document.getElementById('messageBoxCloseBtn').addEventListener('click', hideMessageBox);
+
+            // Initialize dark mode based on localStorage or system preference
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const storedDarkMode = localStorage.getItem('darkMode');
+            if ((storedDarkMode === 'true') || (storedDarkMode === null && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+            updateDarkModeVisuals(document.documentElement.classList.contains('dark'));
+            
+            setTimeout(() => { editor1.refresh(); editor2.refresh(); }, 100);
+        };
+        
+        window.onresize = function() {
+            if (editor1) editor1.refresh();
+            if (editor2) editor2.refresh();
         };
 
-        /**
-         * Sets up drag-and-drop functionality for both editor areas.
-         * Allows users to drag and drop text files into the editors.
-         */
         function setupDragAndDrop() {
-            const editor1Section = document.getElementById('editor1');
-            const editor2Section = document.getElementById('editor2');
-            const dropOverlay1 = document.getElementById('drop-overlay-1');
-            const dropOverlay2 = document.getElementById('drop-overlay-2');
+            ['editor1Wrapper', 'editor2Wrapper'].forEach((id, index) => {
+                const section = document.getElementById(id);
+                const overlay = document.getElementById(`drop-overlay-${index + 1}`);
+                const editorInstance = index === 0 ? editor1 : editor2;
 
-            // Helper function to handle drag events
-            function handleDragEvents(section, overlay, editorInstance) {
-                section.addEventListener('dragover', (e) => {
-                    e.preventDefault();
-                    overlay.classList.add('active');
-                });
-
-                section.addEventListener('dragleave', (e) => {
-                    e.preventDefault();
-                    // Only hide if leaving the main section, not child elements
-                    if (e.target === section) {
-                        overlay.classList.remove('active');
-                    }
-                });
-
+                section.addEventListener('dragover', (e) => { e.preventDefault(); overlay.classList.add('active'); });
+                section.addEventListener('dragleave', (e) => { if (e.target === section || !section.contains(e.relatedTarget)) overlay.classList.remove('active');});
                 section.addEventListener('drop', (e) => {
                     e.preventDefault();
                     overlay.classList.remove('active');
-
                     const files = e.dataTransfer.files;
                     if (files.length > 0) {
                         const file = files[0];
                         const reader = new FileReader();
                         reader.onload = (event) => {
                             editorInstance.setValue(event.target.result);
-                            const mode = getModeForFile(file.name);
-                            editorInstance.setOption('mode', mode); // Set mode for syntax highlighting
-                            showMessageBox(`Fichier "${file.name}" chargé dans le document.`);
-                            clearDiffMarks(); // Clear marks after new file is loaded
-                            document.getElementById('compareBtn').textContent = 'Comparer les documents';
-                            document.getElementById('compareBtn').classList.remove('active');
+                            editorInstance.setOption('mode', getModeForFile(file.name));
+                            showMessageBox(`Fichier "${file.name}" chargé.`);
+                            clearDiffMarks();
+                            const compareBtn = document.getElementById('compareBtn');
+                            compareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 13.5 4.5v5A2.5 2.5 0 0 1 11 12H5A2.5 2.5 0 0 1 2.5 9.5v-5A2.5 2.5 0 0 1 5 2V.5zm0 2.5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5z"/><path d="M12 13H4a1 1 0 0 0-1 1v1.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V14a1 1 0 0 0-1-1z"/></svg> Comparer`;
+                            compareBtn.classList.remove('active');
+                            compareBtn.classList.replace('btn-primary','btn-secondary');
                         };
-                        reader.onerror = () => {
-                            showMessageBox(`Erreur lors de la lecture du fichier "${file.name}".`);
-                        };
+                        reader.onerror = () => showMessageBox(`Erreur lecture fichier "${file.name}".`);
                         reader.readAsText(file);
                     }
                 });
-            }
-
-            handleDragEvents(editor1Section, dropOverlay1, editor1);
-            handleDragEvents(editor2Section, dropOverlay2, editor2);
+            });
         }
 
-        /**
-         * Sets up scroll synchronization between the two CodeMirror editors.
-         * Toggles synchronization on button click.
-         */
         function setupScrollSynchronization() {
             const syncScrollBtn = document.getElementById('syncScrollBtn');
+            let isSyncing = false;
 
-            // Function to synchronize scrolling from source to target
             function syncEditorScroll(sourceEditor, targetEditor) {
-                clearTimeout(scrollTimeout1); // Clear any pending timeouts
-                clearTimeout(scrollTimeout2); // Clear any pending timeouts
-
-                // Calculate scroll percentage
+                if (isSyncing) return;
+                isSyncing = true;
                 const scrollInfo = sourceEditor.getScrollInfo();
-                const scrollPercentage = scrollInfo.top / (scrollInfo.height - scrollInfo.clientHeight);
-
-                // Apply scroll to target editor
-                targetEditor.scrollTo(0, scrollPercentage * (targetEditor.getScrollInfo().height - targetEditor.getScrollInfo().clientHeight));
+                // Check if clientHeight is greater than 0 to prevent division by zero
+                if (scrollInfo.clientHeight > 0 && (scrollInfo.height - scrollInfo.clientHeight) > 0) {
+                    const scrollPercentage = scrollInfo.top / (scrollInfo.height - scrollInfo.clientHeight);
+                     if (!isNaN(scrollPercentage) && targetEditor.getScrollInfo().height > targetEditor.getScrollInfo().clientHeight) {
+                         targetEditor.scrollTo(null, scrollPercentage * (targetEditor.getScrollInfo().height - targetEditor.getScrollInfo().clientHeight));
+                    }
+                } else if (scrollInfo.clientHeight > 0 && scrollInfo.top === 0 && (scrollInfo.height - scrollInfo.clientHeight) <= 0) {
+                    // If source is not scrollable (content fits or less than clientHeight), scroll target to top
+                    targetEditor.scrollTo(null, 0);
+                }
+                setTimeout(() => isSyncing = false, 30); // Adjusted timeout slightly
             }
 
-            // Event listener for editor1 scroll
-            const onScroll1 = () => {
-                if (syncScroll) {
-                    clearTimeout(scrollTimeout1);
-                    scrollTimeout1 = setTimeout(() => syncEditorScroll(editor1, editor2), 10);
-                }
-            };
-
-            // Event listener for editor2 scroll
-            const onScroll2 = () => {
-                if (syncScroll) {
-                    clearTimeout(scrollTimeout2);
-                    scrollTimeout2 = setTimeout(() => syncEditorScroll(editor2, editor1), 10);
-                }
-            };
+            const onScroll1 = () => { if (syncScroll) syncEditorScroll(editor1, editor2); };
+            const onScroll2 = () => { if (syncScroll) syncEditorScroll(editor2, editor1); };
 
             syncScrollBtn.addEventListener('click', () => {
                 syncScroll = !syncScroll;
                 syncScrollBtn.classList.toggle('active', syncScroll);
+                syncScrollBtn.classList.toggle('btn-primary', syncScroll);
+                syncScrollBtn.classList.toggle('btn-secondary', !syncScroll);
+                syncScrollBtn.title = syncScroll ? "Désynchroniser" : "Synchroniser";
                 if (syncScroll) {
-                    showMessageBox('Défilement synchronisé activé.');
+                    showMessageBox('Défilement synchronisé.');
                     editor1.on('scroll', onScroll1);
                     editor2.on('scroll', onScroll2);
-                    // Immediately sync after activation
                     syncEditorScroll(editor1, editor2);
                 } else {
-                    showMessageBox('Défilement synchronisé désactivé.');
+                    showMessageBox('Défilement désynchronisé.');
                     editor1.off('scroll', onScroll1);
                     editor2.off('scroll', onScroll2);
                 }
             });
         }
 
-        /**
-         * Sets up the document comparison functionality.
-         * Compares line by line and highlights differences.
-         */
         function setupComparison() {
             const compareBtn = document.getElementById('compareBtn');
-
             compareBtn.addEventListener('click', () => {
-                // If there are existing diff marks, clear them and reset button
                 if (diffMarks.length > 0) {
                     clearDiffMarks();
-                    compareBtn.textContent = 'Comparer les documents';
-                    compareBtn.classList.remove('active');
-                    showMessageBox('Surlignage des différences effacé.');
-                    return; // Exit function after clearing
+                    compareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 13.5 4.5v5A2.5 2.5 0 0 1 11 12H5A2.5 2.5 0 0 1 2.5 9.5v-5A2.5 2.5 0 0 1 5 2V.5zm0 2.5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5z"/><path d="M12 13H4a1 1 0 0 0-1 1v1.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V14a1 1 0 0 0-1-1z"/></svg> Comparer`;
+                    compareBtn.classList.remove('active', 'btn-primary');
+                    compareBtn.classList.add('btn-secondary');
+                    showMessageBox('Différences effacées.');
+                    return;
                 }
 
-                // If no diff marks, proceed with comparison
                 const doc1Lines = editor1.getValue().split('\n');
                 const doc2Lines = editor2.getValue().split('\n');
-
                 const maxLines = Math.max(doc1Lines.length, doc2Lines.length);
-
                 let differencesFound = false;
 
                 for (let i = 0; i < maxLines; i++) {
                     const line1 = doc1Lines[i] || '';
                     const line2 = doc2Lines[i] || '';
-
                     if (line1 !== line2) {
                         differencesFound = true;
-                        // Highlight the entire line if they are different
-                        if (line1) {
-                            diffMarks.push(editor1.markText(
-                                { line: i, ch: 0 },
-                                { line: i, ch: line1.length },
-                                { className: 'diff-line' }
-                            ));
-                        }
-                        if (line2) {
-                            diffMarks.push(editor2.markText(
-                                { line: i, ch: 0 },
-                                { line: i, ch: line2.length },
-                                { className: 'diff-line' }
-                            ));
-                        }
-
-                        // Character-level comparison for differing lines
+                        if (line1) diffMarks.push(editor1.markText({line:i,ch:0}, {line:i,ch:line1.length}, {className:'diff-line'}));
+                        if (line2) diffMarks.push(editor2.markText({line:i,ch:0}, {line:i,ch:line2.length}, {className:'diff-line'}));
                         const minLength = Math.min(line1.length, line2.length);
                         for (let j = 0; j < minLength; j++) {
                             if (line1[j] !== line2[j]) {
-                                diffMarks.push(editor1.markText(
-                                    { line: i, ch: j },
-                                    { line: i, ch: j + 1 },
-                                    { className: 'diff-char' }
-                                ));
-                                diffMarks.push(editor2.markText(
-                                    { line: i, ch: j },
-                                    { line: i, ch: j + 1 },
-                                    { className: 'diff-char' }
-                                ));
+                                diffMarks.push(editor1.markText({line:i,ch:j}, {line:i,ch:j+1}, {className:'diff-char'}));
+                                diffMarks.push(editor2.markText({line:i,ch:j}, {line:i,ch:j+1}, {className:'diff-char'}));
                             }
                         }
-                        // Highlight remaining characters if one line is longer
-                        if (line1.length > line2.length) {
-                            diffMarks.push(editor1.markText(
-                                { line: i, ch: minLength },
-                                { line: i, ch: line1.length },
-                                { className: 'diff-char' }
-                            ));
-                        } else if (line2.length > line1.length) {
-                            diffMarks.push(editor2.markText(
-                                { line: i, ch: minLength },
-                                { line: i, ch: line2.length },
-                                { className: 'diff-char' }
-                            ));
-                        }
+                        if (line1.length > line2.length) diffMarks.push(editor1.markText({line:i,ch:minLength}, {line:i,ch:line1.length}, {className:'diff-char'}));
+                        else if (line2.length > line1.length) diffMarks.push(editor2.markText({line:i,ch:minLength}, {line:i,ch:line2.length}, {className:'diff-char'}));
                     }
                 }
 
                 if (differencesFound) {
-                    showMessageBox('Comparaison terminée : des différences ont été trouvées et sont surlignées.');
-                    compareBtn.textContent = 'Effacer les différences';
-                    compareBtn.classList.add('active');
+                    showMessageBox('Différences trouvées.');
+                    compareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/></svg> Effacer`;
+                    compareBtn.classList.add('active', 'btn-primary');
+                    compareBtn.classList.remove('btn-secondary');
                 } else {
-                    showMessageBox('Les documents sont identiques !');
-                    compareBtn.textContent = 'Comparer les documents';
-                    compareBtn.classList.remove('active');
+                    showMessageBox('Documents identiques.');
+                }
+            });
+        }
+        function clearDiffMarks() {
+            diffMarks.forEach(mark => mark.clear());
+            diffMarks = [];
+        }
+
+        function setupGoToLine() {
+            const goToLineInput = document.getElementById('goToLineInput');
+            const goToLineBtn = document.getElementById('goToLineBtn');
+            function doGoToLine() {
+                const lineNum = parseInt(goToLineInput.value, 10);
+                if (isNaN(lineNum) || lineNum <= 0) { showMessageBox("Numéro de ligne invalide."); return; }
+                [editor1, editor2].forEach(editor => {
+                    if (lineNum <= editor.lineCount()) {
+                        editor.setCursor(lineNum - 1, 0);
+                        const coords = editor.charCoords({line: lineNum - 1, ch: 0}, "local");
+                        const H = editor.getScrollInfo().clientHeight;
+                        const Y = coords.top;
+                        // Scroll to bring the line to the top third of the editor view
+                        editor.scrollTo(null, Y - (H / 3));
+                        editor.focus();
+                    }
+                });
+                goToLineInput.value = '';
+            }
+            goToLineBtn.addEventListener('click', doGoToLine);
+            goToLineInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') doGoToLine(); });
+        }
+
+        function setupSearchAndReplace() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const replaceBtn = document.getElementById('replaceBtn');
+            const occurrencesTotalSpan = document.getElementById('searchOccurrencesTotal');
+            const occurrences1Span = document.getElementById('occurrences1');
+            const occurrences2Span = document.getElementById('occurrences2');
+
+            function performSearchInEditor(editor, query, caseSensitive, occurrencesEl) {
+                if (!query) {
+                    // Clear existing highlights if using match-highlighter addon
+                    if (editor.state.matchHighlighter) {
+                         editor.state.matchHighlighter.clear();
+                    }
+                    occurrencesEl.textContent = '';
+                    return 0;
+                }
+                let count = 0;
+                const cursor = editor.getSearchCursor(query, null, { caseFold: !caseSensitive, multiline: true });
+                while(cursor.findNext()) { count++; }
+                
+                // Use match-highlighter for visual feedback by refreshing its state
+                // The addon should pick up the new query automatically if it's configured globally
+                // or if we trigger its update mechanism.
+                // Forcing a refresh of the option often helps.
+                if (query) {
+                    editor.setOption("highlightSelectionMatches", {
+                        showToken: new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), caseSensitive ? '' : 'i'),
+                        annotateScrollbar: true
+                    });
+                } else {
+                     editor.setOption("highlightSelectionMatches", false); // Disable if no query
+                }
+                
+                occurrencesEl.textContent = count > 0 ? `(${count})` : '';
+                return count;
+            }
+            
+            function updateGlobalOccurrenceCount() {
+                const query = searchInput.value;
+                const caseSensitive = false; 
+                const count1 = performSearchInEditor(editor1, query, caseSensitive, occurrences1Span);
+                const count2 = performSearchInEditor(editor2, query, caseSensitive, occurrences2Span);
+                const total = count1 + count2;
+                if (query && total > 0) {
+                    occurrencesTotalSpan.textContent = `${total} au total`;
+                    occurrencesTotalSpan.classList.remove('hidden');
+                } else {
+                    occurrencesTotalSpan.classList.add('hidden');
+                    // Ensure individual counts are also cleared if query is empty
+                    if (!query) {
+                        occurrences1Span.textContent = '';
+                        occurrences2Span.textContent = '';
+                    }
+                }
+            }
+
+            searchInput.addEventListener('input', updateGlobalOccurrenceCount);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const activeEditor = editor1.hasFocus() ? editor1 : editor2;
+                    CodeMirror.commands.findNext(activeEditor);
+                }
+            });
+
+            searchBtn.addEventListener('click', () => {
+                const activeEditor = editor1.hasFocus() ? editor1 : (editor2.hasFocus() ? editor2 : editor1);
+                CodeMirror.commands.find(activeEditor, searchInput.value || undefined);
+            });
+
+            replaceBtn.addEventListener('click', () => {
+                const activeEditor = editor1.hasFocus() ? editor1 : (editor2.hasFocus() ? editor2 : editor1);
+                CodeMirror.commands.replace(activeEditor, searchInput.value || undefined);
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && (e.key === 'f' || e.key === 'F')) {
+                    e.preventDefault();
+                    searchInput.focus();
+                    searchBtn.click();
+                }
+                if (e.ctrlKey && (e.key === 'h' || e.key === 'H')) {
+                    e.preventDefault();
+                    searchInput.focus();
+                    replaceBtn.click();
                 }
             });
         }
 
-        /**
-         * Clears all previously marked differences in both editors.
-         */
-        function clearDiffMarks() {
-            diffMarks.forEach(mark => mark.clear());
-            diffMarks = [];
+        function setupThemeSwitcher() {
+            const themeBtn = document.getElementById('themeToggleBtn');
+            const dropdown = document.getElementById('themeDropdown');
+            availableThemes.forEach(theme => {
+                const item = document.createElement('a');
+                item.className = 'dropdown-item';
+                item.textContent = theme.name;
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    setTheme(theme.value);
+                    dropdown.classList.add('hidden');
+                });
+                dropdown.appendChild(item);
+            });
+            themeBtn.addEventListener('click', () => dropdown.classList.toggle('hidden'));
+            document.addEventListener('click', (e) => {
+                if (!themeBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        }
+
+        function setTheme(themeValue) {
+            currentTheme = themeValue;
+            [editor1, editor2].forEach(editor => editor.setOption('theme', themeValue));
+            const isDarkTheme = ['dracula', 'material-palenight', 'monokai', 'nord', 'one-dark', 'cobalt', 'solarized dark'].includes(themeValue);
+            const isLightTheme = ['eclipse', 'solarized light', 'default'].includes(themeValue);
+            const htmlEl = document.documentElement;
+            if (isDarkTheme && !htmlEl.classList.contains('dark')) {
+                htmlEl.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+                updateDarkModeVisuals(true, false); // Don't re-trigger theme change from here
+            } else if (isLightTheme && htmlEl.classList.contains('dark')) {
+                 htmlEl.classList.remove('dark');
+                 localStorage.setItem('darkMode', 'false');
+                 updateDarkModeVisuals(false, false); // Don't re-trigger theme change from here
+            }
+        }
+
+        function setupDarkModeToggle() {
+            const toggle = document.getElementById('darkModeToggle');
+            toggle.addEventListener('click', () => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('darkMode', isDark);
+                updateDarkModeVisuals(isDark, true); // Allow theme change from here
+            });
+        }
+
+        function updateDarkModeVisuals(isDark, changeEditorTheme = true) {
+            document.getElementById('sunIcon').classList.toggle('hidden', isDark);
+            document.getElementById('moonIcon').classList.toggle('hidden', !isDark);
+            
+            if (changeEditorTheme) {
+                const lightThemes = ['eclipse', 'default', 'solarized light'];
+                const darkThemes = ['one-dark', 'dracula', 'material-palenight', 'monokai', 'nord', 'cobalt', 'solarized dark'];
+
+                if (isDark && lightThemes.includes(currentTheme)) {
+                    setTheme('one-dark');
+                } else if (!isDark && darkThemes.includes(currentTheme) && currentTheme !== 'solarized dark') {
+                    setTheme('eclipse');
+                } else {
+                    // Theme is already appropriate or a specific variant like solarized dark/light, just ensure it's applied
+                     [editor1, editor2].forEach(editor => editor.setOption('theme', currentTheme));
+                }
+            } else {
+                // If not changing editor theme, still ensure current theme is applied (e.g., after initial load)
+                [editor1, editor2].forEach(editor => editor.setOption('theme', currentTheme));
+            }
+        }
+
+        function setupTPortalModal() {
+            const tIcon = document.getElementById('tIcon');
+            const modal = document.getElementById('tPortalModal');
+            const backdrop = document.getElementById('tPortalModalBackdrop');
+            const closeModalBtn = document.getElementById('closeTPortalModalBtn');
+            tIcon.addEventListener('click', () => { modal.classList.remove('hidden'); backdrop.classList.remove('hidden'); });
+            function close() { modal.classList.add('hidden'); backdrop.classList.add('hidden'); }
+            closeModalBtn.addEventListener('click', close);
+            backdrop.addEventListener('click', close);
         }
     </script>
 </body>
