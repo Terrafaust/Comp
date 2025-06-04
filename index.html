@@ -81,24 +81,25 @@
 
     <style>
         :root {
-            --header-height: 68px; /* Increased slightly for subtitle */
-            --editor-container-padding-x: 1.5rem; 
-            --editor-container-padding-y: 0.75rem; 
-            --editor-gap: 1rem; 
+            --header-height: 60px;
+            --editor-container-padding-x: 1.5rem; /* px-6 for wider layout */
+            --editor-container-padding-y: 0.75rem; /* py-3 */
+            --editor-gap: 1rem; /* gap-4 between editors */
 
-            --primary-color: #3b82f6; /* blue-500 */
-            --primary-hover-color: #2563eb; /* blue-600 */
-            --primary-active-color: #1d4ed8; /* blue-700 */
+            --primary-color: #2563eb; /* blue-600 */
+            --primary-hover-color: #1d4ed8; /* blue-700 */
+            --primary-active-color: #1e40af; /* blue-800 */
             
-            --secondary-color: #6b7280; /* gray-500 */
-            --secondary-hover-color: #4b5563; /* gray-600 */
+            --secondary-color: #4b5563; /* gray-600 */
+            --secondary-hover-color: #374151; /* gray-700 */
 
-            --bg-main: #f3f4f6; /* gray-100, slightly darker for more depth */
+            --bg-main: #f9fafb; /* gray-50 */
             --text-main: #1f2937; /* gray-800 */
-            --border-main: #d1d5db; /* gray-300 */
-            --input-bg: #ffffff; 
+            --border-main: #e5e7eb; /* gray-200 */
+            --input-bg: #ffffff; /* white */
             --card-bg: #ffffff;
 
+            /* CodeMirror line height settings */
             --cm-font-size: 13px;
             --cm-line-height-multiplier: 1.5;
             --cm-max-lines: 100;
@@ -119,7 +120,7 @@
         .CodeMirror {
             height: 100% !important;
             max-height: var(--cm-max-height-calculated);
-            border-radius: 0.5rem; 
+            border-radius: 0.5rem; /* rounded-lg */
             border: 1px solid var(--border-main);
             font-size: var(--cm-font-size);
             line-height: var(--cm-line-height-multiplier);
@@ -131,57 +132,47 @@
             height: var(--header-height);
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-main);
-            padding: 0.5rem var(--editor-container-padding-x); /* Adjusted padding for subtitle */
+            padding: 0 var(--editor-container-padding-x);
             flex-shrink: 0;
             box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06), 0 4px 5px 0 rgba(0,0,0,0.04);
         }
-        .header-title-group {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem; /* gap-3 */
-        }
-        .header-main-title {
-            font-size: 1.25rem; /* text-xl */
-            font-weight: 600; /* semibold */
-        }
-        .header-subtitle {
-            font-size: 0.75rem; /* text-xs */
-            color: var(--secondary-color);
-            margin-top: -0.25rem; /* Pull up slightly */
-        }
 
-
-        /* Updated Button Styling */
+        /* New Button Styling */
         .btn {
-            @apply rounded-md text-sm font-medium transition-all duration-150 ease-in-out flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500;
-            padding: 0.5rem 1rem; /* py-2 px-4 */
-            border: 1px solid var(--border-main);
+            @apply px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-in-out flex items-center justify-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+            border: 1px solid transparent;
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
+        }
+        .btn-primary:hover { background-color: var(--primary-hover-color); box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06), 0 4px 5px 0 rgba(0,0,0,0.04); }
+        .btn-primary:active { background-color: var(--primary-active-color); }
+        .btn-primary.active { /* For toggle buttons like Sync */
+            background-color: #16a34a; /* green-600 */
+        }
+        .btn-primary.active:hover { background-color: #15803d; }
+
+
+        .btn-secondary {
             background-color: var(--input-bg);
             color: var(--secondary-color);
-            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03), 0 1px 1px 0 rgba(0,0,0,0.02);
+            border-color: var(--border-main);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03);
         }
-        .btn:hover {
-            border-color: #a5b4fc; /* indigo-300 */
+        .btn-secondary:hover {
+            border-color: var(--secondary-color);
             color: var(--primary-color);
-            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.07), 0 2px 2px -1px rgba(0,0,0,0.05);
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px 0 rgba(0,0,0,0.05);
         }
-        .btn:active {
-            background-color: #eef2ff; /* indigo-50 */
-            transform: translateY(1px);
-        }
-        .btn.active { /* For toggle buttons like Sync when active */
+         .btn-secondary:active { background-color: #f3f4f6; /* gray-100 */ }
+        .btn-secondary.active { /* For toggle buttons like Compare when active */
             background-color: var(--primary-color);
             color: white;
             border-color: var(--primary-color);
         }
-        .btn.active:hover {
-             background-color: var(--primary-hover-color);
-             border-color: var(--primary-hover-color);
-        }
-        .btn-icon-only {
-            padding: 0.5rem; /* p-2 */
-        }
-
+        .btn-icon { @apply p-2; }
 
         .input-field {
             @apply px-3 py-1.5 border rounded-md text-sm shadow-sm transition-colors;
@@ -202,32 +193,27 @@
         .modal-body { @apply text-sm mb-5; }
         .modal-footer { @apply flex justify-end gap-3; }
 
-        /* Enhanced Dropdown Styling for Themes */
+        /* Enhanced Dropdown Styling */
         .dropdown { @apply relative inline-block text-left; }
-        .theme-dropdown-menu {
-            @apply origin-top-right absolute right-0 mt-2 w-72 rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none z-20;
+        .dropdown-menu {
+            @apply origin-top-right absolute right-0 mt-2 w-64 rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none z-20;
             background-color: var(--card-bg);
-            max-height: 400px; /* Increased height for more themes */
+            max-height: 320px; /* Increased height */
             overflow-y: auto;
-            padding: 0.5rem; /* p-2 for overall padding */
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Responsive columns */
-            gap: 0.5rem; /* gap-2 */
+            padding: 0.5rem 0; /* py-2 */
         }
-        .theme-dropdown-button {
-            @apply w-full px-3 py-2 text-xs font-medium rounded-md border transition-all duration-150 ease-in-out flex items-center justify-center text-center;
-            min-height: 40px; /* Ensure buttons have some height */
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        .dropdown-item {
+            @apply block px-4 py-2 text-sm cursor-pointer transition-colors duration-150;
+            color: var(--text-main);
         }
-        .theme-dropdown-button:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+        .dropdown-item:hover {
+            background-color: #eff6ff; /* blue-50 */
+            color: var(--primary-color);
         }
-        .theme-dropdown-button.active {
-            ring: 2px;
-            ring-offset: 1px;
-            ring-color: var(--primary-color); /* Or a distinct highlight color */
-            font-weight: 600;
+        .dropdown-item.active {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
         }
 
 
@@ -235,13 +221,13 @@
             font-family: 'Inter', sans-serif;
             font-weight: 600;
             font-size: 1rem;
-            width: 38px; height: 38px; /* Matched to other buttons */
+            width: 36px; height: 36px; /* Slightly larger */
         }
 
         #editorContainer {
             flex-grow: 1;
             width: 100%;
-            max-width: 1800px; /* Even wider max width */
+            max-width: 1600px; /* Max width for very large screens */
             margin-left: auto;
             margin-right: auto;
             display: flex;
@@ -272,8 +258,12 @@
         .drop-overlay.active { @apply opacity-100 pointer-events-auto; }
 
         .identical-line {
-            background-color: rgba(74, 222, 128, 0.2); 
+            background-color: rgba(74, 222, 128, 0.2); /* Tailwind green-400 with opacity */
         }
+        /* Remove old diff styles if not used by other features */
+        /* .diff-line { ... } */
+        /* .diff-char { ... } */
+
 
         .CodeMirror-matchingtag { background: rgba(59, 130, 246, .25); }
         .CodeMirror-focused .cm-matchhighlight { background-color: rgba(59, 130, 246, 0.25); }
@@ -290,12 +280,12 @@
         }
         .CodeMirror-dialog input[type="text"] {
              @apply input-field !important;
-             padding: 0.5rem 0.75rem !important; 
+             padding: 0.5rem 0.75rem !important; /* py-2 px-3 */
         }
         .CodeMirror-dialog button {
-            @apply btn !important; /* Use the general .btn style */
-            padding: 0.375rem 0.75rem !important; 
-            font-size: 0.875rem !important; 
+            @apply btn btn-secondary !important;
+            padding: 0.375rem 0.75rem !important; /* py-1.5 px-3 */
+            font-size: 0.875rem !important; /* text-sm */
         }
         .CodeMirror-search-label {
              color: var(--text-main) !important;
@@ -306,41 +296,45 @@
 <body class="antialiased">
     <!-- Header -->
     <header class="app-header flex items-center justify-between fixed top-0 left-0 right-0 z-30">
-        <div class="header-title-group">
-            <button id="tIcon" class="btn btn-icon-only" title="Portail T">T</button>
-            <div>
-                <h1 class="header-main-title">Comparateur de Documents</h1>
-                <p class="header-subtitle">Fait par Terrafaust & IA</p>
-            </div>
+        <div class="flex items-center gap-3">
+            <button id="tIcon" class="btn btn-secondary btn-icon" title="Portail T">T</button>
+            <h1 class="text-lg font-semibold">Comparateur de Documents</h1>
         </div>
 
         <div class="flex items-center gap-2.5 flex-wrap justify-end">
             <div class="flex items-center">
                 <input type="number" id="goToLineInput" placeholder="Ligne" class="input-field w-24 text-sm" min="1">
-                <button id="goToLineBtn" class="btn btn-icon-only ml-1.5" title="Aller à la ligne">
+                <button id="goToLineBtn" class="btn btn-secondary btn-icon ml-1.5" title="Aller à la ligne">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.293 3.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414-1.414L10.586 10 6.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
 
             <div class="flex items-center">
                 <input type="text" id="searchInput" placeholder="Rechercher..." class="input-field w-40 text-sm">
-                <button id="searchBtn" class="btn btn-icon-only ml-1.5" title="Rechercher (Ctrl+F)">
+                <button id="searchBtn" class="btn btn-secondary btn-icon ml-1.5" title="Rechercher (Ctrl+F)">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                 </button>
-                <button id="replaceBtn" class="btn btn-icon-only ml-1.5" title="Remplacer (Ctrl+H)">
+                <button id="replaceBtn" class="btn btn-secondary btn-icon ml-1.5" title="Remplacer (Ctrl+H)">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 8a1 1 0 00-1 1v1a1 1 0 102 0V9a1 1 0 00-1-1z"></path><path fill-rule="evenodd" d="M6.672 1.953A1 1 0 017.999 2h4a1 1 0 011 1v1H7.999a1 1 0 01-.895-.553L6.672 1.953zM4.001 4V3a1 1 0 011-1h1.328l.447-.553a3 3 0 012.624 0l.447.553H14a1 1 0 011 1v1H4.001zm11.999 7h-12v1a3 3 0 003 3h6a3 3 0 003-3v-1zM4 6h12v4a1 1 0 01-1 1H5a1 1 0 01-1-1V6z" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
             <span id="searchOccurrencesTotal" class="text-xs opacity-75 hidden self-center"></span>
 
-            <button id="syncScrollBtn" class="btn" title="Synchroniser le défilement">Sync</button>
-            <button id="compareBtn" class="btn" title="Comparer les documents">Comparer</button>
+            <button id="syncScrollBtn" class="btn btn-secondary" title="Synchroniser le défilement">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm0 0c5.523 0 10 4.477 10 10s-4.477 10-10 10S0 15.523 0 10 4.477 0 10 0zm-7 9a1 1 0 011-1h4a1 1 0 110 2H4a1 1 0 01-1-1zm14 0a1 1 0 011-1h4a1 1 0 110 2h-4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                Sync
+            </button>
+            <button id="compareBtn" class="btn btn-secondary" title="Comparer les documents">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2V3a1 1 0 10-2 0v1H9V3a1 1 0 00-1-1H7zm1 4a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd"></path></svg>
+                Comparer
+            </button>
 
             <div class="dropdown">
-                <button id="themeToggleBtn" class="btn btn-icon-only" title="Changer de thème">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path></svg>
+                <button id="themeToggleBtn" class="btn btn-secondary" title="Changer de thème">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path></svg>
+                    Thèmes
                 </button>
-                <div id="themeDropdown" class="theme-dropdown-menu hidden"></div>
+                <div id="themeDropdown" class="dropdown-menu hidden"></div>
             </div>
         </div>
     </header>
@@ -362,7 +356,7 @@
         <h3 class="modal-title">Portail T</h3>
         <div class="modal-body">Souhaitez-vous revenir au portail T ?</div>
         <div class="modal-footer">
-            <button id="closeTPortalModalBtn" class="btn">Annuler</button>
+            <button id="closeTPortalModalBtn" class="btn btn-secondary">Annuler</button>
             <a href="https://Terrafaust.github.io/T" target="_blank" class="btn btn-primary">Retourner au portail</a>
         </div>
     </div>
@@ -395,45 +389,11 @@
     <script>
         let editor1, editor2;
         let syncScroll = false;
-        let activeMarks = [];
+        let activeMarks = []; // Renamed from diffMarks for clarity
         let currentTheme = 'one-dark';
 
-        // Predefined colors for theme buttons in the dropdown.
-        // Format: themeValue: {bgColor: 'hex', textColor: 'hex'}
-        // These are approximate and aim for good contrast and representation.
-        const themeButtonColors = {
-            'default': { bgColor: '#ffffff', textColor: '#000000' },
-            'one-dark': { bgColor: '#282c34', textColor: '#abb2bf' },
-            'dracula': { bgColor: '#282a36', textColor: '#f8f8f2' },
-            'material-palenight': { bgColor: '#292D3E', textColor: '#A6ACCD' },
-            'material-darker': { bgColor: '#212121', textColor: '#EEFFFF' },
-            'material-ocean': { bgColor: '#0F111A', textColor: '#89DDFF' },
-            'monokai': { bgColor: '#272822', textColor: '#f8f8f2' },
-            'nord': { bgColor: '#2E3440', textColor: '#D8DEE9' },
-            'cobalt': { bgColor: '#002240', textColor: '#ffffff' },
-            'ayu-dark': { bgColor: '#0A0E14', textColor: '#E6E1CF' },
-            'ayu-mirage': { bgColor: '#1F2430', textColor: '#cbccc6' },
-            'base16-dark': { bgColor: '#151515', textColor: '#e0e0e0' },
-            'eclipse': { bgColor: '#ffffff', textColor: '#000000' },
-            'material': { bgColor: '#FAFAFA', textColor: '#263238' }, // Material Light
-            'solarized light': { bgColor: '#fdf6e3', textColor: '#657b83' },
-            'solarized dark': { bgColor: '#002b36', textColor: '#839496' },
-            '3024-day': { bgColor: '#f8f8f8', textColor: '#3a3a3a' },
-            '3024-night': { bgColor: '#090300', textColor: '#d6d5d4' },
-            'ambiance': { bgColor: '#f0f0f0', textColor: '#202020' }, // Could be dark too, using light variant
-            'blackboard': { bgColor: '#0C1021', textColor: '#F8F8F8' },
-            'duotone-light': {bgColor: '#faf8f5', textColor: '#b29762'},
-            'gruvbox-dark': {bgColor: '#282828', textColor: '#ebdbb2'},
-            'seti': {bgColor: '#151718', textColor: '#CFD2D1'},
-            'tomorrow-night-eighties': {bgColor: '#2d2d2d', textColor: '#cccccc'},
-            'xq-light': {bgColor: '#fff', textColor: '#000'},
-             // Add more as needed, or a default fallback
-            'default-light': { bgColor: '#f0f0f0', textColor: '#333333' },
-            'default-dark': { bgColor: '#333333', textColor: '#f0f0f0' }
-        };
-
-
         const availableThemes = [
+            // Dark Themes
             { name: 'One Dark', value: 'one-dark' }, { name: 'Dracula', value: 'dracula' },
             { name: 'Material Palenight', value: 'material-palenight' }, { name: 'Material Darker', value: 'material-darker' },
             { name: 'Material Ocean', value: 'material-ocean' }, { name: 'Monokai', value: 'monokai' },
@@ -454,9 +414,10 @@
             { name: 'Tomorrow Night Eighties', value: 'tomorrow-night-eighties' }, { name: 'Twilight', value: 'twilight' },
             { name: 'Vibrant Ink', value: 'vibrant-ink' }, { name: 'XQ Dark', value: 'xq-dark' },
             { name: 'Yonce', value: 'yonce' }, { name: 'Zenburn', value: 'zenburn' },
-            { name: 'Eclipse', value: 'eclipse' }, { name: 'Material Light', value: 'material' }, 
+            // Light Themes
+            { name: 'Eclipse', value: 'eclipse' }, { name: 'Material Light', value: 'material' }, // Renamed from 'material' for clarity
             { name: 'Solarized Light', value: 'solarized light' }, { name: '3024 Day', value: '3024-day' },
-            { name: 'Abcdef', value: 'abcdef' }, { name: 'Ambiance', value: 'ambiance' }, 
+            { name: 'Abcdef', value: 'abcdef' }, { name: 'Ambiance (Light)', value: 'ambiance' }, // Ambiance is often dark, but CM provides a light one too
             { name: 'Base16 Light', value: 'base16-light' }, { name: 'Colorforth', value: 'colorforth' },
             { name: 'Duotone Light', value: 'duotone-light' }, { name: 'Elegant', value: 'elegant' },
             { name: 'Hopscotch', value: 'hopscotch' }, { name: 'Icecoder', value: 'icecoder' },
@@ -501,7 +462,9 @@
             editor1.setValue(`// Document 1 - Exemple de code\nfunction helloWorld(name) {\n  // Une ligne identique.\n  console.log("Bonjour, " + name + "!"); // Commentaire différent\n  return name.toUpperCase();\n}\n\nconst user = "Utilisateur";\nhelloWorld(user);\n// Fin du document 1.`);
             editor2.setValue(`// Document 2 - Exemple de code\nfunction helloWorld(name) {\n  // Une ligne identique.\n  console.log("Hello, " + name + "!"); // Different comment\n  return name.toLowerCase();\n}\n\nconst user = "Utilisateur";\nhelloWorld(user);\n// Fin du document 2.`);
             
+            // Populate theme dropdown after editors are initialized
             setupThemeSwitcher();
+            // Then other setups
             setupDragAndDrop();
             setupScrollSynchronization();
             setupComparison();
@@ -511,7 +474,8 @@
 
             document.getElementById('messageBoxCloseBtn').addEventListener('click', hideMessageBox);
             
-            setTheme(currentTheme); 
+            // Set initial theme and refresh
+            setTheme(currentTheme); // Apply initial theme to mark it active in dropdown
             setTimeout(() => { editor1.refresh(); editor2.refresh(); }, 100);
         };
         
@@ -541,9 +505,9 @@
                             showMessageBox(`Fichier "${file.name}" chargé.`);
                             clearActiveMarks();
                             const compareBtn = document.getElementById('compareBtn');
-                            compareBtn.textContent = 'Comparer';
+                            compareBtn.innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2V3a1 1 0 10-2 0v1H9V3a1 1 0 00-1-1H7zm1 4a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd"></path></svg> Comparer`;
                             compareBtn.classList.remove('active','btn-primary');
-                            compareBtn.classList.add('btn'); // Ensure base btn class
+                            compareBtn.classList.add('btn-secondary');
                         };
                         reader.onerror = () => showMessageBox(`Erreur lecture fichier "${file.name}".`);
                         reader.readAsText(file);
@@ -577,7 +541,8 @@
             syncScrollBtn.addEventListener('click', () => {
                 syncScroll = !syncScroll;
                 syncScrollBtn.classList.toggle('active', syncScroll);
-                // No need to toggle btn-primary/btn-secondary, active class handles it
+                syncScrollBtn.classList.toggle('btn-primary', syncScroll);
+                syncScrollBtn.classList.toggle('btn-secondary', !syncScroll);
                 syncScrollBtn.title = syncScroll ? "Désynchroniser" : "Synchroniser";
                 if (syncScroll) {
                     showMessageBox('Défilement synchronisé.');
@@ -595,26 +560,28 @@
         function setupComparison() {
             const compareBtn = document.getElementById('compareBtn');
             compareBtn.addEventListener('click', () => {
-                if (activeMarks.length > 0) { 
+                if (activeMarks.length > 0) { // If marks exist, clear them
                     clearActiveMarks();
-                    compareBtn.textContent = 'Comparer';
-                    compareBtn.classList.remove('active');
+                    compareBtn.innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M7 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-2V3a1 1 0 10-2 0v1H9V3a1 1 0 00-1-1H7zm1 4a1 1 0 100 2h4a1 1 0 100-2H8z" clip-rule="evenodd"></path></svg> Comparer`;
+                    compareBtn.classList.remove('active', 'btn-primary');
+                    compareBtn.classList.add('btn-secondary');
                     showMessageBox('Surlignage des lignes identiques effacé.');
                     return;
                 }
 
+                // Perform new comparison for identical lines
                 const doc1Lines = editor1.getValue().split('\n');
                 const doc2Lines = editor2.getValue().split('\n');
                 const maxLines = Math.max(doc1Lines.length, doc2Lines.length);
                 let identicalLinesFound = 0;
 
                 for (let i = 0; i < maxLines; i++) {
-                    const line1 = doc1Lines[i]; 
-                    const line2 = doc2Lines[i]; 
+                    const line1 = doc1Lines[i]; // Can be undefined if one doc is shorter
+                    const line2 = doc2Lines[i]; // Can be undefined
 
                     if (line1 !== undefined && line2 !== undefined && line1 === line2) {
                         identicalLinesFound++;
-                        if (line1.trim().length > 0) { 
+                        if (line1.trim().length > 0) { // Only mark non-empty identical lines
                            activeMarks.push(editor1.markText({line:i,ch:0}, {line:i,ch:line1.length}, {className:'identical-line'}));
                            activeMarks.push(editor2.markText({line:i,ch:0}, {line:i,ch:line2.length}, {className:'identical-line'}));
                         }
@@ -623,8 +590,9 @@
 
                 if (identicalLinesFound > 0) {
                     showMessageBox(`${identicalLinesFound} ligne(s) identique(s) trouvée(s) et surlignée(s).`);
-                    compareBtn.textContent = 'Effacer';
-                    compareBtn.classList.add('active');
+                    compareBtn.innerHTML = `<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> Effacer`;
+                    compareBtn.classList.add('active', 'btn-primary');
+                    compareBtn.classList.remove('btn-secondary');
                 } else {
                     showMessageBox('Aucune ligne strictement identique trouvée.');
                 }
@@ -741,34 +709,27 @@
         function setupThemeSwitcher() {
             const themeBtn = document.getElementById('themeToggleBtn');
             const dropdown = document.getElementById('themeDropdown');
-            dropdown.innerHTML = ''; 
+            dropdown.innerHTML = ''; // Clear previous items
 
             availableThemes.forEach(theme => {
-                const button = document.createElement('button');
-                button.className = 'theme-dropdown-button';
-                button.textContent = theme.name;
-                
-                const colors = themeButtonColors[theme.value] || themeButtonColors[theme.value.split(' ')[0]] || (theme.value.includes('dark') || theme.value.includes('night') ? themeButtonColors['default-dark'] : themeButtonColors['default-light']);
-                
-                button.style.backgroundColor = colors.bgColor;
-                button.style.color = colors.textColor;
-                button.style.borderColor = colors.textColor === '#000000' || colors.textColor === '#333333' ? '#e5e7eb' : colors.bgColor;
-
-
+                const item = document.createElement('a');
+                item.className = 'dropdown-item';
+                item.textContent = theme.name;
                 if (theme.value === currentTheme) {
-                    button.classList.add('active');
-                     button.style.borderColor = var(--primary-color); // Or a specific highlight
+                    item.classList.add('active');
                 }
-
-                button.addEventListener('click', (e) => {
+                item.addEventListener('click', (e) => {
                     e.preventDefault();
                     setTheme(theme.value);
+                    // Update active class in dropdown
+                    Array.from(dropdown.children).forEach(child => child.classList.remove('active'));
+                    item.classList.add('active');
                     dropdown.classList.add('hidden');
                 });
-                dropdown.appendChild(button);
+                dropdown.appendChild(item);
             });
             themeBtn.addEventListener('click', (e) => {
-                e.stopPropagation(); 
+                e.stopPropagation(); // Prevent click from immediately closing via document listener
                 dropdown.classList.toggle('hidden');
             });
         }
@@ -777,26 +738,16 @@
             currentTheme = themeValue;
             [editor1, editor2].forEach(editor => editor.setOption('theme', themeValue));
             
+            // Update active class in dropdown if it's already populated
             const dropdown = document.getElementById('themeDropdown');
             if (dropdown.children.length > 0) {
                  Array.from(dropdown.children).forEach(child => {
-                    // Match based on textContent which is theme.name
-                    const themeObj = availableThemes.find(t => t.name === child.textContent);
-                    if (themeObj) {
-                        child.classList.toggle('active', themeObj.value === themeValue);
-                        if (themeObj.value === themeValue) {
-                           child.style.borderColor = 'var(--primary-color)';
-                           child.style.ringWidth = '2px'; // Simulate ring with border
-                        } else {
-                           const colors = themeButtonColors[themeObj.value] || themeButtonColors[themeObj.value.split(' ')[0]] || (themeObj.value.includes('dark') || themeObj.value.includes('night') ? themeButtonColors['default-dark'] : themeButtonColors['default-light']);
-                           child.style.borderColor = colors.textColor === '#000000' || colors.textColor === '#333333' ? '#e5e7eb' : colors.bgColor;
-                           child.style.ringWidth = '0px';
-                        }
-                    }
+                    child.classList.toggle('active', child.textContent === availableThemes.find(t => t.value === themeValue)?.name);
                 });
             }
         }
         
+        // Close dropdown if clicked outside
         document.addEventListener('click', (event) => {
             const themeBtn = document.getElementById('themeToggleBtn');
             const dropdown = document.getElementById('themeDropdown');
