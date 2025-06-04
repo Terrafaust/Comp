@@ -154,7 +154,7 @@
 
     <main class="flex-grow container mx-auto p-8 flex flex-col md:flex-row gap-8">
         <!-- Editor 1 -->
-        <section id="editor1" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col min-h-[600px]">
+        <section id="editor1" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col h-[500px]">
             <h2 class="text-2xl font-semibold mb-4 text-blue-700">Document 1</h2>
             <div class="flex-grow border border-gray-300 rounded-lg overflow-hidden">
                 <textarea id="code1" class="w-full h-full"></textarea>
@@ -165,7 +165,7 @@
         </section>
 
         <!-- Editor 2 -->
-        <section id="editor2" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col min-h-[600px]">
+        <section id="editor2" class="relative flex-1 bg-white rounded-lg shadow-xl p-6 flex flex-col h-[500px]">
             <h2 class="text-2xl font-semibold mb-4 text-red-700">Document 2</h2>
             <div class="flex-grow border border-gray-300 rounded-lg overflow-hidden">
                 <textarea id="code2" class="w-full h-full"></textarea>
@@ -196,12 +196,26 @@
 
     <!-- CodeMirror JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/codemirror.min.js"></script>
+    <!-- CodeMirror modes for syntax highlighting -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/javascript/javascript.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/xml/xml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/python/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/markdown/markdown.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/clike/clike.min.js"></script> <!-- For languages like C++, Java -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/go/go.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/php/php.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/ruby/ruby.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/shell/shell.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/sql/sql.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/swift/swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/textile/textile.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/mode/yaml/yaml.min.js"></script>
+
+
+    <!-- CodeMirror addons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/scroll/scrollpastend.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/selection/active-line.min.js"></script>
 
@@ -231,11 +245,56 @@
             messageBoxBackdrop.style.display = 'none';
         }
 
+        // Function to determine CodeMirror mode based on file extension
+        function getModeForFile(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            switch (extension) {
+                case 'js':
+                    return 'javascript';
+                case 'html':
+                case 'htm':
+                    return 'htmlmixed';
+                case 'css':
+                    return 'css';
+                case 'py':
+                    return 'python';
+                case 'json':
+                    return { name: 'javascript', json: true }; // Specific for JSON
+                case 'xml':
+                    return 'xml';
+                case 'md':
+                case 'markdown':
+                    return 'markdown';
+                case 'c':
+                case 'cpp':
+                case 'java':
+                    return 'clike';
+                case 'go':
+                    return 'go';
+                case 'php':
+                    return 'php';
+                case 'rb':
+                    return 'ruby';
+                case 'sh':
+                case 'bash':
+                    return 'shell';
+                case 'sql':
+                    return 'sql';
+                case 'swift':
+                    return 'swift';
+                case 'yml':
+                case 'yaml':
+                    return 'yaml';
+                default:
+                    return 'text/plain';
+            }
+        }
+
         // Initialize CodeMirror editors when the window loads
         window.onload = function() {
             editor1 = CodeMirror.fromTextArea(document.getElementById('code1'), {
                 lineNumbers: true,
-                mode: "text/plain", // Default mode, can be changed dynamically
+                mode: "javascript", // Default mode for initial content
                 theme: "dracula",
                 lineWrapping: true,
                 styleActiveLine: true,
@@ -244,7 +303,7 @@
 
             editor2 = CodeMirror.fromTextArea(document.getElementById('code2'), {
                 lineNumbers: true,
-                mode: "text/plain", // Default mode, can be changed dynamically
+                mode: "javascript", // Default mode for initial content
                 theme: "dracula",
                 lineWrapping: true,
                 styleActiveLine: true,
@@ -252,32 +311,36 @@
             });
 
             // Set initial content for demonstration
-            editor1.setValue(`// Document 1 - En-tête
-function greet(name) {
-    console.log("Bonjour, " + name + "!"); // Différence ici
+            editor1.setValue(`// Document 1 - Exemple de code JavaScript
+function calculateSum(a, b) {
     // Cette ligne est unique au document 1
-    const x = 10;
-    return x;
+    const result = a + b;
+    return result;
 }
 
-// Ligne identique dans les deux documents
-const sharedLine = "Cette ligne est la même.";
-const message = "Ceci est le document 1."; // Différence ici
-greet("Monde"); // Différence ici
+const data = {
+    "name": "Document 1",
+    "version": "1.0",
+    "status": "active"
+};
+
+console.log("Somme calculée : " + calculateSum(5, 10));
 `);
 
-            editor2.setValue(`// Document 2 - En-tête
-function greet(name) {
-    console.log("Salut, " + name + "!"); // Différence ici
+            editor2.setValue(`// Document 2 - Exemple de code JavaScript
+function calculateSum(x, y) {
     // Cette ligne est unique au document 2
-    const y = 20;
-    return y;
+    const sum = x + y;
+    return sum;
 }
 
-// Ligne identique dans les deux documents
-const sharedLine = "Cette ligne est la même.";
-const message = "Ceci est le document 2."; // Différence ici
-greet("Utilisateur"); // Différence ici
+const data = {
+    "name": "Document 2",
+    "version": "1.1",
+    "status": "pending"
+};
+
+console.log("Somme calculée : " + calculateSum(7, 8));
 `);
 
             setupDragAndDrop();
@@ -320,22 +383,20 @@ greet("Utilisateur"); // Différence ici
                     const files = e.dataTransfer.files;
                     if (files.length > 0) {
                         const file = files[0];
-                        if (file.type === 'text/plain' || file.name.endsWith('.txt') || file.name.endsWith('.js') || file.name.endsWith('.html') || file.name.endsWith('.css') || file.name.endsWith('.json')) {
-                            const reader = new FileReader();
-                            reader.onload = (event) => {
-                                editorInstance.setValue(event.target.result);
-                                showMessageBox(`Fichier "${file.name}" chargé dans le document.`);
-                                clearDiffMarks(); // Clear marks after new file is loaded
-                                document.getElementById('compareBtn').textContent = 'Comparer les documents';
-                                document.getElementById('compareBtn').classList.remove('active');
-                            };
-                            reader.onerror = () => {
-                                showMessageBox(`Erreur lors de la lecture du fichier "${file.name}".`);
-                            };
-                            reader.readAsText(file);
-                        } else {
-                            showMessageBox('Veuillez déposer un fichier texte (.txt, .js, .html, .css, .json, etc.).');
-                        }
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            editorInstance.setValue(event.target.result);
+                            const mode = getModeForFile(file.name);
+                            editorInstance.setOption('mode', mode); // Set mode for syntax highlighting
+                            showMessageBox(`Fichier "${file.name}" chargé dans le document.`);
+                            clearDiffMarks(); // Clear marks after new file is loaded
+                            document.getElementById('compareBtn').textContent = 'Comparer les documents';
+                            document.getElementById('compareBtn').classList.remove('active');
+                        };
+                        reader.onerror = () => {
+                            showMessageBox(`Erreur lors de la lecture du fichier "${file.name}".`);
+                        };
+                        reader.readAsText(file);
                     }
                 });
             }
