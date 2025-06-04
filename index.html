@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="fr" class="light"> <!-- Default to light mode -->
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparateur de Documents Pro - NovaLook</title>
+    <title>Comparateur de Documents Avancé</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Inter font -->
@@ -14,348 +14,359 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/dialog/dialog.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/addon/search/matchesonscrollbar.css">
 
-    <!-- CodeMirror Themes (selection) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-palenight.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/eclipse.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/nord.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/solarized.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/one-dark.min.css">
+    <!-- CodeMirror Themes (Expanded Selection) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/3024-day.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/3024-night.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/abcdef.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/ambiance.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/ayu-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/ayu-mirage.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/base16-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/base16-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/bespin.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/blackboard.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/cobalt.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/colorforth.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/dracula.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/duotone-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/duotone-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/eclipse.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/elegant.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/erlang-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/gruvbox-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/hopscotch.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/icecoder.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/idea.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/isotope.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/lesser-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/liquibyte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/lucario.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-darker.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-ocean.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material-palenight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/material.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/mbo.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/mdn-like.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/midnight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/monokai.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/moxer.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/neat.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/neo.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/night.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/nord.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/oceanic-next.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/panda-syntax.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/paraiso-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/paraiso-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/pastel-on-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/railscasts.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/rubyblue.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/seti.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/shadowfox.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/solarized.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/ssms.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/the-matrix.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/tomorrow-night-bright.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/tomorrow-night-eighties.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/ttcn.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/twilight.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/vibrant-ink.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/xq-dark.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/xq-light.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/yeti.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/yonce.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/zenburn.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.5/theme/one-dark.min.css">
 
 
     <style>
         :root {
-            --header-height: 56px; /* Slightly more compact header */
-            --editor-container-padding: 0.75rem; /* p-3 */
+            --header-height: 68px; /* Increased slightly for subtitle */
+            --editor-container-padding-x: 1.5rem; 
+            --editor-container-padding-y: 0.75rem; 
+            --editor-gap: 1rem; 
+
             --primary-color: #3b82f6; /* blue-500 */
             --primary-hover-color: #2563eb; /* blue-600 */
+            --primary-active-color: #1d4ed8; /* blue-700 */
+            
             --secondary-color: #6b7280; /* gray-500 */
             --secondary-hover-color: #4b5563; /* gray-600 */
 
-            --bg-light: #ffffff;
-            --text-light: #1f2937; /* gray-800 */
-            --border-light: #d1d5db; /* gray-300 */
-            --input-bg-light: #f9fafb; /* gray-50 */
+            --bg-main: #f3f4f6; /* gray-100, slightly darker for more depth */
+            --text-main: #1f2937; /* gray-800 */
+            --border-main: #d1d5db; /* gray-300 */
+            --input-bg: #ffffff; 
+            --card-bg: #ffffff;
 
-            --bg-dark: #111827; /* gray-900 */
-            --text-dark: #f3f4f6; /* gray-100 */
-            --border-dark: #374151; /* gray-700 */
-            --input-bg-dark: #1f2937; /* gray-800 */
-
-            /* CodeMirror line height settings */
             --cm-font-size: 13px;
             --cm-line-height-multiplier: 1.5;
             --cm-max-lines: 100;
-            /* Calculated max-height for 100 lines: 100 * 13px * 1.5 = 1950px */
-            --cm-max-height: calc(var(--cm-max-lines) * var(--cm-font-size) * var(--cm-line-height-multiplier));
-        }
-
-        html.dark {
-            color-scheme: dark;
+            --cm-max-height-calculated: calc(var(--cm-max-lines) * var(--cm-font-size) * var(--cm-line-height-multiplier));
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-light);
-            color: var(--text-light);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            background-color: var(--bg-main);
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            overflow-x: hidden; /* Prevent horizontal scroll on body */
-            overflow-y: hidden; /* Prevent main page body from scrolling vertically if content fits */
-        }
-        html.dark body {
-            background-color: var(--bg-dark);
-            color: var(--text-dark);
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .CodeMirror {
-            height: 100% !important; /* Tries to fill its parent */
-            max-height: var(--cm-max-height); /* But capped at 100 lines equivalent */
-            border-radius: 0.375rem; /* rounded-md */
-            border: 1px solid var(--border-light);
+            height: 100% !important;
+            max-height: var(--cm-max-height-calculated);
+            border-radius: 0.5rem; 
+            border: 1px solid var(--border-main);
             font-size: var(--cm-font-size);
             line-height: var(--cm-line-height-multiplier);
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.07), 0 1px 2px 0 rgba(0,0,0,0.05);
         }
-        html.dark .CodeMirror {
-            border: 1px solid var(--border-dark);
-        }
-        .CodeMirror-scroll {
-            min-height: 150px; /* Ensure it's always somewhat visible */
-            /* CodeMirror handles its own overflow internally */
-        }
+        .CodeMirror-scroll { min-height: 200px; }
 
-        /* Header Styling */
         .app-header {
             height: var(--header-height);
-            background-color: var(--bg-light);
-            border-bottom: 1px solid var(--border-light);
-            padding: 0 1rem; /* px-4 */
-            flex-shrink: 0; /* Prevent header from shrinking */
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-main);
+            padding: 0.5rem var(--editor-container-padding-x); /* Adjusted padding for subtitle */
+            flex-shrink: 0;
+            box-shadow: 0 2px 4px -1px rgba(0,0,0,0.06), 0 4px 5px 0 rgba(0,0,0,0.04);
         }
-        html.dark .app-header {
-            background-color: var(--bg-dark);
-            border-bottom: 1px solid var(--border-dark);
+        .header-title-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem; /* gap-3 */
         }
-
-        /* Button Styling - Flat & Modern */
-        .btn {
-            @apply px-3 py-1.5 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+        .header-main-title {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* semibold */
         }
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            border: 1px solid var(--primary-color);
-        }
-        .btn-primary:hover { background-color: var(--primary-hover-color); border-color: var(--primary-hover-color); }
-        .btn-primary.active {
-            background-color: #16a34a; /* green-600 */
-            border-color: #16a34a;
-        }
-         .btn-primary.active:hover {
-            background-color: #15803d; /* green-700 */
-            border-color: #15803d;
-        }
-
-
-        .btn-secondary {
-            background-color: transparent;
+        .header-subtitle {
+            font-size: 0.75rem; /* text-xs */
             color: var(--secondary-color);
-            border: 1px solid var(--border-light);
+            margin-top: -0.25rem; /* Pull up slightly */
         }
-        html.dark .btn-secondary {
-            color: var(--text-dark);
-            border: 1px solid var(--border-dark);
-        }
-        .btn-secondary:hover {
-            background-color: var(--input-bg-light);
-            border-color: var(--secondary-color);
-            color: var(--primary-color);
-        }
-        html.dark .btn-secondary:hover {
-            background-color: var(--input-bg-dark);
-            border-color: var(--secondary-hover-color);
-            color: var(--primary-color);
-        }
-        .btn-secondary.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-         html.dark .btn-secondary.active {
-            background-color: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
-        .btn-icon { @apply p-1.5; } /* For icon-only buttons */
 
-        /* Input Styling */
+
+        /* Updated Button Styling */
+        .btn {
+            @apply rounded-md text-sm font-medium transition-all duration-150 ease-in-out flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500;
+            padding: 0.5rem 1rem; /* py-2 px-4 */
+            border: 1px solid var(--border-main);
+            background-color: var(--input-bg);
+            color: var(--secondary-color);
+            box-shadow: 0 1px 2px 0 rgba(0,0,0,0.03), 0 1px 1px 0 rgba(0,0,0,0.02);
+        }
+        .btn:hover {
+            border-color: #a5b4fc; /* indigo-300 */
+            color: var(--primary-color);
+            box-shadow: 0 1px 3px 0 rgba(0,0,0,0.07), 0 2px 2px -1px rgba(0,0,0,0.05);
+        }
+        .btn:active {
+            background-color: #eef2ff; /* indigo-50 */
+            transform: translateY(1px);
+        }
+        .btn.active { /* For toggle buttons like Sync when active */
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        .btn.active:hover {
+             background-color: var(--primary-hover-color);
+             border-color: var(--primary-hover-color);
+        }
+        .btn-icon-only {
+            padding: 0.5rem; /* p-2 */
+        }
+
+
         .input-field {
-            @apply px-2.5 py-1.5 border rounded-md text-sm shadow-sm transition-colors;
-            background-color: var(--input-bg-light);
-            border-color: var(--border-light);
-            color: var(--text-light);
+            @apply px-3 py-1.5 border rounded-md text-sm shadow-sm transition-colors;
+            background-color: var(--input-bg);
+            border-color: var(--border-main);
+            color: var(--text-main);
         }
         .input-field:focus {
-            @apply ring-2 ring-offset-1 dark:ring-offset-gray-900 ring-blue-500 border-blue-500 outline-none;
-        }
-        html.dark .input-field {
-            background-color: var(--input-bg-dark);
-            border-color: var(--border-dark);
-            color: var(--text-dark);
+            @apply ring-2 ring-offset-0 ring-blue-500 border-blue-500 outline-none;
         }
 
-        /* Modal Styling */
-        .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-30 dark:bg-opacity-50 z-40; }
+        .modal-backdrop { @apply fixed inset-0 bg-black bg-opacity-40 z-40; }
         .modal {
-            @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-5 rounded-lg shadow-xl z-50 w-full max-w-sm;
-            background-color: var(--bg-light);
+            @apply fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-6 rounded-lg shadow-xl z-50 w-full max-w-md;
+            background-color: var(--card-bg);
         }
-        html.dark .modal { background-color: var(--bg-dark); }
-        .modal-title { @apply text-lg font-semibold mb-3; }
-        .modal-body { @apply text-sm mb-4; }
-        .modal-footer { @apply flex justify-end gap-2; }
+        .modal-title { @apply text-lg font-semibold mb-4; }
+        .modal-body { @apply text-sm mb-5; }
+        .modal-footer { @apply flex justify-end gap-3; }
 
-        /* Dropdown Styling */
+        /* Enhanced Dropdown Styling for Themes */
         .dropdown { @apply relative inline-block text-left; }
-        .dropdown-menu {
-            @apply origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-20;
-            background-color: var(--bg-light);
-            max-height: 200px; overflow-y: auto;
+        .theme-dropdown-menu {
+            @apply origin-top-right absolute right-0 mt-2 w-72 rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none z-20;
+            background-color: var(--card-bg);
+            max-height: 400px; /* Increased height for more themes */
+            overflow-y: auto;
+            padding: 0.5rem; /* p-2 for overall padding */
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* Responsive columns */
+            gap: 0.5rem; /* gap-2 */
         }
-        html.dark .dropdown-menu { background-color: var(--bg-dark); @apply ring-gray-700; }
-        .dropdown-item {
-            @apply block px-3 py-1.5 text-sm cursor-pointer;
-            color: var(--text-light);
+        .theme-dropdown-button {
+            @apply w-full px-3 py-2 text-xs font-medium rounded-md border transition-all duration-150 ease-in-out flex items-center justify-center text-center;
+            min-height: 40px; /* Ensure buttons have some height */
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
-        html.dark .dropdown-item { color: var(--text-dark); }
-        .dropdown-item:hover { background-color: var(--input-bg-light); }
-        html.dark .dropdown-item:hover { background-color: var(--input-bg-dark); }
+        .theme-dropdown-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.07);
+        }
+        .theme-dropdown-button.active {
+            ring: 2px;
+            ring-offset: 1px;
+            ring-color: var(--primary-color); /* Or a distinct highlight color */
+            font-weight: 600;
+        }
 
 
-        /* T icon style */
         #tIcon {
             font-family: 'Inter', sans-serif;
-            font-weight: 600; /* semibold */
-            font-size: 1rem; /* text-base */
-            width: 30px; height: 30px; /* Fixed size */
+            font-weight: 600;
+            font-size: 1rem;
+            width: 38px; height: 38px; /* Matched to other buttons */
         }
 
-        /* Editor container takes remaining height */
         #editorContainer {
-            /* height: calc(100vh - var(--header-height) - (var(--editor-container-padding) * 2)); */
-            /* Let flex-grow handle height distribution */
             flex-grow: 1;
             width: 100%;
-            display: flex; /* Ensure it's a flex container for children */
-            overflow: hidden; /* Prevent this container from causing page scroll */
+            max-width: 1800px; /* Even wider max width */
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            padding: var(--editor-container-padding-y) var(--editor-container-padding-x);
+            gap: var(--editor-gap);
+            box-sizing: border-box;
         }
         .editor-wrapper {
-            height: 100%; /* Make editor wrapper take full height of its column */
             display: flex;
-            flex-direction: column; /* Stack title and editor div */
-            min-height: 0; /* Important for flex children that need to scroll */
+            flex-direction: column;
+            min-height: 0;
+            flex-basis: 0;
+            flex-grow: 1;
         }
-        .editor-wrapper > div.flex-grow { /* This is the div CodeMirror replaces/uses */
+        .editor-wrapper > div.flex-grow {
              flex-grow: 1;
-             min-height: 0; /* Allow shrinking and internal scrolling */
-             position: relative; /* For drop overlay */
+             min-height: 0;
+             position: relative;
+             display: flex;
         }
-
+        .editor-wrapper > div.flex-grow > .CodeMirror {
+            flex-grow: 1;
+        }
 
         .drop-overlay {
-            @apply absolute inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center text-white text-lg rounded-md pointer-events-none opacity-0 transition-opacity duration-300 z-10;
+            @apply absolute inset-0 bg-gray-800 bg-opacity-75 flex justify-center items-center text-white text-xl rounded-lg pointer-events-none opacity-0 transition-opacity duration-300 z-10;
         }
         .drop-overlay.active { @apply opacity-100 pointer-events-auto; }
 
-        .diff-line { background-color: rgba(239, 68, 68, 0.15); } /* Lighter red */
-        html.dark .diff-line { background-color: rgba(239, 68, 68, 0.25); }
-        .diff-char {
-            background-color: rgba(239, 68, 68, 0.5);
-            font-weight: 500; color: white; padding: 0 1px; border-radius: 2px;
+        .identical-line {
+            background-color: rgba(74, 222, 128, 0.2); 
         }
-        html.dark .diff-char { background-color: rgba(239, 68, 68, 0.7); }
 
-        .CodeMirror-matchingtag { background: rgba(0, 123, 255, .2); }
-        .CodeMirror-focused .cm-matchhighlight { background-color: rgba(59, 130, 246, 0.2); }
-        .cm-matchhighlight { background-color: rgba(59, 130, 246, 0.15); }
-        .CodeMirror-selection-highlight-scrollbar { background-color: rgba(59, 130, 246, 0.3); }
+        .CodeMirror-matchingtag { background: rgba(59, 130, 246, .25); }
+        .CodeMirror-focused .cm-matchhighlight { background-color: rgba(59, 130, 246, 0.25); }
+        .cm-matchhighlight { background-color: rgba(59, 130, 246, 0.2); }
+        .CodeMirror-selection-highlight-scrollbar { background-color: rgba(59, 130, 246, 0.35); }
 
-        .search-results-count { @apply text-xs ml-1 opacity-70; }
+        .search-results-count { @apply text-xs ml-1.5 opacity-75; }
 
-         /* Styling for CodeMirror search dialogs */
         .CodeMirror-dialog {
-            background-color: var(--bg-light) !important;
-            color: var(--text-light) !important;
-            border: 1px solid var(--border-light) !important;
-            @apply rounded-md shadow-lg text-sm p-3;
-        }
-        html.dark .CodeMirror-dialog {
-            background-color: var(--bg-dark) !important;
-            color: var(--text-dark) !important;
-            border: 1px solid var(--border-dark) !important;
+            background-color: var(--card-bg) !important;
+            color: var(--text-main) !important;
+            border: 1px solid var(--border-main) !important;
+            @apply rounded-lg shadow-xl text-sm p-4;
         }
         .CodeMirror-dialog input[type="text"] {
              @apply input-field !important;
-             padding: 0.375rem 0.5rem !important; /* Equivalent to py-1.5 px-2 */
+             padding: 0.5rem 0.75rem !important; 
         }
         .CodeMirror-dialog button {
-            @apply btn btn-secondary !important;
-            padding: 0.25rem 0.5rem !important;
-            font-size: 0.75rem !important; /* text-xs */
+            @apply btn !important; /* Use the general .btn style */
+            padding: 0.375rem 0.75rem !important; 
+            font-size: 0.875rem !important; 
         }
         .CodeMirror-search-label {
-             color: var(--text-light) !important;
-             @apply text-xs;
+             color: var(--text-main) !important;
+             @apply text-sm mb-1;
         }
-         html.dark .CodeMirror-search-label {
-             color: var(--text-dark) !important;
-        }
-
     </style>
 </head>
 <body class="antialiased">
     <!-- Header -->
     <header class="app-header flex items-center justify-between fixed top-0 left-0 right-0 z-30">
-        <div class="flex items-center gap-3">
-            <button id="tIcon" class="btn btn-secondary btn-icon" title="Portail T">T</button>
-            <h1 class="text-md font-semibold">Comparateur</h1>
+        <div class="header-title-group">
+            <button id="tIcon" class="btn btn-icon-only" title="Portail T">T</button>
+            <div>
+                <h1 class="header-main-title">Comparateur de Documents</h1>
+                <p class="header-subtitle">Fait par Terrafaust & IA</p>
+            </div>
         </div>
 
-        <div class="flex items-center gap-2 flex-wrap justify-end">
-            <!-- Go to Line -->
+        <div class="flex items-center gap-2.5 flex-wrap justify-end">
             <div class="flex items-center">
-                <input type="number" id="goToLineInput" placeholder="Ligne" class="input-field w-20 text-xs" min="1">
-                <button id="goToLineBtn" class="btn btn-secondary btn-icon ml-1" title="Aller à la ligne">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M10.854 3.854a.5.5 0 0 0-.708-.708L6 7.293 1.854 3.146a.5.5 0 1 0-.708.708L5.293 8l-4.147 4.146a.5.5 0 0 0 .708.708L6 8.707l4.146 4.147a.5.5 0 0 0 .708-.708L6.707 8l4.147-4.146z"/></svg>
+                <input type="number" id="goToLineInput" placeholder="Ligne" class="input-field w-24 text-sm" min="1">
+                <button id="goToLineBtn" class="btn btn-icon-only ml-1.5" title="Aller à la ligne">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.293 3.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414-1.414L10.586 10 6.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
 
-            <!-- Search -->
             <div class="flex items-center">
-                <input type="text" id="searchInput" placeholder="Rechercher..." class="input-field w-32 text-xs">
-                <button id="searchBtn" class="btn btn-secondary btn-icon ml-1" title="Rechercher (Ctrl+F)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
+                <input type="text" id="searchInput" placeholder="Rechercher..." class="input-field w-40 text-sm">
+                <button id="searchBtn" class="btn btn-icon-only ml-1.5" title="Rechercher (Ctrl+F)">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                 </button>
-                <button id="replaceBtn" class="btn btn-secondary btn-icon ml-1" title="Remplacer (Ctrl+H)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1.5 13.5A1.5 1.5 0 0 1 0 12V4A1.5 1.5 0 0 1 1.5 2.5h13A1.5 1.5 0 0 1 16 4v8a1.5 1.5 0 0 1-1.5 1.5h-13zm13-1a.5.5 0 0 0 .5-.5V4a.5.5 0 0 0-.5-.5h-13a.5.5 0 0 0-.5.5v8a.5.5 0 0 0 .5.5h13z"/><path d="M2 5.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H2.5a.5.5 0 0 1-.5-.5zm4.5-3a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5zm0 2a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1h-5z"/></svg>
+                <button id="replaceBtn" class="btn btn-icon-only ml-1.5" title="Remplacer (Ctrl+H)">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M5 8a1 1 0 00-1 1v1a1 1 0 102 0V9a1 1 0 00-1-1z"></path><path fill-rule="evenodd" d="M6.672 1.953A1 1 0 017.999 2h4a1 1 0 011 1v1H7.999a1 1 0 01-.895-.553L6.672 1.953zM4.001 4V3a1 1 0 011-1h1.328l.447-.553a3 3 0 012.624 0l.447.553H14a1 1 0 011 1v1H4.001zm11.999 7h-12v1a3 3 0 003 3h6a3 3 0 003-3v-1zM4 6h12v4a1 1 0 01-1 1H5a1 1 0 01-1-1V6z" clip-rule="evenodd"></path></svg>
                 </button>
             </div>
-            <span id="searchOccurrencesTotal" class="text-xs opacity-70 hidden"></span>
+            <span id="searchOccurrencesTotal" class="text-xs opacity-75 hidden self-center"></span>
 
-            <button id="syncScrollBtn" class="btn btn-secondary" title="Synchroniser le défilement">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h13a.5.5 0 0 0 0-1h-13a.5.5 0 0 0-.5.5zm-1-4a.5.5 0 0 1 .5-.5h15a.5.5 0 0 1 0 1h-15a.5.5 0 0 1-.5-.5zm1-4a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 0 1h-13a.5.5 0 0 1-.5-.5z"/></svg>
-                Sync
-            </button>
-            <button id="compareBtn" class="btn btn-secondary" title="Comparer les documents">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 13.5 4.5v5A2.5 2.5 0 0 1 11 12H5A2.5 2.5 0 0 1 2.5 9.5v-5A2.5 2.5 0 0 1 5 2V.5zm0 2.5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5z"/><path d="M12 13H4a1 1 0 0 0-1 1v1.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V14a1 1 0 0 0-1-1z"/></svg>
-                Comparer
-            </button>
+            <button id="syncScrollBtn" class="btn" title="Synchroniser le défilement">Sync</button>
+            <button id="compareBtn" class="btn" title="Comparer les documents">Comparer</button>
 
-            <!-- Theme Selector -->
             <div class="dropdown">
-                <button id="themeToggleBtn" class="btn btn-secondary btn-icon" title="Changer de thème">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/><path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.901 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/></svg>
+                <button id="themeToggleBtn" class="btn btn-icon-only" title="Changer de thème">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"></path></svg>
                 </button>
-                <div id="themeDropdown" class="dropdown-menu hidden"></div>
+                <div id="themeDropdown" class="theme-dropdown-menu hidden"></div>
             </div>
-
-            <!-- Day/Night Mode Toggle -->
-            <button id="darkModeToggle" class="btn btn-secondary btn-icon" title="Mode Jour/Nuit">
-                <svg id="sunIcon" class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-                <svg id="moonIcon" class="w-4 h-4 hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-            </button>
         </div>
     </header>
 
-    <!-- Main Content Area for Editors -->
-    <main id="editorContainer" class="flex-grow flex flex-col md:flex-row gap-3 p-3" style="padding-top: calc(var(--header-height) + var(--editor-container-padding));">
-        <section id="editor1Wrapper" class="relative flex-1 flex flex-col editor-wrapper min-w-0">
-            <h2 class="text-sm font-medium mb-1.5 opacity-80">Document 1 <span id="occurrences1" class="search-results-count"></span></h2>
+    <main id="editorContainer" class="flex-grow">
+        <section id="editor1Wrapper" class="relative flex-1 flex flex-col editor-wrapper">
+            <h2 class="text-sm font-semibold mb-2 opacity-90">Document 1 <span id="occurrences1" class="search-results-count"></span></h2>
             <div class="flex-grow relative"><textarea id="code1"></textarea><div class="drop-overlay" id="drop-overlay-1"><p>Déposez le fichier ici</p></div></div>
         </section>
 
-        <section id="editor2Wrapper" class="relative flex-1 flex flex-col editor-wrapper min-w-0">
-            <h2 class="text-sm font-medium mb-1.5 opacity-80">Document 2 <span id="occurrences2" class="search-results-count"></span></h2>
+        <section id="editor2Wrapper" class="relative flex-1 flex flex-col editor-wrapper">
+            <h2 class="text-sm font-semibold mb-2 opacity-90">Document 2 <span id="occurrences2" class="search-results-count"></span></h2>
             <div class="flex-grow relative"><textarea id="code2"></textarea><div class="drop-overlay" id="drop-overlay-2"><p>Déposez le fichier ici</p></div></div>
         </section>
     </main>
 
-    <!-- "T" Portal Modal -->
     <div id="tPortalModalBackdrop" class="modal-backdrop hidden"></div>
     <div id="tPortalModal" class="modal hidden">
         <h3 class="modal-title">Portail T</h3>
         <div class="modal-body">Souhaitez-vous revenir au portail T ?</div>
         <div class="modal-footer">
-            <button id="closeTPortalModalBtn" class="btn btn-secondary">Annuler</button>
+            <button id="closeTPortalModalBtn" class="btn">Annuler</button>
             <a href="https://Terrafaust.github.io/T" target="_blank" class="btn btn-primary">Retourner au portail</a>
         </div>
     </div>
 
-    <!-- Message Box -->
     <div id="messageBoxBackdrop" class="modal-backdrop hidden"></div>
     <div id="messageBox" class="modal hidden">
         <p id="messageBoxText" class="modal-body"></p>
@@ -384,21 +395,78 @@
     <script>
         let editor1, editor2;
         let syncScroll = false;
-        let diffMarks = [];
-        let currentTheme = 'one-dark'; // Changed default for a more modern dark start
+        let activeMarks = [];
+        let currentTheme = 'one-dark';
+
+        // Predefined colors for theme buttons in the dropdown.
+        // Format: themeValue: {bgColor: 'hex', textColor: 'hex'}
+        // These are approximate and aim for good contrast and representation.
+        const themeButtonColors = {
+            'default': { bgColor: '#ffffff', textColor: '#000000' },
+            'one-dark': { bgColor: '#282c34', textColor: '#abb2bf' },
+            'dracula': { bgColor: '#282a36', textColor: '#f8f8f2' },
+            'material-palenight': { bgColor: '#292D3E', textColor: '#A6ACCD' },
+            'material-darker': { bgColor: '#212121', textColor: '#EEFFFF' },
+            'material-ocean': { bgColor: '#0F111A', textColor: '#89DDFF' },
+            'monokai': { bgColor: '#272822', textColor: '#f8f8f2' },
+            'nord': { bgColor: '#2E3440', textColor: '#D8DEE9' },
+            'cobalt': { bgColor: '#002240', textColor: '#ffffff' },
+            'ayu-dark': { bgColor: '#0A0E14', textColor: '#E6E1CF' },
+            'ayu-mirage': { bgColor: '#1F2430', textColor: '#cbccc6' },
+            'base16-dark': { bgColor: '#151515', textColor: '#e0e0e0' },
+            'eclipse': { bgColor: '#ffffff', textColor: '#000000' },
+            'material': { bgColor: '#FAFAFA', textColor: '#263238' }, // Material Light
+            'solarized light': { bgColor: '#fdf6e3', textColor: '#657b83' },
+            'solarized dark': { bgColor: '#002b36', textColor: '#839496' },
+            '3024-day': { bgColor: '#f8f8f8', textColor: '#3a3a3a' },
+            '3024-night': { bgColor: '#090300', textColor: '#d6d5d4' },
+            'ambiance': { bgColor: '#f0f0f0', textColor: '#202020' }, // Could be dark too, using light variant
+            'blackboard': { bgColor: '#0C1021', textColor: '#F8F8F8' },
+            'duotone-light': {bgColor: '#faf8f5', textColor: '#b29762'},
+            'gruvbox-dark': {bgColor: '#282828', textColor: '#ebdbb2'},
+            'seti': {bgColor: '#151718', textColor: '#CFD2D1'},
+            'tomorrow-night-eighties': {bgColor: '#2d2d2d', textColor: '#cccccc'},
+            'xq-light': {bgColor: '#fff', textColor: '#000'},
+             // Add more as needed, or a default fallback
+            'default-light': { bgColor: '#f0f0f0', textColor: '#333333' },
+            'default-dark': { bgColor: '#333333', textColor: '#f0f0f0' }
+        };
+
 
         const availableThemes = [
-            { name: 'One Dark', value: 'one-dark' },
-            { name: 'Dracula', value: 'dracula' },
-            { name: 'Material Palenight', value: 'material-palenight' },
-            { name: 'Monokai', value: 'monokai' },
-            { name: 'Nord', value: 'nord' },
-            { name: 'Cobalt', value: 'cobalt'},
-            { name: 'Eclipse (Light)', value: 'eclipse' },
-            { name: 'Solarized Light', value: 'solarized light' },
-            { name: 'Solarized Dark', value: 'solarized dark' },
-            { name: 'CodeMirror Default', value: 'default' }
+            { name: 'One Dark', value: 'one-dark' }, { name: 'Dracula', value: 'dracula' },
+            { name: 'Material Palenight', value: 'material-palenight' }, { name: 'Material Darker', value: 'material-darker' },
+            { name: 'Material Ocean', value: 'material-ocean' }, { name: 'Monokai', value: 'monokai' },
+            { name: 'Nord', value: 'nord' }, { name: 'Cobalt', value: 'cobalt' },
+            { name: 'Ayu Dark', value: 'ayu-dark' }, { name: 'Ayu Mirage', value: 'ayu-mirage' },
+            { name: 'Base16 Dark', value: 'base16-dark' }, { name: 'Bespin', value: 'bespin' },
+            { name: 'Blackboard', value: 'blackboard' }, { name: 'Duotone Dark', value: 'duotone-dark' },
+            { name: 'Erling Dark', value: 'erlang-dark' }, { name: 'Gruvbox Dark', value: 'gruvbox-dark' },
+            { name: 'Lesser Dark', value: 'lesser-dark' }, { name: 'Liquibyte', value: 'liquibyte' },
+            { name: 'Lucario', value: 'lucario' }, { name: 'Midnight', value: 'midnight' },
+            { name: 'Moxer', value: 'moxer' }, { name: 'Night', value: 'night' },
+            { name: 'Oceanic Next', value: 'oceanic-next' }, { name: 'Panda Syntax', value: 'panda-syntax' },
+            { name: 'Paraiso Dark', value: 'paraiso-dark' }, { name: 'Pastel on Dark', value: 'pastel-on-dark' },
+            { name: 'Railscasts', value: 'railscasts' }, { name: 'Rubyblue', value: 'rubyblue' },
+            { name: 'Seti', value: 'seti' }, { name: 'Shadowfox', value: 'shadowfox' },
+            { name: 'Solarized Dark', value: 'solarized dark' }, { name: 'SSMS', value: 'ssms' },
+            { name: 'The Matrix', value: 'the-matrix' }, { name: 'Tomorrow Night Bright', value: 'tomorrow-night-bright' },
+            { name: 'Tomorrow Night Eighties', value: 'tomorrow-night-eighties' }, { name: 'Twilight', value: 'twilight' },
+            { name: 'Vibrant Ink', value: 'vibrant-ink' }, { name: 'XQ Dark', value: 'xq-dark' },
+            { name: 'Yonce', value: 'yonce' }, { name: 'Zenburn', value: 'zenburn' },
+            { name: 'Eclipse', value: 'eclipse' }, { name: 'Material Light', value: 'material' }, 
+            { name: 'Solarized Light', value: 'solarized light' }, { name: '3024 Day', value: '3024-day' },
+            { name: 'Abcdef', value: 'abcdef' }, { name: 'Ambiance', value: 'ambiance' }, 
+            { name: 'Base16 Light', value: 'base16-light' }, { name: 'Colorforth', value: 'colorforth' },
+            { name: 'Duotone Light', value: 'duotone-light' }, { name: 'Elegant', value: 'elegant' },
+            { name: 'Hopscotch', value: 'hopscotch' }, { name: 'Icecoder', value: 'icecoder' },
+            { name: 'Idea', value: 'idea' }, { name: 'Isotope', value: 'isotope' },
+            { name: 'MDN Like', value: 'mdn-like' }, { name: 'Neat', value: 'neat' },
+            { name: 'Neo', value: 'neo' }, { name: 'Paraiso Light', value: 'paraiso-light' },
+            { name: 'TTCN', value: 'ttcn' }, { name: 'XQ Light', value: 'xq-light' },
+            { name: 'Yeti', value: 'yeti' }, { name: 'CodeMirror Default', value: 'default' }
         ];
+
 
         function showMessageBox(message) {
             document.getElementById('messageBoxText').textContent = message;
@@ -430,28 +498,20 @@
             editor1 = CodeMirror.fromTextArea(document.getElementById('code1'), commonOptions);
             editor2 = CodeMirror.fromTextArea(document.getElementById('code2'), commonOptions);
 
-            editor1.setValue(`// Document 1 - Design Épuré\nfunction calculateTotal(price, quantity) {\n  // This is a comment.\n  const subtotal = price * quantity;\n  const tax = subtotal * 0.05; // 5% tax\n  return subtotal + tax;\n}\n\nconsole.log(calculateTotal(100, 2));\n// Ligne pour recherche: mot_unique_doc1`);
-            editor2.setValue(`// Document 2 - Design Épuré\nfunction calculateTotal(itemPrice, numItems) {\n  // Another comment here.\n  const sub = itemPrice * numItems;\n  const salesTax = sub * 0.07; // 7% sales tax\n  return sub + salesTax;\n}\n\nconsole.log(calculateTotal(150, 3));\n// Ligne pour recherche: mot_unique_doc2`);
-
+            editor1.setValue(`// Document 1 - Exemple de code\nfunction helloWorld(name) {\n  // Une ligne identique.\n  console.log("Bonjour, " + name + "!"); // Commentaire différent\n  return name.toUpperCase();\n}\n\nconst user = "Utilisateur";\nhelloWorld(user);\n// Fin du document 1.`);
+            editor2.setValue(`// Document 2 - Exemple de code\nfunction helloWorld(name) {\n  // Une ligne identique.\n  console.log("Hello, " + name + "!"); // Different comment\n  return name.toLowerCase();\n}\n\nconst user = "Utilisateur";\nhelloWorld(user);\n// Fin du document 2.`);
+            
+            setupThemeSwitcher();
             setupDragAndDrop();
             setupScrollSynchronization();
             setupComparison();
             setupGoToLine();
             setupSearchAndReplace();
-            setupThemeSwitcher();
-            setupDarkModeToggle();
             setupTPortalModal();
 
             document.getElementById('messageBoxCloseBtn').addEventListener('click', hideMessageBox);
-
-            // Initialize dark mode based on localStorage or system preference
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const storedDarkMode = localStorage.getItem('darkMode');
-            if ((storedDarkMode === 'true') || (storedDarkMode === null && prefersDark)) {
-                document.documentElement.classList.add('dark');
-            }
-            updateDarkModeVisuals(document.documentElement.classList.contains('dark'));
             
+            setTheme(currentTheme); 
             setTimeout(() => { editor1.refresh(); editor2.refresh(); }, 100);
         };
         
@@ -479,11 +539,11 @@
                             editorInstance.setValue(event.target.result);
                             editorInstance.setOption('mode', getModeForFile(file.name));
                             showMessageBox(`Fichier "${file.name}" chargé.`);
-                            clearDiffMarks();
+                            clearActiveMarks();
                             const compareBtn = document.getElementById('compareBtn');
-                            compareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 13.5 4.5v5A2.5 2.5 0 0 1 11 12H5A2.5 2.5 0 0 1 2.5 9.5v-5A2.5 2.5 0 0 1 5 2V.5zm0 2.5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5z"/><path d="M12 13H4a1 1 0 0 0-1 1v1.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V14a1 1 0 0 0-1-1z"/></svg> Comparer`;
-                            compareBtn.classList.remove('active');
-                            compareBtn.classList.replace('btn-primary','btn-secondary');
+                            compareBtn.textContent = 'Comparer';
+                            compareBtn.classList.remove('active','btn-primary');
+                            compareBtn.classList.add('btn'); // Ensure base btn class
                         };
                         reader.onerror = () => showMessageBox(`Erreur lecture fichier "${file.name}".`);
                         reader.readAsText(file);
@@ -500,17 +560,15 @@
                 if (isSyncing) return;
                 isSyncing = true;
                 const scrollInfo = sourceEditor.getScrollInfo();
-                // Check if clientHeight is greater than 0 to prevent division by zero
                 if (scrollInfo.clientHeight > 0 && (scrollInfo.height - scrollInfo.clientHeight) > 0) {
                     const scrollPercentage = scrollInfo.top / (scrollInfo.height - scrollInfo.clientHeight);
                      if (!isNaN(scrollPercentage) && targetEditor.getScrollInfo().height > targetEditor.getScrollInfo().clientHeight) {
                          targetEditor.scrollTo(null, scrollPercentage * (targetEditor.getScrollInfo().height - targetEditor.getScrollInfo().clientHeight));
                     }
                 } else if (scrollInfo.clientHeight > 0 && scrollInfo.top === 0 && (scrollInfo.height - scrollInfo.clientHeight) <= 0) {
-                    // If source is not scrollable (content fits or less than clientHeight), scroll target to top
                     targetEditor.scrollTo(null, 0);
                 }
-                setTimeout(() => isSyncing = false, 30); // Adjusted timeout slightly
+                setTimeout(() => isSyncing = false, 30);
             }
 
             const onScroll1 = () => { if (syncScroll) syncEditorScroll(editor1, editor2); };
@@ -519,8 +577,7 @@
             syncScrollBtn.addEventListener('click', () => {
                 syncScroll = !syncScroll;
                 syncScrollBtn.classList.toggle('active', syncScroll);
-                syncScrollBtn.classList.toggle('btn-primary', syncScroll);
-                syncScrollBtn.classList.toggle('btn-secondary', !syncScroll);
+                // No need to toggle btn-primary/btn-secondary, active class handles it
                 syncScrollBtn.title = syncScroll ? "Désynchroniser" : "Synchroniser";
                 if (syncScroll) {
                     showMessageBox('Défilement synchronisé.');
@@ -538,52 +595,44 @@
         function setupComparison() {
             const compareBtn = document.getElementById('compareBtn');
             compareBtn.addEventListener('click', () => {
-                if (diffMarks.length > 0) {
-                    clearDiffMarks();
-                    compareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 13.5 4.5v5A2.5 2.5 0 0 1 11 12H5A2.5 2.5 0 0 1 2.5 9.5v-5A2.5 2.5 0 0 1 5 2V.5zm0 2.5a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-5a1 1 0 0 0-1-1H5z"/><path d="M12 13H4a1 1 0 0 0-1 1v1.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5V14a1 1 0 0 0-1-1z"/></svg> Comparer`;
-                    compareBtn.classList.remove('active', 'btn-primary');
-                    compareBtn.classList.add('btn-secondary');
-                    showMessageBox('Différences effacées.');
+                if (activeMarks.length > 0) { 
+                    clearActiveMarks();
+                    compareBtn.textContent = 'Comparer';
+                    compareBtn.classList.remove('active');
+                    showMessageBox('Surlignage des lignes identiques effacé.');
                     return;
                 }
 
                 const doc1Lines = editor1.getValue().split('\n');
                 const doc2Lines = editor2.getValue().split('\n');
                 const maxLines = Math.max(doc1Lines.length, doc2Lines.length);
-                let differencesFound = false;
+                let identicalLinesFound = 0;
 
                 for (let i = 0; i < maxLines; i++) {
-                    const line1 = doc1Lines[i] || '';
-                    const line2 = doc2Lines[i] || '';
-                    if (line1 !== line2) {
-                        differencesFound = true;
-                        if (line1) diffMarks.push(editor1.markText({line:i,ch:0}, {line:i,ch:line1.length}, {className:'diff-line'}));
-                        if (line2) diffMarks.push(editor2.markText({line:i,ch:0}, {line:i,ch:line2.length}, {className:'diff-line'}));
-                        const minLength = Math.min(line1.length, line2.length);
-                        for (let j = 0; j < minLength; j++) {
-                            if (line1[j] !== line2[j]) {
-                                diffMarks.push(editor1.markText({line:i,ch:j}, {line:i,ch:j+1}, {className:'diff-char'}));
-                                diffMarks.push(editor2.markText({line:i,ch:j}, {line:i,ch:j+1}, {className:'diff-char'}));
-                            }
+                    const line1 = doc1Lines[i]; 
+                    const line2 = doc2Lines[i]; 
+
+                    if (line1 !== undefined && line2 !== undefined && line1 === line2) {
+                        identicalLinesFound++;
+                        if (line1.trim().length > 0) { 
+                           activeMarks.push(editor1.markText({line:i,ch:0}, {line:i,ch:line1.length}, {className:'identical-line'}));
+                           activeMarks.push(editor2.markText({line:i,ch:0}, {line:i,ch:line2.length}, {className:'identical-line'}));
                         }
-                        if (line1.length > line2.length) diffMarks.push(editor1.markText({line:i,ch:minLength}, {line:i,ch:line1.length}, {className:'diff-char'}));
-                        else if (line2.length > line1.length) diffMarks.push(editor2.markText({line:i,ch:minLength}, {line:i,ch:line2.length}, {className:'diff-char'}));
                     }
                 }
 
-                if (differencesFound) {
-                    showMessageBox('Différences trouvées.');
-                    compareBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="w-4 h-4" viewBox="0 0 16 16"><path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/></svg> Effacer`;
-                    compareBtn.classList.add('active', 'btn-primary');
-                    compareBtn.classList.remove('btn-secondary');
+                if (identicalLinesFound > 0) {
+                    showMessageBox(`${identicalLinesFound} ligne(s) identique(s) trouvée(s) et surlignée(s).`);
+                    compareBtn.textContent = 'Effacer';
+                    compareBtn.classList.add('active');
                 } else {
-                    showMessageBox('Documents identiques.');
+                    showMessageBox('Aucune ligne strictement identique trouvée.');
                 }
             });
         }
-        function clearDiffMarks() {
-            diffMarks.forEach(mark => mark.clear());
-            diffMarks = [];
+        function clearActiveMarks() {
+            activeMarks.forEach(mark => mark.clear());
+            activeMarks = [];
         }
 
         function setupGoToLine() {
@@ -598,7 +647,6 @@
                         const coords = editor.charCoords({line: lineNum - 1, ch: 0}, "local");
                         const H = editor.getScrollInfo().clientHeight;
                         const Y = coords.top;
-                        // Scroll to bring the line to the top third of the editor view
                         editor.scrollTo(null, Y - (H / 3));
                         editor.focus();
                     }
@@ -619,10 +667,7 @@
 
             function performSearchInEditor(editor, query, caseSensitive, occurrencesEl) {
                 if (!query) {
-                    // Clear existing highlights if using match-highlighter addon
-                    if (editor.state.matchHighlighter) {
-                         editor.state.matchHighlighter.clear();
-                    }
+                    if (editor.state.matchHighlighter) { editor.state.matchHighlighter.clear(); }
                     occurrencesEl.textContent = '';
                     return 0;
                 }
@@ -630,17 +675,13 @@
                 const cursor = editor.getSearchCursor(query, null, { caseFold: !caseSensitive, multiline: true });
                 while(cursor.findNext()) { count++; }
                 
-                // Use match-highlighter for visual feedback by refreshing its state
-                // The addon should pick up the new query automatically if it's configured globally
-                // or if we trigger its update mechanism.
-                // Forcing a refresh of the option often helps.
                 if (query) {
                     editor.setOption("highlightSelectionMatches", {
                         showToken: new RegExp(query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), caseSensitive ? '' : 'i'),
                         annotateScrollbar: true
                     });
                 } else {
-                     editor.setOption("highlightSelectionMatches", false); // Disable if no query
+                     editor.setOption("highlightSelectionMatches", false);
                 }
                 
                 occurrencesEl.textContent = count > 0 ? `(${count})` : '';
@@ -658,7 +699,6 @@
                     occurrencesTotalSpan.classList.remove('hidden');
                 } else {
                     occurrencesTotalSpan.classList.add('hidden');
-                    // Ensure individual counts are also cleared if query is empty
                     if (!query) {
                         occurrences1Span.textContent = '';
                         occurrences2Span.textContent = '';
@@ -687,12 +727,12 @@
             document.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && (e.key === 'f' || e.key === 'F')) {
                     e.preventDefault();
-                    searchInput.focus();
+                    searchInput.focus(); searchInput.select();
                     searchBtn.click();
                 }
                 if (e.ctrlKey && (e.key === 'h' || e.key === 'H')) {
                     e.preventDefault();
-                    searchInput.focus();
+                    searchInput.focus(); searchInput.select();
                     replaceBtn.click();
                 }
             });
@@ -701,72 +741,70 @@
         function setupThemeSwitcher() {
             const themeBtn = document.getElementById('themeToggleBtn');
             const dropdown = document.getElementById('themeDropdown');
+            dropdown.innerHTML = ''; 
+
             availableThemes.forEach(theme => {
-                const item = document.createElement('a');
-                item.className = 'dropdown-item';
-                item.textContent = theme.name;
-                item.addEventListener('click', (e) => {
+                const button = document.createElement('button');
+                button.className = 'theme-dropdown-button';
+                button.textContent = theme.name;
+                
+                const colors = themeButtonColors[theme.value] || themeButtonColors[theme.value.split(' ')[0]] || (theme.value.includes('dark') || theme.value.includes('night') ? themeButtonColors['default-dark'] : themeButtonColors['default-light']);
+                
+                button.style.backgroundColor = colors.bgColor;
+                button.style.color = colors.textColor;
+                button.style.borderColor = colors.textColor === '#000000' || colors.textColor === '#333333' ? '#e5e7eb' : colors.bgColor;
+
+
+                if (theme.value === currentTheme) {
+                    button.classList.add('active');
+                     button.style.borderColor = var(--primary-color); // Or a specific highlight
+                }
+
+                button.addEventListener('click', (e) => {
                     e.preventDefault();
                     setTheme(theme.value);
                     dropdown.classList.add('hidden');
                 });
-                dropdown.appendChild(item);
+                dropdown.appendChild(button);
             });
-            themeBtn.addEventListener('click', () => dropdown.classList.toggle('hidden'));
-            document.addEventListener('click', (e) => {
-                if (!themeBtn.contains(e.target) && !dropdown.contains(e.target)) {
-                    dropdown.classList.add('hidden');
-                }
+            themeBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                dropdown.classList.toggle('hidden');
             });
         }
 
         function setTheme(themeValue) {
             currentTheme = themeValue;
             [editor1, editor2].forEach(editor => editor.setOption('theme', themeValue));
-            const isDarkTheme = ['dracula', 'material-palenight', 'monokai', 'nord', 'one-dark', 'cobalt', 'solarized dark'].includes(themeValue);
-            const isLightTheme = ['eclipse', 'solarized light', 'default'].includes(themeValue);
-            const htmlEl = document.documentElement;
-            if (isDarkTheme && !htmlEl.classList.contains('dark')) {
-                htmlEl.classList.add('dark');
-                localStorage.setItem('darkMode', 'true');
-                updateDarkModeVisuals(true, false); // Don't re-trigger theme change from here
-            } else if (isLightTheme && htmlEl.classList.contains('dark')) {
-                 htmlEl.classList.remove('dark');
-                 localStorage.setItem('darkMode', 'false');
-                 updateDarkModeVisuals(false, false); // Don't re-trigger theme change from here
-            }
-        }
-
-        function setupDarkModeToggle() {
-            const toggle = document.getElementById('darkModeToggle');
-            toggle.addEventListener('click', () => {
-                const isDark = document.documentElement.classList.toggle('dark');
-                localStorage.setItem('darkMode', isDark);
-                updateDarkModeVisuals(isDark, true); // Allow theme change from here
-            });
-        }
-
-        function updateDarkModeVisuals(isDark, changeEditorTheme = true) {
-            document.getElementById('sunIcon').classList.toggle('hidden', isDark);
-            document.getElementById('moonIcon').classList.toggle('hidden', !isDark);
             
-            if (changeEditorTheme) {
-                const lightThemes = ['eclipse', 'default', 'solarized light'];
-                const darkThemes = ['one-dark', 'dracula', 'material-palenight', 'monokai', 'nord', 'cobalt', 'solarized dark'];
-
-                if (isDark && lightThemes.includes(currentTheme)) {
-                    setTheme('one-dark');
-                } else if (!isDark && darkThemes.includes(currentTheme) && currentTheme !== 'solarized dark') {
-                    setTheme('eclipse');
-                } else {
-                    // Theme is already appropriate or a specific variant like solarized dark/light, just ensure it's applied
-                     [editor1, editor2].forEach(editor => editor.setOption('theme', currentTheme));
-                }
-            } else {
-                // If not changing editor theme, still ensure current theme is applied (e.g., after initial load)
-                [editor1, editor2].forEach(editor => editor.setOption('theme', currentTheme));
+            const dropdown = document.getElementById('themeDropdown');
+            if (dropdown.children.length > 0) {
+                 Array.from(dropdown.children).forEach(child => {
+                    // Match based on textContent which is theme.name
+                    const themeObj = availableThemes.find(t => t.name === child.textContent);
+                    if (themeObj) {
+                        child.classList.toggle('active', themeObj.value === themeValue);
+                        if (themeObj.value === themeValue) {
+                           child.style.borderColor = 'var(--primary-color)';
+                           child.style.ringWidth = '2px'; // Simulate ring with border
+                        } else {
+                           const colors = themeButtonColors[themeObj.value] || themeButtonColors[themeObj.value.split(' ')[0]] || (themeObj.value.includes('dark') || themeObj.value.includes('night') ? themeButtonColors['default-dark'] : themeButtonColors['default-light']);
+                           child.style.borderColor = colors.textColor === '#000000' || colors.textColor === '#333333' ? '#e5e7eb' : colors.bgColor;
+                           child.style.ringWidth = '0px';
+                        }
+                    }
+                });
             }
         }
+        
+        document.addEventListener('click', (event) => {
+            const themeBtn = document.getElementById('themeToggleBtn');
+            const dropdown = document.getElementById('themeDropdown');
+            if (dropdown && !dropdown.classList.contains('hidden') && !themeBtn.contains(event.target) && !dropdown.contains(event.target)) {
+                dropdown.classList.add('hidden');
+            }
+        });
+
 
         function setupTPortalModal() {
             const tIcon = document.getElementById('tIcon');
